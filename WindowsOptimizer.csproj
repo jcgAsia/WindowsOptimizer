@@ -7,12 +7,14 @@
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <AssemblyName>WindowsOptimizer</AssemblyName>
     <RootNamespace>WindowsOptimizer</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.0.0.3</Version>	
     <Product>Windows System Optimizer</Product>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <FileVersion>1.0.0.1</FileVersion>
+    <AssemblyVersion>1.0.0.9</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,7 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\app.ico" />
+    <EmbeddedResource Include="Assets\app.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -41,5 +45,20 @@
     <Content Remove="Uninstaller\**" />
     <EmbeddedResource Remove="Uninstaller\**" />
     <None Remove="Uninstaller\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

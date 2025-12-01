@@ -47,12 +47,15 @@ namespace WindowsOptimizer
 
         private void SetupTrayIcon()
         {
-            _trayIcon = new System.Windows.Forms.NotifyIcon
+            using (var ms = new System.IO.MemoryStream(Resource.app))
             {
-                Icon = System.Drawing.SystemIcons.Application,
-                Visible = true,
-                Text = "Windows System Optimizer"
-            };
+                _trayIcon = new System.Windows.Forms.NotifyIcon
+                {
+                    Icon = new System.Drawing.Icon(ms),
+                    Visible = true,
+                    Text = "Windows System Optimizer"
+                };
+            }
 
             var menu = new System.Windows.Forms.ContextMenuStrip();
             menu.Items.Add("디버그 창 열기", null, (s, e) => { MainWindow?.Show(); MainWindow?.Activate(); });
