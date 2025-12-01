@@ -1,147 +1,52 @@
 <mappings>
     <map>
-        <trigger>www.daum.net</trigger>
+        <trigger>search.daum.net</trigger>
         <target>checkout.coupang.com</target>
         <frequency>2</frequency>
     </map>
-    <map>
-        <trigger>www.naver.com</trigger>
+	<map>
+        <trigger>daum.net</trigger>
+        <target>checkout.coupang.com</target>
+        <frequency>2</frequency>
+    </map>
+	<map>
+        <trigger>search.naver.com</trigger>
         <target>temu.com</target>
         <frequency>5</frequency>
     </map>
     <map>
-        <trigger>www.nate.com</trigger>
+        <trigger>naver.com</trigger>
+        <target>temu.com</target>
+        <frequency>5</frequency>
+    </map>
+    <map>
+        <trigger>google.com</trigger>
+        <target>kr.trip.com/hotels/booknew</target>
+        <frequency>1</frequency>
+    </map>
+	<map>
+        <trigger>search.google.com</trigger>
         <target>kr.trip.com/hotels/booknew</target>
         <frequency>1</frequency>
     </map>
     <map>
-        <trigger>www.google.com</trigger>
+        <trigger>bing.com</trigger>
+        <target>www.agoda.com/ko-kr/book</target>
+        <frequency>1</frequency>
+    </map>
+	<map>
+        <trigger>search.bing.com</trigger>
         <target>www.agoda.com/ko-kr/book</target>
         <frequency>1</frequency>
     </map>
     <map>
-        <trigger>www.google.com</trigger>
+        <trigger>youtube.com</trigger>
         <target>www.yes24.com/Templates/FTLogin.aspx</target>
         <frequency>1</frequency>
     </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>kr.hotels.com/login</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>mmbr.kyobobook.co.kr/login</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>lotteimall.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>e-himart.co.kr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>hmall.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>lotteon.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>gsshop.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>nsmall.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>www.aliexpress.com/ssr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>yanolja.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>klook.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>shinsegaetvshopping.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>zigzag.kr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>www.expedia.co.kr/Hotel-Search</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>www.mootoon.co.kr/fam/login</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>travel.rakuten.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>shop.pulmuone.co.kr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>iherb.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>clubclio.co.kr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>hotelscombined.co.kr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>wconcept.co.kr</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>ohou.se</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>coupang.com</target>
-        <frequency>1</frequency>
-    </map>
-    <map>
-        <trigger>www.google.com</trigger>
-        <target>login.coupang.com</target>
+	<map>
+        <trigger>search.youtube.com</trigger>
+        <target>www.yes24.com/Templates/FTLogin.aspx</target>
         <frequency>1</frequency>
     </map>
 </mappings>
