@@ -5,7 +5,7 @@
     xmlns:vm="clr-namespace:WindowsOptimizer.ViewModels"
     Title="Windows Optimizer"
     Width="900"
-    Height="700"
+    Height="900"
     Background="#1E1E1E"
     Closing="Window_Closing"
     WindowStartupLocation="CenterScreen">
