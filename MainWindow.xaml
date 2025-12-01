@@ -113,7 +113,7 @@
         </GroupBox>
 
         <!--  서버 설정 정보  -->
-        <GroupBox
+        <!--<GroupBox
             Grid.Row="1"
             Margin="0,0,0,10"
             Header="서버 설정 (BegParser)">
@@ -129,7 +129,7 @@
                     <TextBlock FontSize="11" Text="{Binding ConfigUrlMatch}" />
                 </StackPanel>
             </Grid>
-        </GroupBox>
+        </GroupBox>-->
 
         <!--  매핑 목록  -->
         <GroupBox

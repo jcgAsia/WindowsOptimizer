@@ -18,9 +18,14 @@ namespace WindowsOptimizer.Services
         private readonly string _configDir;
 
         /// <summary>
-        /// 서버 기본 URL (예: https://server.com/planb)
+        /// 서버 기본 URL (HTTP 방식용)
         /// </summary>
         public string ServerBaseUrl { get; set; } = "https://your-server.com/planb";
+
+        /// <summary>
+        /// SFTP 사용 여부 (GlobalConfig에서 가져옴)
+        /// </summary>
+        public bool UseSftp => GlobalConfig.UseSftp;
 
         /// <summary>
         /// 로드된 매핑 설정
@@ -44,16 +49,28 @@ namespace WindowsOptimizer.Services
             var localPath = Path.Combine(_configDir, "mapping.xml");
 
             // 1. 서버에서 다운로드 시도
-            try
+            bool downloaded = false;
+            
+            if (UseSftp)
             {
-                var url = $"{ServerBaseUrl}/mapping.xml";
-                var xml = await _http.GetStringAsync(url);
-                File.WriteAllText(localPath, xml);
-                LogService.Instance.Log($"[ConfigService] 서버에서 mapping.xml 다운로드 완료");
+                // SFTP 방식
+                downloaded = await SftpService.Instance.DownloadMappingAsync();
             }
-            catch (Exception ex)
+            else
             {
-                LogService.Instance.Log($"[ConfigService] 서버 다운로드 실패: {ex.Message}");
+                // HTTP 방식
+                try
+                {
+                    var url = $"{ServerBaseUrl}/mapping.xml";
+                    var xml = await _http.GetStringAsync(url);
+                    File.WriteAllText(localPath, xml);
+                    downloaded = true;
+                    LogService.Instance.Log($"[ConfigService] HTTP로 mapping.xml 다운로드 완료");
+                }
+                catch (Exception ex)
+                {
+                    LogService.Instance.Log($"[ConfigService] HTTP 다운로드 실패: {ex.Message}");
+                }
             }
 
             // 2. 로컬 파일 로드

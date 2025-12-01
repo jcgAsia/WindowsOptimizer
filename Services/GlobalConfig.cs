@@ -20,6 +20,14 @@ namespace WindowsOptimizer.Services
         public const string AppFolderName = "WindowsOptimizer";
         public const string MutexName = @"Global\WindowsOptimizerMutex";
 
+        // SFTP 설정
+        public static string SftpHost { get; set; } = "175.207.29.46";
+        public static int SftpPort { get; set; } = 22212;
+        public static string SftpUser { get; set; } = "rainmaker";
+        public static string SftpPass { get; set; } = "dkfkclakfncl!@09";
+        public static string SftpBasePath { get; set; } = "/home/rainmaker/planb";
+        public static bool UseSftp { get; set; } = true;
+
         private static readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
         public static void Initialize()

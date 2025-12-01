@@ -285,7 +285,7 @@ namespace WindowsOptimizer.Services
                 }
             }
             catch (Exception ex)
-            {
+            {                
                 LogService.Instance.Log($"[PlanB] 매칭 오류: {ex.Message}");
             }
         }
