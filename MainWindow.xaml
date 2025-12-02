@@ -8,7 +8,6 @@
     Height="900"
     Background="#1E1E1E"
     Closing="Window_Closing"
-    Icon="/Assets/app.ico"
     WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
