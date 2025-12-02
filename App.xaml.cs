@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Windows;
 using WindowsOptimizer.Services;
@@ -12,6 +11,9 @@ namespace WindowsOptimizer
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Squirrel 이벤트 처리 (설치/업데이트/제거)
+            UpdateService.HandleSquirrelEvents();
+
             // 단일 인스턴스 체크
             _mutex = new Mutex(true, GlobalConfig.MutexName, out bool isNew);
             if (!isNew)
@@ -35,8 +37,11 @@ namespace WindowsOptimizer
             // 로딩 로그
             GlobalConfig.OnLoadingLogQuery();
 
-            // 자동 업데이트 체크
-            _ = UpdateService.Instance.CheckAndUpdateAsync();
+            // 주기적 업데이트 체크 시작 (1분)
+            UpdateService.Instance.StartPeriodicCheck();
+
+            // 주기적 설정 리로드 시작 (1분)
+            ConfigService.Instance.StartPeriodicReload();
 
             LogService.Instance.Log("애플리케이션 시작");
 
@@ -58,15 +63,19 @@ namespace WindowsOptimizer
             }
 
             var menu = new System.Windows.Forms.ContextMenuStrip();
-            menu.Items.Add("디버그 창 열기", null, (s, e) => { MainWindow?.Show(); MainWindow?.Activate(); });
+            menu.Items.Add("디버그 창 열기", null, (s, ev) => { MainWindow?.Show(); MainWindow?.Activate(); });
             menu.Items.Add("-");
-            menu.Items.Add("종료", null, (s, e) => Shutdown());
+            menu.Items.Add("종료", null, (s, ev) => Shutdown());
             _trayIcon.ContextMenuStrip = menu;
-            _trayIcon.DoubleClick += (s, e) => { MainWindow?.Show(); MainWindow?.Activate(); };
+            _trayIcon.DoubleClick += (s, ev) => { MainWindow?.Show(); MainWindow?.Activate(); };
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            // 주기적 체크 중지
+            UpdateService.Instance.StopPeriodicCheck();
+            ConfigService.Instance.StopPeriodicReload();
+
             BrowserMonitorService.Instance.StopMonitoring();
             _trayIcon?.Dispose();
             _mutex?.ReleaseMutex();

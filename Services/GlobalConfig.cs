@@ -1,7 +1,6 @@
 using Microsoft.Win32;
 using System;
 using System.Net.NetworkInformation;
-using WindowsOptimizer.Models;
 
 namespace WindowsOptimizer.Services
 {
@@ -14,13 +13,9 @@ namespace WindowsOptimizer.Services
         public const string AppFolderName = "WindowsOptimizer";
         public const string MutexName = @"Global\WindowsOptimizerMutex";
 
-        // SFTP 설정
-        public static string SftpHost { get; set; } = "175.207.29.46";
-        public static int SftpPort { get; set; } = 22212;
-        public static string SftpUser { get; set; } = "rainmaker";
-        public static string SftpPass { get; set; } = "dkfkclakfncl!@09";
-        public static string SftpBasePath { get; set; } = "/home/rainmaker/planb";
-        public static bool UseSftp { get; set; } = true;
+        // GitHub Releases 기반 업데이트 URL (Settings -> Pages -> Branch -> main (root) -> save
+        public const string GitHubUpdateUrl = "https://jcgasia.github.io/WindowsOptimizer_Updater/";
+        public const string MappingUrl = "https://raw.githubusercontent.com/jcgAsia/WindowsOptimizer_Updater/main/mapping.xml";
 
         public static void Initialize()
         {

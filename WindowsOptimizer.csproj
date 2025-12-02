@@ -7,14 +7,13 @@
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <AssemblyName>WindowsOptimizer</AssemblyName>
     <RootNamespace>WindowsOptimizer</RootNamespace>
-    <Version>1.0.0.3</Version>	
+    <Version>1.1.5</Version>
     <Product>Windows System Optimizer</Product>
+    <Company>JCG</Company>
+    <Authors>JCG</Authors>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-    <FileVersion>1.0.0.1</FileVersion>
-    <AssemblyVersion>1.0.0.9</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,12 +24,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SSH.NET" Version="2023.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Web" />
     <Reference Include="UIAutomationClient" />
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
@@ -42,10 +39,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="publish\**" />
+    <Compile Remove="Releases\**" />
     <Compile Remove="Uninstaller\**" />
     <Content Remove="Uninstaller\**" />
+    <EmbeddedResource Remove="publish\**" />
+    <EmbeddedResource Remove="Releases\**" />
     <EmbeddedResource Remove="Uninstaller\**" />
+    <None Remove="publish\**" />
+    <None Remove="Releases\**" />
     <None Remove="Uninstaller\**" />
+    <Page Remove="publish\**" />
+    <Page Remove="Releases\**" />
+    <Compile Remove="Services\SftpService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,3 +69,10 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
+
+
+
+
+
+
+

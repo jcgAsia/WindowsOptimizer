@@ -61,7 +61,7 @@ namespace WindowsOptimizer.Services
 
                     key.SetValue("DisplayName", DisplayName);
                     key.SetValue("DisplayVersion", version?.ToString() ?? "1.0.0");
-                    key.SetValue("Publisher", "YourCompany");
+                    key.SetValue("Publisher", "JCG");
                     key.SetValue("InstallLocation", InstallDir);
                     key.SetValue("UninstallString", $"\"{Path.Combine(InstallDir, "uninstall.exe")}\"");
                     key.SetValue("DisplayIcon", ExePath);

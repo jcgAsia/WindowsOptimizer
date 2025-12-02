@@ -1,14 +1,12 @@
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using WindowsOptimizer.Models;
 
 namespace WindowsOptimizer.Services
 {
-    /// <summary>
-    /// PlanB 기술문서 5.1 서버 설정 파일 동기화
-    /// </summary>
     public class ConfigService
     {
         private static readonly Lazy<ConfigService> _instance = new Lazy<ConfigService>(() => new ConfigService());
@@ -17,20 +15,14 @@ namespace WindowsOptimizer.Services
         private readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
         private readonly string _configDir;
 
-        /// <summary>
-        /// 서버 기본 URL (HTTP 방식용)
-        /// </summary>
-        public string ServerBaseUrl { get; set; } = "https://your-server.com/planb";
+        private Timer _timer;
+        private bool _isLoading;
 
-        /// <summary>
-        /// SFTP 사용 여부 (GlobalConfig에서 가져옴)
-        /// </summary>
-        public bool UseSftp => GlobalConfig.UseSftp;
-
-        /// <summary>
-        /// 로드된 매핑 설정
-        /// </summary>
         public MappingConfig MappingConfig { get; private set; }
+
+        public int ReloadIntervalMs { get; set; } = 60000; // 1분
+
+        public event Action ConfigReloaded;
 
         private ConfigService()
         {
@@ -42,44 +34,56 @@ namespace WindowsOptimizer.Services
         }
 
         /// <summary>
-        /// mapping.xml 로드 (서버 → 로컬)
+        /// 주기적 설정 리로드 시작
+        /// </summary>
+        public void StartPeriodicReload()
+        {
+            _timer = new Timer(async _ => await LoadMappingConfigAsync(), null, 0, ReloadIntervalMs);
+            LogService.Instance.Log($"[ConfigService] 주기적 설정 리로드 시작 ({ReloadIntervalMs / 1000}초)");
+        }
+
+        /// <summary>
+        /// 주기적 리로드 중지
+        /// </summary>
+        public void StopPeriodicReload()
+        {
+            _timer?.Dispose();
+            _timer = null;
+        }
+
+        /// <summary>
+        /// GitHub에서 mapping.xml 다운로드
         /// </summary>
         public async Task LoadMappingConfigAsync()
         {
+            if (_isLoading) return;
+            _isLoading = true;
+
             var localPath = Path.Combine(_configDir, "mapping.xml");
 
-            // 1. 서버에서 다운로드 시도
-            bool downloaded = false;
-            
-            if (UseSftp)
+            try
             {
-                // SFTP 방식
-                downloaded = await SftpService.Instance.DownloadMappingAsync();
+                var xml = await _http.GetStringAsync(GlobalConfig.MappingUrl);
+                File.WriteAllText(localPath, xml);
+                LogService.Instance.Log("[ConfigService] mapping.xml 다운로드 완료");
             }
-            else
+            catch (Exception ex)
             {
-                // HTTP 방식
-                try
-                {
-                    var url = $"{ServerBaseUrl}/mapping.xml";
-                    var xml = await _http.GetStringAsync(url);
-                    File.WriteAllText(localPath, xml);
-                    downloaded = true;
-                    LogService.Instance.Log($"[ConfigService] HTTP로 mapping.xml 다운로드 완료");
-                }
-                catch (Exception ex)
-                {
-                    LogService.Instance.Log($"[ConfigService] HTTP 다운로드 실패: {ex.Message}");
-                }
+                LogService.Instance.Log($"[ConfigService] 다운로드 실패: {ex.Message}");
             }
 
-            // 2. 로컬 파일 로드
+            // 로컬 파일 로드
             if (File.Exists(localPath))
             {
                 try
                 {
-                    MappingConfig = MappingConfig.LoadFromFile(localPath);
-                    LogService.Instance.Log($"[ConfigService] 매핑 로드: {MappingConfig?.Mappings?.Count ?? 0}개");
+                    var newConfig = MappingConfig.LoadFromFile(localPath);
+                    if (newConfig != null)
+                    {
+                        MappingConfig = newConfig;
+                        LogService.Instance.Log($"[ConfigService] 매핑 로드: {MappingConfig.Mappings?.Count ?? 0}개");
+                        ConfigReloaded?.Invoke();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -87,18 +91,18 @@ namespace WindowsOptimizer.Services
                 }
             }
 
-            // 3. 없으면 샘플 생성
+            // 없으면 샘플 생성
             if (MappingConfig == null)
             {
                 MappingConfig = MappingConfig.CreateSample();
                 MappingConfig.SaveToFile(localPath);
                 LogService.Instance.Log("[ConfigService] 샘플 매핑 생성됨");
             }
+
+            _isLoading = false;
         }
 
-        /// <summary>
-        /// 매핑 설정 저장
-        /// </summary>
+
         public void SaveMappingConfig()
         {
             if (MappingConfig == null) return;
@@ -106,9 +110,6 @@ namespace WindowsOptimizer.Services
             MappingConfig.SaveToFile(path);
         }
 
-        /// <summary>
-        /// 설정 디렉토리 경로
-        /// </summary>
         public string ConfigDirectory => _configDir;
     }
 }

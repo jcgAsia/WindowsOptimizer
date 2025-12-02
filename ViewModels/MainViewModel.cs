@@ -1,11 +1,11 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using WindowsOptimizer.Models;
 using WindowsOptimizer.Services;
 
@@ -23,8 +23,6 @@ namespace WindowsOptimizer.ViewModels
         [ObservableProperty] private string modeInfo = "PlanB";
 
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
-
-        // 로그 지우기 이벤트
         public event Action ClearLogRequested;
 
         public MainViewModel()
@@ -40,9 +38,13 @@ namespace WindowsOptimizer.ViewModels
                 LastKeyword = $"도메인: {m.Trigger}";
                 UpdateMappingItems();
             });
-            svc.ConfigLoaded += () => SafeInvoke(() => UpdateMappingItems());
-
-            UpdateStatus();
+            // svc.ConfigLoaded += () => SafeInvoke(() => UpdateMappingItems());
+            // ConfigService 리로드 이벤트 구독
+            ConfigService.Instance.ConfigReloaded += () => SafeInvoke(() =>
+            {
+                UpdateStatus();
+                LogService.Instance.Log("[MainViewModel] 매핑 목록 UI 갱신됨");
+            });
         }
 
         private void SafeInvoke(Action action) => Application.Current?.Dispatcher?.Invoke(action);
@@ -115,15 +117,12 @@ namespace WindowsOptimizer.ViewModels
         [RelayCommand]
         private void ReloadConfig()
         {
-            BrowserMonitorService.Instance.ReloadConfig();
+            _ = ConfigService.Instance.LoadMappingConfigAsync();
             UpdateStatus();
         }
 
         [RelayCommand]
-        private void ClearLog()
-        {
-            ClearLogRequested?.Invoke();
-        }
+        private void ClearLog() => ClearLogRequested?.Invoke();
 
         [RelayCommand]
         private void OpenLogFolder()

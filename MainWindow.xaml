@@ -334,7 +334,7 @@
         <GroupBox
             Grid.Row="3"
             Margin="0,8,0,0"
-            Header="📜 실시간 로그">
+            Header="📜 실시간 로그.">
             <RichTextBox
                 x:Name="LogRichTextBox"
                 Padding="5"

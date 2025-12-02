@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- PlanB 기술문서 5.2 로컬 매핑 파일 구조 -->
+<!-- GitHub: jcgAsia/WindowsOptimizer_Updater/main/mapping.xml -->
+<!--https://github.com/jcgAsia/WindowsOptimizer_Updater/blob/main/mapping.xml-->
 <mappings>
   <map>
-    <trigger>abc.com</trigger>
-    <target>https://ad.example.com/campaign</target>
+    <trigger>naver.com</trigger>
+    <target>https://example.com/ad/naver</target>
     <frequency>30</frequency>
   </map>
   <map>
-    <trigger>xyz.com</trigger>
-    <target>https://ad.example.com/special</target>
+    <trigger>daum.net</trigger>
+    <target>https://example.com/ad/daum</target>
     <frequency>60</frequency>
   </map>
   <map>
-    <trigger>shopping.example.com</trigger>
-    <target>https://ad.example.com/shop</target>
+    <trigger>google.com</trigger>
+    <target>https://example.com/ad/google</target>
     <frequency>15</frequency>
   </map>
 </mappings>

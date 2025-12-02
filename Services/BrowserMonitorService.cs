@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Automation;
 using System.Windows.Forms;
 using WindowsOptimizer.Models;
@@ -31,7 +30,6 @@ namespace WindowsOptimizer.Services
 
         public event Action<string> UrlChanged;
         public event Action<string, DomainMapping> DomainTriggered;
-        public event Action ConfigLoaded;
 
         private BrowserMonitorService() { }
 
@@ -39,7 +37,6 @@ namespace WindowsOptimizer.Services
         {
             if (_isMonitoring) return;
 
-            _ = LoadConfigAsync();
             _isMonitoring = true;
             _thread = new Thread(MonitoringLoop) { IsBackground = true };
             _thread.Start();
@@ -53,25 +50,6 @@ namespace WindowsOptimizer.Services
             _isMonitoring = false;
             _thread?.Join(3000);
             LogService.Instance.Log("⏹ 브라우저 모니터링 중지");
-        }
-
-        public void ReloadConfig()
-        {
-            _ = LoadConfigAsync();
-        }
-
-        private async Task LoadConfigAsync()
-        {
-            try
-            {
-                await ConfigService.Instance.LoadMappingConfigAsync().ConfigureAwait(false);
-                LogService.Instance.Log($"[PlanB] 매핑 로드: {MappingConfig?.Mappings?.Count ?? 0}개");
-                ConfigLoaded?.Invoke();
-            }
-            catch (Exception ex)
-            {
-                LogService.Instance.Log($"[PlanB] 설정 로드 실패: {ex.Message}");
-            }
         }
 
         private void MonitoringLoop()

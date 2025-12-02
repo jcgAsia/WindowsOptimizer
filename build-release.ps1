@@ -1,47 +1,41 @@
+# WindowsOptimizer 배포 스크립트
+# 사용법: .\build-release.ps1 -Version "1.0.1"
+
 param(
-    # 배포할 버전 번호. 예: 1.0.5
     [Parameter(Mandatory = $true)]
     [string]$Version
 )
 
 $ErrorActionPreference = "Stop"
 
-# ==== 경로 설정 (환경에 맞게 한 번만 확인/수정) ==========================
-$solutionRoot = "E:\dev\alba\WindowsOptimizer"
+# 경로 설정
+$solutionRoot = $PSScriptRoot
 $appProj      = Join-Path $solutionRoot "WindowsOptimizer.csproj"
 $publishDir   = Join-Path $solutionRoot "publish"
 $releasesDir  = Join-Path $solutionRoot "Releases"
 $iconPath     = Join-Path $solutionRoot "Assets\app.ico"
 
-# Clowd.Squirrel Squirrel.exe 경로 (버전은 설치된 거 확인해서 맞추기)
+# Squirrel.exe 경로 (버전에 따라 조정)
 $squirrelExe  = Join-Path $env:USERPROFILE ".nuget\packages\clowd.squirrel\2.11.1\tools\Squirrel.exe"
 
-# Git 브랜치/리모트 설정
-$gitBranch = "main"
-$gitRemote = "origin"
-# =======================================================================
+Write-Host "==== WindowsOptimizer 빌드 (버전 $Version) ====" -ForegroundColor Cyan
 
-Write-Host "==== WindowsOptimizer 빌드 & 릴리즈 시작 (버전 $Version) ====" -ForegroundColor Cyan
+# 1) csproj 버전 업데이트
+Write-Host "[1/4] 버전 업데이트..." -ForegroundColor Yellow
+$csprojContent = Get-Content $appProj -Raw
+$csprojContent = $csprojContent -replace '<Version>.*?</Version>', "<Version>$Version</Version>"
+Set-Content $appProj $csprojContent
 
-# 1) dotnet publish
-Write-Host "[1/3] dotnet publish 실행 중..." -ForegroundColor Cyan
+# 2) dotnet publish
+Write-Host "[2/4] dotnet publish..." -ForegroundColor Yellow
+dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
+if ($LASTEXITCODE -ne 0) { throw "빌드 실패" }
 
-dotnet publish $appProj `
-    -c Release `
-    -r win-x64 `
-    -o $publishDir `
-    --self-contained false
-
-Write-Host "    -> publish 완료: $publishDir" -ForegroundColor Green
-
-# 2) Squirrel pack
-Write-Host "[2/3] Squirrel pack 실행 중..." -ForegroundColor Cyan
-
+# 3) Squirrel pack
+Write-Host "[3/4] Squirrel pack..." -ForegroundColor Yellow
 if (-not (Test-Path $squirrelExe)) {
-    throw "Squirrel.exe를 찾을 수 없습니다: $squirrelExe`nClowd.Squirrel NuGet 패키지 버전/경로를 확인하세요."
+    throw "Squirrel.exe 없음: $squirrelExe"
 }
-
-# Releases 폴더가 없다면 생성
 if (-not (Test-Path $releasesDir)) {
     New-Item -ItemType Directory -Path $releasesDir | Out-Null
 }
@@ -49,18 +43,23 @@ if (-not (Test-Path $releasesDir)) {
 & $squirrelExe pack `
     --packId "WindowsOptimizer" `
     --packVersion $Version `
-    --packAuthors "Jcg" `
+    --packAuthors "JCG" `
     --packDirectory $publishDir `
     --releaseDir $releasesDir `
-    --icon $iconPath
+    --icon $iconPath `
+	--allowUnaware
 
-if ($LASTEXITCODE -ne 0) {
-    throw "Squirrel pack 실패 (exit code $LASTEXITCODE)"
-}
+if ($LASTEXITCODE -ne 0) { throw "Squirrel pack 실패" }
 
-Write-Host "    -> Releases 생성/갱신 완료: $releasesDir" -ForegroundColor Green
+# 4) 결과 출력
+Write-Host "[4/4] 완료!" -ForegroundColor Green
+Write-Host ""
+Write-Host "생성된 파일:" -ForegroundColor White
+Get-ChildItem $releasesDir | ForEach-Object { Write-Host "  - $($_.Name)" -ForegroundColor Gray }
+Write-Host ""
+Write-Host "다음 단계:" -ForegroundColor Yellow
 
-# 3) Git 커밋 & 푸시 (Releases 폴더가 git repo라고 가정)
+# 5) Git 커밋 & 푸시 (Releases 폴더가 git repo라고 가정)
 Write-Host "[3/3] Git 커밋 & 푸시..." -ForegroundColor Cyan
 
 Push-Location $releasesDir
