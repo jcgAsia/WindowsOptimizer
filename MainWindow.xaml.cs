@@ -16,7 +16,10 @@ namespace WindowsOptimizer
             LogService.Instance.LogAdded += OnLogAdded;
 
             if (DataContext is MainViewModel vm)
+            {
                 vm.ClearLogRequested += ClearLog;
+                vm.ToggleMonitoringCommand.Execute(vm);
+            }
         }
 
         private void ClearLog() => LogRichTextBox.Document.Blocks.Clear();

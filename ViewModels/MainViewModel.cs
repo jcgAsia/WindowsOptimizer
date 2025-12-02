@@ -38,7 +38,7 @@ namespace WindowsOptimizer.ViewModels
                 LastKeyword = $"도메인: {m.Trigger}";
                 UpdateMappingItems();
             });
-            // svc.ConfigLoaded += () => SafeInvoke(() => UpdateMappingItems());
+            // svc.ReloadConfig += () => SafeInvoke(() => UpdateMappingItems());
             // ConfigService 리로드 이벤트 구독
             ConfigService.Instance.ConfigReloaded += () => SafeInvoke(() =>
             {

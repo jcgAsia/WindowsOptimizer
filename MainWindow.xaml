@@ -8,6 +8,7 @@
     Height="900"
     Background="#1E1E1E"
     Closing="Window_Closing"
+    Icon="/Assets/app.ico"
     WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
@@ -324,9 +325,9 @@
         </GroupBox>
 
         <GridSplitter
-            Grid.Row="2"            
+            Grid.Row="2"
             Height="6"
-            Margin="3, 5, 0, 0"
+            Margin="3,5,0,0"
             HorizontalAlignment="Stretch"
             Background="#3F3F46" />
 

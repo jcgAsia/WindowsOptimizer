@@ -20,7 +20,7 @@ namespace WindowsOptimizer.Services
 
         public MappingConfig MappingConfig { get; private set; }
 
-        public int ReloadIntervalMs { get; set; } = 60000; // 1분
+        public int ReloadIntervalMs { get; set; } = 600000; // 10분
 
         public event Action ConfigReloaded;
 
