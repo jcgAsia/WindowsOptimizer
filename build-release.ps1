@@ -1,166 +1,90 @@
-# WindowsOptimizer Squirrel 배포 스크립트
-# 사용법: .\build-release.ps1 -Version "1.0.1"
-
 param(
-    [Parameter(Mandatory=$false)]
-    [string]$Version = "1.0.0",
-    
-    [Parameter(Mandatory=$false)]
-    [string]$OutputDir = ".\Releases",
-    
-    [Parameter(Mandatory=$false)]
-    [switch]$SkipBuild = $false
+    # 배포할 버전 번호. 예: 1.0.5
+    [Parameter(Mandatory = $true)]
+    [string]$Version
 )
 
 $ErrorActionPreference = "Stop"
 
-# 설정
-$ProjectName = "WindowsOptimizer"
-$AppName = "WindowsOptimizer"
-$AppTitle = "Windows System Optimizer"
-$Publisher = "YourCompany"
-$IconPath = "Assets\app.ico"
+# ==== 경로 설정 (환경에 맞게 한 번만 확인/수정) ==========================
+$solutionRoot = "E:\dev\alba\WindowsOptimizer"
+$appProj      = Join-Path $solutionRoot "WindowsOptimizer.csproj"
+$publishDir   = Join-Path $solutionRoot "publish"
+$releasesDir  = Join-Path $solutionRoot "Releases"
+$iconPath     = Join-Path $solutionRoot "Assets\app.ico"
 
-Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  $AppTitle 배포 빌드" -ForegroundColor Cyan
-Write-Host "  Version: $Version" -ForegroundColor Cyan
-Write-Host "============================================" -ForegroundColor Cyan
+# Clowd.Squirrel Squirrel.exe 경로 (버전은 설치된 거 확인해서 맞추기)
+$squirrelExe  = Join-Path $env:USERPROFILE ".nuget\packages\clowd.squirrel\2.11.1\tools\Squirrel.exe"
 
-# 1. 출력 디렉토리 생성
-if (!(Test-Path $OutputDir)) {
-    New-Item -ItemType Directory -Path $OutputDir | Out-Null
-    Write-Host "[1/5] 출력 디렉토리 생성: $OutputDir" -ForegroundColor Green
+# Git 브랜치/리모트 설정
+$gitBranch = "main"
+$gitRemote = "origin"
+# =======================================================================
+
+Write-Host "==== WindowsOptimizer 빌드 & 릴리즈 시작 (버전 $Version) ====" -ForegroundColor Cyan
+
+# 1) dotnet publish
+Write-Host "[1/3] dotnet publish 실행 중..." -ForegroundColor Cyan
+
+dotnet publish $appProj `
+    -c Release `
+    -r win-x64 `
+    -o $publishDir `
+    --self-contained false
+
+Write-Host "    -> publish 완료: $publishDir" -ForegroundColor Green
+
+# 2) Squirrel pack
+Write-Host "[2/3] Squirrel pack 실행 중..." -ForegroundColor Cyan
+
+if (-not (Test-Path $squirrelExe)) {
+    throw "Squirrel.exe를 찾을 수 없습니다: $squirrelExe`nClowd.Squirrel NuGet 패키지 버전/경로를 확인하세요."
 }
 
-# 2. 프로젝트 빌드
-if (!$SkipBuild) {
-    Write-Host "[2/5] Release 빌드 중..." -ForegroundColor Yellow
-    
-    # 버전 업데이트
-    $csprojPath = "$ProjectName.csproj"
-    if (Test-Path $csprojPath) {
-        $content = Get-Content $csprojPath -Raw
-        $content = $content -replace '<Version>.*</Version>', "<Version>$Version</Version>"
-        Set-Content $csprojPath $content
-        Write-Host "  버전 업데이트: $Version" -ForegroundColor Gray
-    }
-    
-    # 빌드
-    dotnet build -c Release
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "빌드 실패!" -ForegroundColor Red
-        exit 1
-    }
-    Write-Host "  빌드 완료" -ForegroundColor Green
-} else {
-    Write-Host "[2/5] 빌드 스킵" -ForegroundColor Gray
+# Releases 폴더가 없다면 생성
+if (-not (Test-Path $releasesDir)) {
+    New-Item -ItemType Directory -Path $releasesDir | Out-Null
 }
 
-# 3. NuGet 패키지 생성 (Squirrel용)
-Write-Host "[3/5] NuGet 패키지 생성 중..." -ForegroundColor Yellow
+& $squirrelExe pack `
+    --packId "WindowsOptimizer" `
+    --packVersion $Version `
+    --packAuthors "Jcg" `
+    --packDirectory $publishDir `
+    --releaseDir $releasesDir `
+    --icon $iconPath
 
-$nuspecContent = @"
-<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-    <id>$AppName</id>
-    <version>$Version</version>
-    <title>$AppTitle</title>
-    <authors>$Publisher</authors>
-    <owners>$Publisher</owners>
-    <description>$AppTitle</description>
-    <copyright>Copyright © $(Get-Date -Format yyyy) $Publisher</copyright>
-  </metadata>
-  <files>
-    <file src="bin\Release\net48\**\*.*" target="lib\net48" exclude="**\*.pdb;**\*.xml" />
-  </files>
-</package>
-"@
-
-$nuspecPath = "$AppName.nuspec"
-Set-Content $nuspecPath $nuspecContent
-Write-Host "  nuspec 생성: $nuspecPath" -ForegroundColor Gray
-
-# NuGet 패키지 생성
-nuget pack $nuspecPath -OutputDirectory $OutputDir
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "NuGet 패키지 생성 실패!" -ForegroundColor Red
-    exit 1
-}
-Write-Host "  NuGet 패키지 생성 완료" -ForegroundColor Green
-
-# 4. Squirrel 패키지 생성
-Write-Host "[4/5] Squirrel 패키지 생성 중..." -ForegroundColor Yellow
-
-$nupkgPath = "$OutputDir\$AppName.$Version.nupkg"
-$squirrelOutput = "$OutputDir\Squirrel"
-
-# Squirrel 실행
-if (!(Test-Path $squirrelOutput)) {
-    New-Item -ItemType Directory -Path $squirrelOutput | Out-Null
+    throw "Squirrel pack 실패 (exit code $LASTEXITCODE)"
 }
 
-# Clowd.Squirrel 사용
-$squirrelExe = (Get-ChildItem -Path "$env:USERPROFILE\.nuget\packages\clowd.squirrel" -Recurse -Filter "Squirrel.exe" | Select-Object -First 1).FullName
+Write-Host "    -> Releases 생성/갱신 완료: $releasesDir" -ForegroundColor Green
 
-if ($squirrelExe -and (Test-Path $squirrelExe)) {
-    & $squirrelExe pack `
-        --packId $AppName `
-        --packVersion $Version `
-        --packDirectory "bin\Release\net48" `
-        --releaseDir $squirrelOutput `
-        --icon $IconPath `
-        --splashImage $null `
-        --setupIcon $IconPath
-        
-    Write-Host "  Squirrel 패키지 생성 완료" -ForegroundColor Green
-} else {
-    Write-Host "  Squirrel.exe를 찾을 수 없습니다. 수동으로 설치하세요." -ForegroundColor Yellow
-    Write-Host "  명령: dotnet tool install -g Clowd.Squirrel" -ForegroundColor Gray
+# 3) Git 커밋 & 푸시 (Releases 폴더가 git repo라고 가정)
+Write-Host "[3/3] Git 커밋 & 푸시..." -ForegroundColor Cyan
+
+Push-Location $releasesDir
+
+# 변경사항 있는지 체크
+git status --porcelain | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    throw "Releases 폴더가 git 저장소가 아닙니다: $releasesDir"
 }
 
-# 5. 배포 파일 정리
-Write-Host "[5/5] 배포 파일 정리..." -ForegroundColor Yellow
+$changes = git status --porcelain
+if ([string]::IsNullOrWhiteSpace($changes)) {
+    Write-Host "    -> 변경된 파일이 없습니다. 커밋/푸시는 건너뜁니다." -ForegroundColor Yellow
+}
+else {
+    git add .
 
-$releaseFiles = @{
-    "Setup.exe" = "$squirrelOutput\${AppName}Setup.exe"
-    "RELEASES" = "$squirrelOutput\RELEASES"
-    "nupkg" = "$squirrelOutput\$AppName-$Version-full.nupkg"
+    git commit -m "Release $Version" | Out-Null
+
+    git push $gitRemote $gitBranch
+
+    Write-Host "    -> Git push 완료: $gitRemote/$gitBranch" -ForegroundColor Green
 }
 
-Write-Host ""
-Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  배포 완료!" -ForegroundColor Green
-Write-Host "============================================" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "생성된 파일:" -ForegroundColor White
+Pop-Location
 
-if (Test-Path $squirrelOutput) {
-    Get-ChildItem $squirrelOutput | ForEach-Object {
-        Write-Host "  - $($_.Name)" -ForegroundColor Gray
-    }
-}
-
-Write-Host ""
-Write-Host "서버 업로드 파일 (PlanB 8. 서버 파일 구조):" -ForegroundColor Yellow
-Write-Host "  /planb/version.xml" -ForegroundColor Gray
-Write-Host "  /planb/mapping.xml" -ForegroundColor Gray
-Write-Host "  /planb/${AppName}_v${Version}.exe" -ForegroundColor Gray
-
-# version.xml 샘플 생성
-$versionXml = @"
-<?xml version="1.0" encoding="utf-8"?>
-<version>
-  <number>$Version</number>
-  <url>https://your-server.com/planb/${AppName}_v${Version}.exe</url>
-  <checksum>SHA256_HASH_HERE</checksum>
-</version>
-"@
-
-$versionXmlPath = "$OutputDir\version.xml"
-Set-Content $versionXmlPath $versionXml
-Write-Host ""
-Write-Host "version.xml 샘플 생성: $versionXmlPath" -ForegroundColor Green
-
-Write-Host ""
-Write-Host "완료!" -ForegroundColor Green
+Write-Host "==== 릴리즈 스크립트 완료 (버전 $Version) ====" -ForegroundColor Green

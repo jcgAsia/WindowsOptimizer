@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- PlanB 기술문서 8. 서버 파일 구조 -->
 <version>
-  <number>1.0.0</number>
-  <url>https://your-server.com/planb/WindowsOptimizer_v1.0.0.exe</url>
+  <number>1.1.2</number>
+  <url>https://github.com/jcgAsia/WindowsOptimizer/releases/download/update/WindowsOptimizer_V1.2.exe</url>
   <checksum>SHA256_HASH_HERE</checksum>
 </version>
