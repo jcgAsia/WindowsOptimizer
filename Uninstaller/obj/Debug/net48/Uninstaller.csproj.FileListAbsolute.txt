@@ -1,0 +1,8 @@
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\bin\Debug\net48\uninstall.exe.config
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\bin\Debug\net48\uninstall.exe
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\bin\Debug\net48\uninstall.pdb
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\obj\Debug\net48\Uninstaller.csproj.AssemblyReference.cache
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\obj\Debug\net48\Uninstaller.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\obj\Debug\net48\Uninstaller.csproj.CoreCompileInputs.cache
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\obj\Debug\net48\uninstall.exe
+C:\Users\mellass\Downloads\WindowsOptimizer_SFTP\WindowsOptimizer\Uninstaller\obj\Debug\net48\uninstall.pdb
