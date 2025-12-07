@@ -7,7 +7,7 @@
     Width="900"
     Height="900"
     Background="#1E1E1E"
-    Closing="Window_Closing"    
+    Closing="Window_Closing"
     WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
