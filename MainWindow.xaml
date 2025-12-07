@@ -364,9 +364,11 @@
 
             <TextBlock
                 Grid.Column="0"
-                Margin="0,0,0,9"
+                Margin="20,0,0,9"
                 VerticalAlignment="Bottom"
-                Foreground="{StaticResource TextSecondary}"
+                FontSize="14"
+                FontWeight="Bold"
+                Foreground="GreenYellow"
                 Text="{Binding VersionInfo}" />
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">

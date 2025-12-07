@@ -12,7 +12,17 @@ namespace WindowsOptimizer.Services
         private static readonly Lazy<ConfigService> _instance = new Lazy<ConfigService>(() => new ConfigService());
         public static ConfigService Instance => _instance.Value;
 
-        private readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+        private readonly HttpClient _http;
+
+        private void InitializeHttpClient()
+        {
+            _http.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+            {
+                NoCache = true,
+                NoStore = true
+            };
+            _http.DefaultRequestHeaders.Pragma.Add(new System.Net.Http.Headers.NameValueHeaderValue("no-cache"));
+        }
         private readonly string _configDir;
 
         private Timer _timer;
@@ -20,12 +30,15 @@ namespace WindowsOptimizer.Services
 
         public MappingConfig MappingConfig { get; private set; }
 
-        public int ReloadIntervalMs { get; set; } = 600000; // 10분
+        public int ReloadIntervalMs { get; set; } = 60000; // 1분
 
         public event Action ConfigReloaded;
 
         private ConfigService()
         {
+            _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+            InitializeHttpClient();
+
             _configDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 GlobalConfig.AppFolderName, "config");
@@ -63,7 +76,9 @@ namespace WindowsOptimizer.Services
 
             try
             {
-                var xml = await _http.GetStringAsync(GlobalConfig.MappingUrl);
+                // 캐시 우회를 위한 타임스탬프 쿼리 파라미터 추가
+                var url = $"{GlobalConfig.MappingUrl}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                var xml = await _http.GetStringAsync(url);
                 File.WriteAllText(localPath, xml);
                 LogService.Instance.Log("[ConfigService] mapping.xml 다운로드 완료");
             }

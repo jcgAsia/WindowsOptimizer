@@ -16,11 +16,12 @@ namespace WindowsOptimizer.ViewModels
         [ObservableProperty] private string statusText = "대기 중";
         [ObservableProperty] private Brush statusColor = Brushes.Gray;
         [ObservableProperty] private string currentUrl = "-";
-        [ObservableProperty] private string triggerInfo = "0회";
+        [ObservableProperty] private string triggerInfo = "AutoTab:0 / OpenHd:0";
         [ObservableProperty] private string lastKeyword = "";
         [ObservableProperty] private string monitorButtonText = "▶ 모니터링 시작";
         [ObservableProperty] private string versionInfo = "";
-        [ObservableProperty] private string modeInfo = "PlanB";
+        [ObservableProperty] private string modeInfo = "PlanB v1.3";
+        [ObservableProperty] private string configStatus = "";
 
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
         public event Action ClearLogRequested;
@@ -32,18 +33,18 @@ namespace WindowsOptimizer.ViewModels
 
             var svc = BrowserMonitorService.Instance;
             svc.UrlChanged += url => SafeInvoke(() => CurrentUrl = string.IsNullOrEmpty(url) ? "-" : url);
-            svc.DomainTriggered += (url, m) => SafeInvoke(() =>
+            svc.DomainTriggered += (url, m, type) => SafeInvoke(() =>
             {
                 UpdateTriggerInfo();
-                LastKeyword = $"도메인: {m.Trigger}";
+                LastKeyword = $"[{type}] {m.Trigger}";
                 UpdateMappingItems();
             });
-            // svc.ReloadConfig += () => SafeInvoke(() => UpdateMappingItems());
-            // ConfigService 리로드 이벤트 구독
+
             ConfigService.Instance.ConfigReloaded += () => SafeInvoke(() =>
             {
                 UpdateStatus();
-                LogService.Instance.Log("[MainViewModel] 매핑 목록 UI 갱신됨");
+                UpdateConfigStatus();
+                LogService.Instance.Log("[MainViewModel] 설정 리로드됨");
             });
         }
 
@@ -52,8 +53,14 @@ namespace WindowsOptimizer.ViewModels
         private void UpdateStatus()
         {
             var svc = BrowserMonitorService.Instance;
+            var config = svc.MappingConfig;
 
-            if (svc.IsMonitoring)
+            if (config?.IsForceDown == true)
+            {
+                StatusText = "강제 중지됨 (ForceDown)";
+                StatusColor = Brushes.Red;
+            }
+            else if (svc.IsMonitoring)
             {
                 StatusText = "모니터링 중";
                 StatusColor = new SolidColorBrush(Color.FromRgb(78, 201, 176));
@@ -70,10 +77,20 @@ namespace WindowsOptimizer.ViewModels
             UpdateMappingItems();
         }
 
+        private void UpdateConfigStatus()
+        {
+            var config = BrowserMonitorService.Instance.MappingConfig;
+            if (config == null) return;
+
+            var autoTab = config.IsAutoTabEnabled ? $"ON({config.AutoTabCycleTime}s)" : "OFF";
+            var openHd = config.IsOpenHdEnabled ? $"ON({config.OpenHdCloseTime}s/{config.OpenHdCycleTime}s)" : "OFF";
+            ConfigStatus = $"AutoTab:{autoTab} | OpenHd:{openHd}";
+        }
+
         private void UpdateTriggerInfo()
         {
             var svc = BrowserMonitorService.Instance;
-            TriggerInfo = $"{svc.TriggerCount}회";
+            TriggerInfo = $"AutoTab:{svc.AutoTabTriggerCount} / OpenHd:{svc.OpenHdTriggerCount}";
             if (svc.LastTriggerTime != DateTime.MinValue)
                 TriggerInfo += $" (마지막: {svc.LastTriggerTime:HH:mm:ss})";
         }
@@ -81,36 +98,27 @@ namespace WindowsOptimizer.ViewModels
         private void UpdateMappingItems()
         {
             MappingItems.Clear();
-            var mapping = BrowserMonitorService.Instance.MappingConfig;
-            if (mapping?.Mappings == null) return;
+            var config = BrowserMonitorService.Instance.MappingConfig;
+            if (config?.Mappings == null) return;
 
-            foreach (var m in mapping.Mappings)
+            foreach (var m in config.Mappings)
             {
                 MappingItems.Add(new MappingItemViewModel
                 {
                     Trigger = m.Trigger,
                     Target = m.Target,
                     Frequency = m.Frequency,
-                    StatusText = m.CanTrigger() ? "대기" : GetRemainTime(m)
+                    StatusText = $"AT:{m.AutoTabCount} HD:{m.OpenHdCount}"
                 });
             }
-        }
-
-        private string GetRemainTime(DomainMapping m)
-        {
-            var remain = m.Frequency - (DateTime.Now - m.LastTriggered).TotalMinutes;
-            return remain > 0 ? $"{remain:F0}분 후" : "대기";
         }
 
         [RelayCommand]
         private void ToggleMonitoring()
         {
             var svc = BrowserMonitorService.Instance;
-            if (svc.IsMonitoring)
-                svc.StopMonitoring();
-            else
-                svc.StartMonitoring();
-
+            if (svc.IsMonitoring) svc.StopMonitoring();
+            else svc.StartMonitoring();
             UpdateStatus();
         }
 
