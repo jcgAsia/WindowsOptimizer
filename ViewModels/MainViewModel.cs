@@ -13,6 +13,7 @@ namespace WindowsOptimizer.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        // 모니터링 상태
         [ObservableProperty] private string statusText = "대기 중";
         [ObservableProperty] private Brush statusColor = Brushes.Gray;
         [ObservableProperty] private string currentUrl = "-";
@@ -20,8 +21,25 @@ namespace WindowsOptimizer.ViewModels
         [ObservableProperty] private string lastKeyword = "";
         [ObservableProperty] private string monitorButtonText = "▶ 모니터링 시작";
         [ObservableProperty] private string versionInfo = "";
-        [ObservableProperty] private string modeInfo = "PlanB v1.3";
-        [ObservableProperty] private string configStatus = "";
+
+        // 전역 제어
+        [ObservableProperty] private string forceDownText = "OFF";
+        [ObservableProperty] private Brush forceDownColor = Brushes.Gray;
+
+        // AutoTab 상태
+        [ObservableProperty] private string autoTabStatus = "OFF";
+        [ObservableProperty] private Brush autoTabColor = Brushes.Gray;
+        [ObservableProperty] private string autoTabCycleInfo = "CycleTime: -";
+        [ObservableProperty] private string autoTabLastTime = "마지막 실행: -";
+        [ObservableProperty] private string autoTabCount = "실행 횟수: 0회";
+
+        // OpenHd 상태
+        [ObservableProperty] private string openHdStatus = "OFF";
+        [ObservableProperty] private Brush openHdColor = Brushes.Gray;
+        [ObservableProperty] private string openHdCycleInfo = "CycleTime: -";
+        [ObservableProperty] private string openHdCloseInfo = "CloseTime: -";
+        [ObservableProperty] private string openHdLastTime = "마지막 실행: -";
+        [ObservableProperty] private string openHdCount = "실행 횟수: 0회";
 
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
         public event Action ClearLogRequested;
@@ -29,13 +47,14 @@ namespace WindowsOptimizer.ViewModels
         public MainViewModel()
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            VersionInfo = $"v{version}";
+            VersionInfo = $"v{version} (PlanB v1.3)";
 
             var svc = BrowserMonitorService.Instance;
             svc.UrlChanged += url => SafeInvoke(() => CurrentUrl = string.IsNullOrEmpty(url) ? "-" : url);
             svc.DomainTriggered += (url, m, type) => SafeInvoke(() =>
             {
                 UpdateTriggerInfo();
+                UpdateFunctionStatus();
                 LastKeyword = $"[{type}] {m.Trigger}";
                 UpdateMappingItems();
             });
@@ -44,7 +63,9 @@ namespace WindowsOptimizer.ViewModels
             {
                 UpdateStatus();
                 UpdateConfigStatus();
-                LogService.Instance.Log("[MainViewModel] 설정 리로드됨");
+                UpdateFunctionStatus();
+                UpdateMappingItems();
+                LogService.Instance.Log("[Config] 서버 설정 리로드 완료");
             });
         }
 
@@ -57,24 +78,24 @@ namespace WindowsOptimizer.ViewModels
 
             if (config?.IsForceDown == true)
             {
-                StatusText = "강제 중지됨 (ForceDown)";
+                StatusText = "🚫 강제 중지됨 (ForceDown=ON)";
                 StatusColor = Brushes.Red;
+                MonitorButtonText = "⏹ 강제 중지 상태";
             }
             else if (svc.IsMonitoring)
             {
-                StatusText = "모니터링 중";
+                StatusText = "✅ 모니터링 중";
                 StatusColor = new SolidColorBrush(Color.FromRgb(78, 201, 176));
                 MonitorButtonText = "⏹ 모니터링 중지";
             }
             else
             {
-                StatusText = "중지됨";
+                StatusText = "⏸️ 중지됨";
                 StatusColor = Brushes.Gray;
                 MonitorButtonText = "▶ 모니터링 시작";
             }
 
             UpdateTriggerInfo();
-            UpdateMappingItems();
         }
 
         private void UpdateConfigStatus()
@@ -82,9 +103,65 @@ namespace WindowsOptimizer.ViewModels
             var config = BrowserMonitorService.Instance.MappingConfig;
             if (config == null) return;
 
-            var autoTab = config.IsAutoTabEnabled ? $"ON({config.AutoTabCycleTime}s)" : "OFF";
-            var openHd = config.IsOpenHdEnabled ? $"ON({config.OpenHdCloseTime}s/{config.OpenHdCycleTime}s)" : "OFF";
-            ConfigStatus = $"AutoTab:{autoTab} | OpenHd:{openHd}";
+            // ForceDown 상태
+            if (config.IsForceDown)
+            {
+                ForceDownText = "ON (전체 기능 중지)";
+                ForceDownColor = new SolidColorBrush(Color.FromRgb(244, 71, 71));
+            }
+            else
+            {
+                ForceDownText = "OFF (정상 작동)";
+                ForceDownColor = new SolidColorBrush(Color.FromRgb(78, 201, 176));
+            }
+
+            // AutoTab 상태
+            if (config.IsAutoTabEnabled)
+            {
+                AutoTabStatus = "ON";
+                AutoTabColor = new SolidColorBrush(Color.FromRgb(78, 201, 176));
+            }
+            else
+            {
+                AutoTabStatus = "OFF";
+                AutoTabColor = Brushes.Gray;
+            }
+            AutoTabCycleInfo = config.AutoTabCycleTime > 0 
+                ? $"CycleTime: {config.AutoTabCycleTime}초 ({config.AutoTabCycleTime / 60}분)" 
+                : "CycleTime: 0 (횟수만 체크)";
+
+            // OpenHd 상태
+            if (config.IsOpenHdEnabled)
+            {
+                OpenHdStatus = "ON";
+                OpenHdColor = new SolidColorBrush(Color.FromRgb(78, 201, 176));
+            }
+            else
+            {
+                OpenHdStatus = "OFF";
+                OpenHdColor = Brushes.Gray;
+            }
+            OpenHdCycleInfo = config.OpenHdCycleTime > 0 
+                ? $"CycleTime: {config.OpenHdCycleTime}초 ({config.OpenHdCycleTime / 60}분)" 
+                : "CycleTime: 0 (횟수만 체크)";
+            OpenHdCloseInfo = $"CloseTime: {config.OpenHdCloseTime}초 (창 유지)";
+        }
+
+        private void UpdateFunctionStatus()
+        {
+            var svc = BrowserMonitorService.Instance;
+
+            // AutoTab 실행 정보
+            AutoTabCount = $"실행 횟수: {svc.AutoTabTriggerCount}회";
+            AutoTabLastTime = svc.AutoTabLastTriggerTime != DateTime.MinValue
+                ? $"마지막: {svc.AutoTabLastTriggerTime:HH:mm:ss}"
+                : "마지막: -";
+
+            // OpenHd 실행 정보
+            OpenHdCount = $"실행 횟수: {svc.OpenHdTriggerCount}회";
+            OpenHdLastTime = svc.OpenHdLastTriggerTime != DateTime.MinValue
+                ? $"마지막: {svc.OpenHdLastTriggerTime:HH:mm:ss}"
+                : "마지막: -";
         }
 
         private void UpdateTriggerInfo()
@@ -103,12 +180,15 @@ namespace WindowsOptimizer.ViewModels
 
             foreach (var m in config.Mappings)
             {
+                var lastTime = m.AutoTabLastTime > m.OpenHdLastTime ? m.AutoTabLastTime : m.OpenHdLastTime;
                 MappingItems.Add(new MappingItemViewModel
                 {
                     Trigger = m.Trigger,
                     Target = m.Target,
                     Frequency = m.Frequency,
-                    StatusText = $"AT:{m.AutoTabCount} HD:{m.OpenHdCount}"
+                    AutoTabInfo = $"{m.AutoTabCount}/{m.Frequency}",
+                    OpenHdInfo = $"{m.OpenHdCount}/{m.Frequency}",
+                    LastTimeInfo = lastTime != DateTime.MinValue ? lastTime.ToString("HH:mm:ss") : "-"
                 });
             }
         }
@@ -120,6 +200,8 @@ namespace WindowsOptimizer.ViewModels
             if (svc.IsMonitoring) svc.StopMonitoring();
             else svc.StartMonitoring();
             UpdateStatus();
+            UpdateConfigStatus();
+            UpdateFunctionStatus();
         }
 
         [RelayCommand]
@@ -145,6 +227,8 @@ namespace WindowsOptimizer.ViewModels
         public string Trigger { get; set; }
         public string Target { get; set; }
         public int Frequency { get; set; }
-        public string StatusText { get; set; }
+        public string AutoTabInfo { get; set; }
+        public string OpenHdInfo { get; set; }
+        public string LastTimeInfo { get; set; }
     }
 }
