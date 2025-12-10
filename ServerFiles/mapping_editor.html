@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Configuration Editor</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #1a1a2e; color: #eee; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 20px; color: #00d4ff; }
+
+        .settings-section { background: #16213e; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .settings-section h2 { color: #00d4ff; margin-bottom: 15px; font-size: 1.1em; }
+        .setting-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .setting-row label { min-width: 180px; }
+        .setting-row input, .setting-row select { background: #0f3460; border: 1px solid #444; color: #fff; padding: 8px 12px; border-radius: 4px; }
+        .setting-row input[type="number"] { width: 100px; }
+        .setting-row select { min-width: 80px; }
+        .hint { color: #888; font-size: 0.85em; margin-left: 10px; }
+
+        .mappings-section { background: #16213e; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .mappings-section h2 { color: #00d4ff; margin-bottom: 15px; }
+
+        .mapping-table { width: 100%; border-collapse: collapse; }
+        .mapping-table th { background: #0f3460; padding: 12px; text-align: left; font-weight: 500; }
+        .mapping-table td { padding: 8px; border-bottom: 1px solid #333; }
+        .mapping-table input { width: 100%; background: #0f3460; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; }
+        .mapping-table input[type="number"] { width: 60px; text-align: center; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .btn-add { background: #00d4ff; color: #000; }
+        .btn-add:hover { background: #00b8e6; }
+        .btn-delete { background: #e94560; color: #fff; padding: 6px 12px; }
+        .btn-delete:hover { background: #d63050; }
+        .btn-generate { background: #4ade80; color: #000; font-size: 16px; padding: 12px 30px; }
+        .btn-generate:hover { background: #3bca70; }
+        .btn-load { background: #fbbf24; color: #000; }
+        .btn-load:hover { background: #f0b020; }
+        .btn-copy { background: #8b5cf6; color: #fff; }
+        .btn-copy:hover { background: #7c4ce0; }
+
+        .actions { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+
+        .output-section { background: #16213e; border-radius: 8px; padding: 20px; }
+        .output-section h2 { color: #00d4ff; margin-bottom: 15px; }
+        .output-section textarea { width: 100%; height: 300px; background: #0a0a15; border: 1px solid #444; color: #4ade80; padding: 15px; font-family: 'Consolas', monospace; font-size: 13px; border-radius: 4px; resize: vertical; }
+
+        .file-input { display: none; }
+        .drop-zone { border: 2px dashed #444; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 15px; cursor: pointer; transition: all 0.2s; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: #00d4ff; background: rgba(0,212,255,0.1); }
+
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #4ade80; color: #000; padding: 15px 25px; border-radius: 8px; display: none; animation: slideIn 0.3s; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mapping Configuration Editor</h1>
+
+        <div class="drop-zone" id="dropZone">
+            XML 파일을 여기에 드래그하거나 클릭하여 불러오기
+            <input type="file" class="file-input" id="fileInput" accept=".xml">
+        </div>
+
+        <div class="settings-section">
+            <h2>General Settings</h2>
+            <div class="setting-row">
+                <label>Force Download (forcedown)</label>
+                <select id="forcedown">
+                    <option value="off">off</option>
+                    <option value="on">on</option>
+                </select>
+                <span class="hint">강제 다운로드 여부</span>
+            </div>
+            <div class="setting-row">
+                <label>Auto Tab (autotab)</label>
+                <select id="autotab">
+                    <option value="on">on</option>
+                    <option value="off">off</option>
+                </select>
+                <span class="hint">자동 탭 기능</span>
+            </div>
+            <div class="setting-row">
+                <label>Auto Tab Cycle Time (초)</label>
+                <input type="number" id="autotab_cycletime" value="1800" min="1">
+                <span class="hint">자동 탭 주기 (초)</span>
+            </div>
+            <div class="setting-row">
+                <label>Open HD (openhd)</label>
+                <select id="openhd">
+                    <option value="on">on</option>
+                    <option value="off">off</option>
+                </select>
+                <span class="hint">HD 열기 기능</span>
+            </div>
+            <div class="setting-row">
+                <label>Open HD Close Time (초)</label>
+                <input type="number" id="openhd_closetime" value="10" min="1">
+                <span class="hint">HD 창 닫기 시간 (초)</span>
+            </div>
+            <div class="setting-row">
+                <label>Open HD Cycle Time (초)</label>
+                <input type="number" id="openhd_cycletime" value="1800" min="1">
+                <span class="hint">HD 주기 (초)</span>
+            </div>
+        </div>
+
+        <div class="mappings-section">
+            <h2>URL Mappings</h2>
+            <table class="mapping-table">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Trigger Domain</th>
+                        <th style="width:45%">Target URL</th>
+                        <th style="width:10%">Frequency</th>
+                        <th style="width:15%">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="mappingsBody">
+                </tbody>
+            </table>
+            <div style="margin-top: 15px;">
+                <button class="btn btn-add" onclick="addMapping()">+ Add Mapping</button>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-generate" onclick="generateXML()">Generate XML</button>
+            <button class="btn btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
+            <button class="btn btn-load" onclick="downloadXML()">Download XML</button>
+        </div>
+
+        <div class="output-section">
+            <h2>Generated XML Output</h2>
+            <textarea id="xmlOutput" readonly placeholder="Click 'Generate XML' to see the output..."></textarea>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
+    <script>
+        let mappings = [];
+
+        // Initialize with sample data
+        function init() {
+            addMapping('search.daum.net', 'checkout.coupang.com', 2);
+            addMapping('daum.net', 'checkout.coupang.com', 2);
+            addMapping('search.naver.com', 'www.agoda.com/ko-kr/book', 2);
+            addMapping('naver.com', 'temu.com', 5);
+            addMapping('google.com', 'kr.trip.com/hotels/booknew', 1);
+        }
+
+        function addMapping(trigger = '', target = '', frequency = 1) {
+            const id = Date.now() + Math.random();
+            mappings.push({ id, trigger, target, frequency });
+            renderMappings();
+        }
+
+        function deleteMapping(id) {
+            mappings = mappings.filter(m => m.id !== id);
+            renderMappings();
+        }
+
+        function renderMappings() {
+            const tbody = document.getElementById('mappingsBody');
+            tbody.innerHTML = mappings.map(m => `
+                <tr>
+                    <td><input type="text" value="${escapeHtml(m.trigger)}" onchange="updateMapping(${m.id}, 'trigger', this.value)" placeholder="예: naver.com"></td>
+                    <td><input type="text" value="${escapeHtml(m.target)}" onchange="updateMapping(${m.id}, 'target', this.value)" placeholder="예: checkout.coupang.com"></td>
+                    <td><input type="number" value="${m.frequency}" min="1" onchange="updateMapping(${m.id}, 'frequency', parseInt(this.value))"></td>
+                    <td><button class="btn btn-delete" onclick="deleteMapping(${m.id})">Delete</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function updateMapping(id, field, value) {
+            const mapping = mappings.find(m => m.id === id);
+            if (mapping) mapping[field] = value;
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function escapeXml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+        }
+
+        function generateXML() {
+            const forcedown = document.getElementById('forcedown').value;
+            const autotab = document.getElementById('autotab').value;
+            const autotab_cycletime = document.getElementById('autotab_cycletime').value;
+            const openhd = document.getElementById('openhd').value;
+            const openhd_closetime = document.getElementById('openhd_closetime').value;
+            const openhd_cycletime = document.getElementById('openhd_cycletime').value;
+
+            let xml = `<?xml version="1.0" encoding="utf-8"?>\n<config>\n`;
+            xml += `\t<forcedown>${forcedown}</forcedown>\n`;
+            xml += `\t<autotab>${autotab}</autotab>\n`;
+            xml += `\t<autotab_cycletime>${autotab_cycletime}</autotab_cycletime>\n`;
+            xml += `\t<openhd>${openhd}</openhd>\n`;
+            xml += `\t<openhd_closetime>${openhd_closetime}</openhd_closetime>\n`;
+            xml += `\t<openhd_cycletime>${openhd_cycletime}</openhd_cycletime>\n`;
+            xml += `\t<mappings>\n`;
+
+            mappings.forEach(m => {
+                if (m.trigger && m.target) {
+                    xml += `\t\t<map>\n`;
+                    xml += `\t\t\t<trigger>${escapeXml(m.trigger)}</trigger>\n`;
+                    xml += `\t\t\t<target>${escapeXml(m.target)}</target>\n`;
+                    xml += `\t\t\t<frequency>${m.frequency || 1}</frequency>\n`;
+                    xml += `\t\t</map>\n`;
+                }
+            });
+
+            xml += `\t</mappings>\n</config>`;
+
+            document.getElementById('xmlOutput').value = xml;
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('xmlOutput');
+            if (!output.value) {
+                generateXML();
+            }
+            navigator.clipboard.writeText(output.value).then(() => {
+                showToast('Copied to clipboard!');
+            });
+        }
+
+        function downloadXML() {
+            const output = document.getElementById('xmlOutput');
+            if (!output.value) {
+                generateXML();
+            }
+            const blob = new Blob([output.value], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mapping.xml';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2000);
+        }
+
+        // File loading
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) loadFile(file);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) loadFile(e.target.files[0]);
+        });
+
+        function loadFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => parseXML(e.target.result);
+            reader.readAsText(file);
+        }
+
+        function parseXML(xmlString) {
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(xmlString, 'text/xml');
+
+                // Load settings
+                const getValue = (tag) => {
+                    const el = doc.querySelector(tag);
+                    return el ? el.textContent : null;
+                };
+
+                if (getValue('forcedown')) document.getElementById('forcedown').value = getValue('forcedown');
+                if (getValue('autotab')) document.getElementById('autotab').value = getValue('autotab');
+                if (getValue('autotab_cycletime')) document.getElementById('autotab_cycletime').value = getValue('autotab_cycletime');
+                if (getValue('openhd')) document.getElementById('openhd').value = getValue('openhd');
+                if (getValue('openhd_closetime')) document.getElementById('openhd_closetime').value = getValue('openhd_closetime');
+                if (getValue('openhd_cycletime')) document.getElementById('openhd_cycletime').value = getValue('openhd_cycletime');
+
+                // Load mappings
+                mappings = [];
+                const maps = doc.querySelectorAll('map');
+                maps.forEach(map => {
+                    const trigger = map.querySelector('trigger')?.textContent || '';
+                    const target = map.querySelector('target')?.textContent || '';
+                    const frequency = parseInt(map.querySelector('frequency')?.textContent) || 1;
+                    addMapping(trigger, target, frequency);
+                });
+
+                if (maps.length === 0) {
+                    addMapping();
+                }
+
+                showToast('XML loaded successfully!');
+                generateXML();
+            } catch (err) {
+                showToast('Error parsing XML file');
+                console.error(err);
+            }
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
