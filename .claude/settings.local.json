@@ -6,7 +6,8 @@
       "Bash(more:*)",
       "Bash(findstr:*)",
       "Bash(cmd /c \"if exist D:\\dev\\WindowsOptimizer\\ServerFiles\\mapping_editor.html echo EXISTS\")",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

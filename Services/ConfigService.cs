@@ -76,11 +76,18 @@ namespace WindowsOptimizer.Services
 
             try
             {
-                // 캐시 우회를 위한 타임스탬프 쿼리 파라미터 추가
-                var url = $"{GlobalConfig.MappingUrl}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
-                var xml = await _http.GetStringAsync(url);
+                // GitHub API를 사용하여 CDN 캐시 우회
+                var apiUrl = "https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/mapping.xml?ref=main";
+                var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
+                request.Headers.Add("Accept", "application/vnd.github.v3.raw");
+                request.Headers.Add("User-Agent", "WindowsOptimizer");
+
+                var response = await _http.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+                var xml = await response.Content.ReadAsStringAsync();
+
                 File.WriteAllText(localPath, xml);
-                LogService.Instance.Log("[ConfigService] mapping.xml 다운로드 완료");
+                LogService.Instance.Log("[ConfigService] mapping.xml 다운로드 완료 (GitHub API)");
             }
             catch (Exception ex)
             {
