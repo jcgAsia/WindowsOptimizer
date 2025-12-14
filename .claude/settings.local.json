@@ -5,7 +5,8 @@
       "Bash(cat:*)",
       "Bash(more:*)",
       "Bash(findstr:*)",
-      "Bash(cmd /c \"if exist D:\\dev\\WindowsOptimizer\\ServerFiles\\mapping_editor.html echo EXISTS\")"
+      "Bash(cmd /c \"if exist D:\\dev\\WindowsOptimizer\\ServerFiles\\mapping_editor.html echo EXISTS\")",
+      "Bash(curl:*)"
     ]
   }
 }
