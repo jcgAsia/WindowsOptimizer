@@ -25,6 +25,9 @@ namespace WindowsOptimizer.Models
         [XmlElement("openhd")]
         public string OpenHd { get; set; } = "off";
 
+        [XmlElement("openhd_delaytime")]
+        public int OpenHdDelayTime { get; set; } = 0;
+
         [XmlElement("openhd_closetime")]
         public int OpenHdCloseTime { get; set; } = 10;
 
@@ -97,6 +100,7 @@ namespace WindowsOptimizer.Models
                 AutoTab = "on",
                 AutoTabCycleTime = 1800,
                 OpenHd = "on",
+                OpenHdDelayTime = 180,
                 OpenHdCloseTime = 10,
                 OpenHdCycleTime = 1800,
                 MappingList = new MappingList

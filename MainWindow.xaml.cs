@@ -10,6 +10,8 @@ namespace WindowsOptimizer
 {
     public partial class MainWindow : Window
     {
+        private bool _monitoringStarted = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -18,8 +20,34 @@ namespace WindowsOptimizer
             if (DataContext is MainViewModel vm)
             {
                 vm.ClearLogRequested += ClearLog;
-                vm.ToggleMonitoringCommand.Execute(vm);
+
+                // 설정이 이미 로드되었으면 바로 시작, 아니면 이벤트 대기
+                if (ConfigService.Instance.MappingConfig != null)
+                {
+                    vm.ToggleMonitoringCommand.Execute(vm);
+                    _monitoringStarted = true;
+                }
+                else
+                {
+                    ConfigService.Instance.ConfigReloaded += OnConfigFirstLoaded;
+                }
             }
+        }
+
+        private void OnConfigFirstLoaded()
+        {
+            if (_monitoringStarted) return;
+            _monitoringStarted = true;
+
+            ConfigService.Instance.ConfigReloaded -= OnConfigFirstLoaded;
+
+            Dispatcher.Invoke(() =>
+            {
+                if (DataContext is MainViewModel vm)
+                {
+                    vm.ToggleMonitoringCommand.Execute(vm);
+                }
+            });
         }
 
         private void ClearLog() => LogRichTextBox.Document.Blocks.Clear();
@@ -49,11 +77,14 @@ namespace WindowsOptimizer
 
         private Color GetLogColor(string line)
         {
-            if (line.Contains("도메인 매칭") || line.Contains("트리거")) return Color.FromRgb(78, 201, 176);
-            if (line.Contains("URL 변경")) return Color.FromRgb(206, 145, 120);
-            if (line.Contains("백그라운드 탭")) return Color.FromRgb(86, 156, 214);
+            if (line.Contains("도메인 매칭") || line.Contains("트리거") || line.Contains("매칭")) return Color.FromRgb(78, 201, 176);
+            if (line.Contains("URL 변경") || line.Contains("URL]")) return Color.FromRgb(206, 145, 120);
+            if (line.Contains("백그라운드 탭") || line.Contains("AutoTab")) return Color.FromRgb(86, 156, 214);
+            if (line.Contains("OpenHd") || line.Contains("히든")) return Color.FromRgb(78, 201, 176);
+            if (line.Contains("DelayTime") || line.Contains("대기")) return Color.FromRgb(220, 220, 170);
             if (line.Contains("오류") || line.Contains("실패")) return Color.FromRgb(244, 71, 71);
-            if (line.Contains("시작") || line.Contains("중지")) return Color.FromRgb(220, 220, 170);
+            if (line.Contains("시작") || line.Contains("중지") || line.Contains("완료")) return Color.FromRgb(220, 220, 170);
+            if (line.Contains("Counting") || line.Contains("카운팅")) return Color.FromRgb(181, 206, 168);
             return Color.FromRgb(170, 170, 170);
         }
 

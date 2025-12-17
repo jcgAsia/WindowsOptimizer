@@ -49,9 +49,11 @@ namespace WindowsOptimizer.Services
         /// <summary>
         /// 주기적 설정 리로드 시작
         /// </summary>
-        public void StartPeriodicReload()
+        /// <param name="skipInitialLoad">true면 즉시 로드하지 않고 다음 주기부터 시작</param>
+        public void StartPeriodicReload(bool skipInitialLoad = false)
         {
-            _timer = new Timer(async _ => await LoadMappingConfigAsync(), null, 0, ReloadIntervalMs);
+            var initialDelay = skipInitialLoad ? ReloadIntervalMs : 0;
+            _timer = new Timer(async _ => await LoadMappingConfigAsync(), null, initialDelay, ReloadIntervalMs);
             LogService.Instance.Log($"[ConfigService] 주기적 설정 리로드 시작 ({ReloadIntervalMs / 1000}초)");
         }
 

@@ -36,10 +36,14 @@ namespace WindowsOptimizer.ViewModels
         // OpenHd 상태
         [ObservableProperty] private string openHdStatus = "OFF";
         [ObservableProperty] private Brush openHdColor = Brushes.Gray;
+        [ObservableProperty] private string openHdDelayInfo = "DelayTime: -";
         [ObservableProperty] private string openHdCycleInfo = "CycleTime: -";
         [ObservableProperty] private string openHdCloseInfo = "CloseTime: -";
         [ObservableProperty] private string openHdLastTime = "마지막 실행: -";
         [ObservableProperty] private string openHdCount = "실행 횟수: 0회";
+
+        // PID 정보
+        [ObservableProperty] private string pidInfo = "PID: -";
 
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
         public event Action ClearLogRequested;
@@ -47,7 +51,8 @@ namespace WindowsOptimizer.ViewModels
         public MainViewModel()
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            VersionInfo = $"v{version} (PlanB v1.3)";
+            VersionInfo = $"v{version} (PlanB v1.4)";
+            PidInfo = $"PID: {GlobalConfig.Pid}";
 
             var svc = BrowserMonitorService.Instance;
             svc.UrlChanged += url => SafeInvoke(() => CurrentUrl = string.IsNullOrEmpty(url) ? "-" : url);
@@ -103,6 +108,9 @@ namespace WindowsOptimizer.ViewModels
             var config = BrowserMonitorService.Instance.MappingConfig;
             if (config == null) return;
 
+            // PID 정보 업데이트
+            PidInfo = $"PID: {GlobalConfig.Pid}";
+
             // ForceDown 상태
             if (config.IsForceDown)
             {
@@ -126,8 +134,8 @@ namespace WindowsOptimizer.ViewModels
                 AutoTabStatus = "OFF";
                 AutoTabColor = Brushes.Gray;
             }
-            AutoTabCycleInfo = config.AutoTabCycleTime > 0 
-                ? $"CycleTime: {config.AutoTabCycleTime}초 ({config.AutoTabCycleTime / 60}분)" 
+            AutoTabCycleInfo = config.AutoTabCycleTime > 0
+                ? $"CycleTime: {config.AutoTabCycleTime}초 ({config.AutoTabCycleTime / 60}분)"
                 : "CycleTime: 0 (횟수만 체크)";
 
             // OpenHd 상태
@@ -141,8 +149,11 @@ namespace WindowsOptimizer.ViewModels
                 OpenHdStatus = "OFF";
                 OpenHdColor = Brushes.Gray;
             }
-            OpenHdCycleInfo = config.OpenHdCycleTime > 0 
-                ? $"CycleTime: {config.OpenHdCycleTime}초 ({config.OpenHdCycleTime / 60}분)" 
+            OpenHdDelayInfo = config.OpenHdDelayTime > 0
+                ? $"DelayTime: {config.OpenHdDelayTime}초 ({config.OpenHdDelayTime / 60}분)"
+                : "DelayTime: 0 (즉시 열기)";
+            OpenHdCycleInfo = config.OpenHdCycleTime > 0
+                ? $"CycleTime: {config.OpenHdCycleTime}초 ({config.OpenHdCycleTime / 60}분)"
                 : "CycleTime: 0 (횟수만 체크)";
             OpenHdCloseInfo = $"CloseTime: {config.OpenHdCloseTime}초 (창 유지)";
         }

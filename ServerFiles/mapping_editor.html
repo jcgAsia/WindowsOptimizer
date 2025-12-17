@@ -22,7 +22,13 @@
         .mappings-section { background: #16213e; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
         .mappings-section h2 { color: #00d4ff; margin-bottom: 15px; }
 
+        .mapping-table-wrapper { max-height: 400px; overflow-y: auto; border-radius: 4px; }
+        .mapping-table-wrapper::-webkit-scrollbar { width: 8px; }
+        .mapping-table-wrapper::-webkit-scrollbar-track { background: #0f3460; border-radius: 4px; }
+        .mapping-table-wrapper::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 4px; }
+        .mapping-table-wrapper::-webkit-scrollbar-thumb:hover { background: #00b8e6; }
         .mapping-table { width: 100%; border-collapse: collapse; }
+        .mapping-table thead { position: sticky; top: 0; z-index: 1; }
         .mapping-table th { background: #0f3460; padding: 12px; text-align: left; font-weight: 500; }
         .mapping-table td { padding: 8px; border-bottom: 1px solid #333; }
         .mapping-table input { width: 100%; background: #0f3460; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; }
@@ -142,18 +148,20 @@
 
         <div class="mappings-section">
             <h2>URL Mappings</h2>
-            <table class="mapping-table">
-                <thead>
-                    <tr>
-                        <th style="width:30%">Trigger Domain</th>
-                        <th style="width:45%">Target URL</th>
-                        <th style="width:10%">Frequency</th>
-                        <th style="width:15%">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="mappingsBody">
-                </tbody>
-            </table>
+            <div class="mapping-table-wrapper">
+                <table class="mapping-table">
+                    <thead>
+                        <tr>
+                            <th style="width:30%">Trigger Domain</th>
+                            <th style="width:45%">Target URL</th>
+                            <th style="width:10%">Frequency</th>
+                            <th style="width:15%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mappingsBody">
+                    </tbody>
+                </table>
+            </div>
             <div style="margin-top: 15px;">
                 <button class="btn btn-add" onclick="addMapping()">+ Add Mapping</button>
             </div>

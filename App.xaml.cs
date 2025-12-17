@@ -1,4 +1,5 @@
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using WindowsOptimizer.Services;
 
@@ -8,6 +9,15 @@ namespace WindowsOptimizer
     {
         private static Mutex _mutex;
         private System.Windows.Forms.NotifyIcon _trayIcon;
+
+        private async void InitializeConfigAsync()
+        {
+            // 먼저 설정 로드 완료 대기
+            await ConfigService.Instance.LoadMappingConfigAsync();
+
+            // 그 후 주기적 리로드 시작 (다음 주기부터)
+            ConfigService.Instance.StartPeriodicReload(skipInitialLoad: true);
+        }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -34,14 +44,17 @@ namespace WindowsOptimizer
             // 트레이 아이콘 설정
             SetupTrayIcon();
 
-            // 로딩 로그
+            // 로딩 로그 (레지스트리)
             GlobalConfig.OnLoadingLogQuery();
+
+            // 카운팅 서버 로그 전송
+            _ = CountingService.Instance.LogLoadingAsync();
 
             // 주기적 업데이트 체크 시작 (1분)
             UpdateService.Instance.StartPeriodicCheck();
 
-            // 주기적 설정 리로드 시작 (1분)
-            ConfigService.Instance.StartPeriodicReload();
+            // 설정 먼저 로드 후 주기적 리로드 시작
+            InitializeConfigAsync();
 
             LogService.Instance.Log("애플리케이션 시작");
 

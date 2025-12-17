@@ -24,7 +24,7 @@ namespace WindowsOptimizer.Services
         public void Log(string message)
         {
             var line = $"[{DateTime.Now:HH:mm:ss}] {message}";
-            
+
             lock (_lock)
             {
                 try
