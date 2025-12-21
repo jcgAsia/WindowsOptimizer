@@ -66,6 +66,41 @@ namespace WindowsOptimizer.Services
 
             MacAddress = GetMacAddress();
             LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}");
+
+            // 첫 실행 체크 및 설치 로그 전송
+            CheckFirstRunAndSendInstallLog();
+        }
+
+        /// <summary>
+        /// 첫 실행 여부 체크 - 설치 로그 전송 (Squirrel 훅 대체)
+        /// </summary>
+        private static void CheckFirstRunAndSendInstallLog()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
+                {
+                    if (key == null) return;
+
+                    var installed = key.GetValue("installed")?.ToString();
+                    if (string.IsNullOrEmpty(installed))
+                    {
+                        // 첫 실행 - 설치 로그 전송
+                        key.SetValue("installed", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        LogService.Instance.Log("[FirstRun] 첫 실행 감지 - 설치 로그 전송");
+
+                        // 업데이터 설치 로그 (Squirrel 훅 대체)
+                        _ = BustabccLoggingService.Instance.LogUpdaterInstallAsync();
+
+                        // 메인 설치 로그
+                        _ = BustabccLoggingService.Instance.LogMainInstallAsync();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                LogService.Instance.Log($"[FirstRun] 첫 실행 체크 오류: {ex.Message}");
+            }
         }
 
         /// <summary>

@@ -7,7 +7,7 @@
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <AssemblyName>WindowsOptimizer</AssemblyName>
     <RootNamespace>WindowsOptimizer</RootNamespace>
-    <Version>1.1.23</Version>
+    <Version>1.1.27</Version>
     <Product>Windows System Optimizer</Product>
     <Company>JCG</Company>
     <Authors>JCG</Authors>
@@ -15,6 +15,14 @@
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <!-- Squirrel SquirrelAwareApp metadata -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>SquirrelAwareVersion</_Parameter1>
+      <_Parameter2>1</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Clowd.Squirrel" Version="2.11.1" />
@@ -69,6 +77,11 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
+
+
+
+
+
 
 
 

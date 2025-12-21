@@ -85,6 +85,10 @@ namespace WindowsOptimizer
             if (line.Contains("오류") || line.Contains("실패")) return Color.FromRgb(244, 71, 71);
             if (line.Contains("시작") || line.Contains("중지") || line.Contains("완료")) return Color.FromRgb(220, 220, 170);
             if (line.Contains("Counting") || line.Contains("카운팅")) return Color.FromRgb(181, 206, 168);
+            // Bustabcc 로그 (보라색 계열)
+            if (line.Contains("[Bustabcc]") || line.Contains("bustabcc")) return Color.FromRgb(197, 134, 192);
+            // ProgramUpdate 로그 (주황색)
+            if (line.Contains("[ProgramUpdate]")) return Color.FromRgb(206, 145, 120);
             return Color.FromRgb(170, 170, 170);
         }
 

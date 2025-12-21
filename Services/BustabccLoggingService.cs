@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WindowsOptimizer.Services
@@ -8,7 +7,7 @@ namespace WindowsOptimizer.Services
     /// <summary>
     /// bustabcc.net 서버로 로그를 전송하는 서비스
     /// URL 형식: https://bustabcc.net/PRG/lg_read.php?bid=%BID
-    /// %BID에는 암호화된 쿼리스트링이 들어감
+    /// %BID에는 XOR256 암호화된 쿼리스트링이 들어감
     /// </summary>
     public class BustabccLoggingService
     {
@@ -17,6 +16,14 @@ namespace WindowsOptimizer.Services
         public static BustabccLoggingService Instance => _instance.Value;
 
         private readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
+
+        // 로그 전송 결과 이벤트
+        public event Action<bool, string, string> LogSent; // success, action, message
+
+        // 마지막 전송 정보
+        public DateTime LastSentTime { get; private set; } = DateTime.MinValue;
+        public bool LastSentSuccess { get; private set; }
+        public string LastSentAction { get; private set; } = "";
 
         private BustabccLoggingService() { }
 
@@ -96,7 +103,7 @@ namespace WindowsOptimizer.Services
         #endregion
 
         /// <summary>
-        /// 로그 전송 - 쿼리스트링을 암호화하여 bid 파라미터로 전송
+        /// 로그 전송 - 쿼리스트링을 XOR256 암호화하여 bid 파라미터로 전송
         /// </summary>
         /// <param name="action">액션 타입 (install, update, load, uninstall)</param>
         /// <param name="target">타겟 타입 (0=업데이터, 1=메인)</param>
@@ -106,52 +113,57 @@ namespace WindowsOptimizer.Services
             {
                 // 쿼리스트링 생성
                 // client=%CLIENTID&action=xxx&target=xxx&macadd=%MAC
-                var queryString = $"client={Uri.EscapeDataString(GlobalConfig.Pid)}" +
+                var queryString = $"client={GlobalConfig.Pid}" +
                                   $"&action={action}" +
                                   $"&target={target}" +
-                                  $"&macadd={Uri.EscapeDataString(GlobalConfig.MacAddress)}";
+                                  $"&macadd={GlobalConfig.MacAddress}";
 
-                // Base64 암호화
-                var encryptedBid = EncryptBid(queryString);
+                // XOR256 암호화 (HEX 문자열 반환)
+                var encryptedBid = Xor256CryptoService.Instance.Encrypt(queryString);
 
                 // URL 생성
-                var url = $"{GlobalConfig.BustabccLogUrl}?bid={Uri.EscapeDataString(encryptedBid)}";
+                var url = $"{GlobalConfig.BustabccLogUrl}?bid={encryptedBid}";
 
                 LogService.Instance.Log($"[Bustabcc] 로그 전송 시도: action={action}, target={target}");
+                LogService.Instance.Log($"[Bustabcc] URL: {url}");
 
                 var response = await _http.GetAsync(url);
 
+                LastSentTime = DateTime.Now;
+                LastSentAction = action;
+
                 if (response.IsSuccessStatusCode)
                 {
-                    LogService.Instance.Log($"[Bustabcc] 로그 전송 완료: action={action}, target={target}");
+                    LastSentSuccess = true;
+                    var msg = $"전송 성공: {action} (target={target})";
+                    LogService.Instance.Log($"[Bustabcc] {msg}");
+                    LogSent?.Invoke(true, action, msg);
                 }
                 else
                 {
-                    LogService.Instance.Log($"[Bustabcc] 로그 전송 실패: HTTP {(int)response.StatusCode}");
+                    LastSentSuccess = false;
+                    var msg = $"전송 실패: HTTP {(int)response.StatusCode}";
+                    LogService.Instance.Log($"[Bustabcc] {msg}");
+                    LogSent?.Invoke(false, action, msg);
                 }
             }
             catch (Exception ex)
             {
-                LogService.Instance.Log($"[Bustabcc] 로그 전송 오류: {ex.Message}");
+                LastSentTime = DateTime.Now;
+                LastSentAction = action;
+                LastSentSuccess = false;
+                var msg = $"전송 오류: {ex.Message}";
+                LogService.Instance.Log($"[Bustabcc] {msg}");
+                LogSent?.Invoke(false, action, msg);
             }
         }
 
         /// <summary>
-        /// 쿼리스트링을 Base64로 암호화
+        /// XOR256 복호화 (디버깅용)
         /// </summary>
-        private string EncryptBid(string plainText)
+        public string DecryptBid(string encryptedHex)
         {
-            var bytes = Encoding.UTF8.GetBytes(plainText);
-            return Convert.ToBase64String(bytes);
-        }
-
-        /// <summary>
-        /// Base64 복호화 (디버깅용)
-        /// </summary>
-        public string DecryptBid(string encryptedText)
-        {
-            var bytes = Convert.FromBase64String(encryptedText);
-            return Encoding.UTF8.GetString(bytes);
+            return Xor256CryptoService.Instance.Decrypt(encryptedHex);
         }
     }
 }
