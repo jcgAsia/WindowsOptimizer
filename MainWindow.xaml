@@ -236,7 +236,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!--  전역 제어 + Bustabcc 상태  -->
+                <!--  전역 제어  -->
                 <StackPanel
                     Grid.Row="0"
                     Margin="0,0,0,10"
@@ -252,21 +252,6 @@
                         Margin="20,0,0,0"
                         Foreground="{StaticResource AccentYellow}"
                         Text="{Binding PidInfo}" />
-
-                    <!--  Bustabcc 상태  -->
-                    <TextBlock
-                        Margin="30,0,10,0"
-                        Foreground="{StaticResource TextSecondary}">Bustabcc:</TextBlock>
-                    <Border Background="{Binding BustabccColor}" Style="{StaticResource StatusBadge}">
-                        <TextBlock
-                            FontWeight="Bold"
-                            Foreground="White"
-                            Text="{Binding BustabccStatus}" />
-                    </Border>
-                    <TextBlock
-                        Margin="10,0,0,0"
-                        Foreground="#C586C0"
-                        Text="{Binding BustabccLastLog}" />
                 </StackPanel>
 
                 <!--  기능별 상태  -->

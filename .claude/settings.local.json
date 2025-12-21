@@ -17,7 +17,13 @@
       "Bash(powershell -Command:*)",
       "Bash(powershell -ExecutionPolicy Bypass -File \"D:\\\\dev\\\\WindowsOptimizer\\\\test_new_mac.ps1\")",
       "Bash(del \"D:\\\\dev\\\\WindowsOptimizer\\\\test_new_mac.ps1\")",
-      "Bash(powershell -ExecutionPolicy Bypass -File \"D:\\\\dev\\\\WindowsOptimizer\\\\test_pb001.ps1\")"
+      "Bash(powershell -ExecutionPolicy Bypass -File \"D:\\\\dev\\\\WindowsOptimizer\\\\test_pb001.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"D:\\\\dev\\\\WindowsOptimizer\\\\check_metadata.ps1\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"D:\\\\dev\\\\WindowsOptimizer\\\\check_install.ps1\")",
+      "Bash(powershell:*)",
+      "Bash(git checkout:*)",
+      "Bash(del \"D:\\\\dev\\\\WindowsOptimizer\\\\Services\\\\BustabccLoggingService.cs\")",
+      "Bash(del \"D:\\\\dev\\\\WindowsOptimizer\\\\Services\\\\Xor256CryptoService.cs\")"
     ]
   }
 }

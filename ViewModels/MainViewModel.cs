@@ -45,11 +45,6 @@ namespace WindowsOptimizer.ViewModels
         // PID 정보
         [ObservableProperty] private string pidInfo = "PID: -";
 
-        // Bustabcc 상태
-        [ObservableProperty] private string bustabccStatus = "대기";
-        [ObservableProperty] private Brush bustabccColor = Brushes.Gray;
-        [ObservableProperty] private string bustabccLastLog = "마지막 전송: -";
-
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
         public event Action ClearLogRequested;
 
@@ -77,32 +72,6 @@ namespace WindowsOptimizer.ViewModels
                 UpdateMappingItems();
                 LogService.Instance.Log("[Config] 서버 설정 리로드 완료");
             });
-
-            // Bustabcc 로그 전송 이벤트 구독
-            BustabccLoggingService.Instance.LogSent += (success, action, msg) => SafeInvoke(() =>
-            {
-                UpdateBustabccStatus(success, action, msg);
-            });
-        }
-
-        private void UpdateBustabccStatus(bool success, string action, string message)
-        {
-            var svc = BustabccLoggingService.Instance;
-
-            if (success)
-            {
-                BustabccStatus = "전송 성공";
-                BustabccColor = new SolidColorBrush(Color.FromRgb(78, 201, 176)); // 녹색
-            }
-            else
-            {
-                BustabccStatus = "전송 실패";
-                BustabccColor = new SolidColorBrush(Color.FromRgb(244, 71, 71)); // 빨강
-            }
-
-            BustabccLastLog = svc.LastSentTime != DateTime.MinValue
-                ? $"마지막: {svc.LastSentTime:HH:mm:ss} ({action})"
-                : "마지막 전송: -";
         }
 
         private void SafeInvoke(Action action) => Application.Current?.Dispatcher?.Invoke(action);

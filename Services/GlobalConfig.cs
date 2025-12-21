@@ -6,12 +6,10 @@ namespace WindowsOptimizer.Services
 {
     public static class GlobalConfig
     {
-        // 파트너 아이디 (빌드 타입에 따라 설정)
-        // pb000: Mockup용, pb001: 실제 배포용
 #if DEBUG
-        public static string Pid { get; private set; } = "pb000";  // Mockup
+        public static string Pid { get; private set; } = "pb000";
 #else
-        public static string Pid { get; private set; } = "pb001";  // Live
+        public static string Pid { get; private set; } = "pb001";
 #endif
         public static string MacAddress { get; private set; }
 
@@ -26,81 +24,30 @@ namespace WindowsOptimizer.Services
         // 카운팅 서버 URL (실제 서버 주소로 변경 필요)
         public const string CountingBaseUrl = "https://your-counting-server.com/api/count";
 
-        #region Bustabcc 서버 설정
-        // 메인 도메인
-        public const string BustabccDomain = "bustabcc.net";
-
-        // 로그 전송 URL (bid 파라미터는 암호화된 쿼리스트링)
+        // Bustabcc 서버 설정
         public const string BustabccLogUrl = "https://bustabcc.net/PRG/lg_read.php";
-
-        // XML 업데이트 URL
-        public const string BustabccUpdateUrl = "https://bustabcc.net/SWC/ups_read.php";
-
-        // 로그 액션 타입
         public const string ActionInstall = "install";
         public const string ActionUpdate = "update";
         public const string ActionLoad = "load";
         public const string ActionUninstall = "uninstall";
-
-        // 타겟 타입 (0=업데이터, 1=메인)
         public const int TargetUpdater = 0;
         public const int TargetMain = 1;
-        #endregion
 
         public static void Initialize()
         {
             try
             {
-                // 레지스트리에 PID가 설정되어 있으면 사용, 없으면 빌드 타입 기본값 유지
                 using (var key = Registry.CurrentUser.OpenSubKey(RegSubKey))
                 {
                     var regPid = key?.GetValue("pid")?.ToString();
                     if (!string.IsNullOrEmpty(regPid))
-                    {
                         Pid = regPid;
-                    }
-                    // 레지스트리에 없으면 빌드 타입 기본값(pb000/pb001) 유지
                 }
             }
             catch { }
 
             MacAddress = GetMacAddress();
             LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}");
-
-            // 첫 실행 체크 및 설치 로그 전송
-            CheckFirstRunAndSendInstallLog();
-        }
-
-        /// <summary>
-        /// 첫 실행 여부 체크 - 설치 로그 전송 (Squirrel 훅 대체)
-        /// </summary>
-        private static void CheckFirstRunAndSendInstallLog()
-        {
-            try
-            {
-                using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
-                {
-                    if (key == null) return;
-
-                    var installed = key.GetValue("installed")?.ToString();
-                    if (string.IsNullOrEmpty(installed))
-                    {
-                        // 첫 실행 - 설치 로그 전송
-                        key.SetValue("installed", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                        LogService.Instance.Log("[FirstRun] 첫 실행 감지 - 설치 로그 전송");
-
-                        // 업데이터 설치 로그 (Squirrel 훅 대체)
-                        _ = BustabccLoggingService.Instance.LogUpdaterInstallAsync();
-
-                        // 메인 설치 로그
-                        _ = BustabccLoggingService.Instance.LogMainInstallAsync();
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                LogService.Instance.Log($"[FirstRun] 첫 실행 체크 오류: {ex.Message}");
-            }
         }
 
         /// <summary>
