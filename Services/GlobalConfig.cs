@@ -6,7 +6,13 @@ namespace WindowsOptimizer.Services
 {
     public static class GlobalConfig
     {
-        public static string Pid { get; private set; } = "default";
+        // 파트너 아이디 (빌드 타입에 따라 설정)
+        // pb000: Mockup용, pb001: 실제 배포용
+#if DEBUG
+        public static string Pid { get; private set; } = "pb000";  // Mockup
+#else
+        public static string Pid { get; private set; } = "pb001";  // Live
+#endif
         public static string MacAddress { get; private set; }
 
         public const string RegSubKey = @"SOFTWARE\WindowsOptimizer";
@@ -45,8 +51,16 @@ namespace WindowsOptimizer.Services
         {
             try
             {
+                // 레지스트리에 PID가 설정되어 있으면 사용, 없으면 빌드 타입 기본값 유지
                 using (var key = Registry.CurrentUser.OpenSubKey(RegSubKey))
-                    Pid = key?.GetValue("pid")?.ToString() ?? "default";
+                {
+                    var regPid = key?.GetValue("pid")?.ToString();
+                    if (!string.IsNullOrEmpty(regPid))
+                    {
+                        Pid = regPid;
+                    }
+                    // 레지스트리에 없으면 빌드 타입 기본값(pb000/pb001) 유지
+                }
             }
             catch { }
 

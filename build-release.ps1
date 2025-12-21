@@ -1,9 +1,14 @@
 # WindowsOptimizer 배포 스크립트
-# 사용법: .\build-release.ps1 -Version "1.0.1"
+# 사용법:
+#   실제 배포: .\build-release.ps1 -Version "1.0.1"
+#   Mockup:   .\build-release.ps1 -Version "1.0.1" -Mockup
 
 param(
     [Parameter(Mandatory = $true)]
-    [string]$Version
+    [string]$Version,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$Mockup  # Mockup 모드 (pb000), 미지정시 Live 모드 (pb001)
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,18 +23,32 @@ $iconPath     = Join-Path $solutionRoot "Assets\setup.ico"
 # Squirrel.exe 경로 (버전에 따라 조정)
 $squirrelExe  = Join-Path $env:USERPROFILE ".nuget\packages\clowd.squirrel\2.11.1\tools\Squirrel.exe"
 
-Write-Host "==== WindowsOptimizer 빌드 (버전 $Version) ====" -ForegroundColor Cyan
+# PID 설정
+$pid_value = if ($Mockup) { "pb000" } else { "pb001" }
+$build_type = if ($Mockup) { "Mockup" } else { "Live" }
 
-# 1) csproj 버전 업데이트
-Write-Host "[1/4] 버전 업데이트..." -ForegroundColor Yellow
+Write-Host "==== WindowsOptimizer 빌드 (버전 $Version, $build_type, PID: $pid_value) ====" -ForegroundColor Cyan
+
+# GlobalConfig.cs에서 PID 설정 (Mockup/Live에 따라)
+$globalConfigPath = Join-Path $solutionRoot "Services\GlobalConfig.cs"
+
+# 1) csproj 버전 업데이트 및 PID 설정
+Write-Host "[1/4] 버전 업데이트 및 PID 설정..." -ForegroundColor Yellow
 $csprojContent = Get-Content $appProj -Raw
 $csprojContent = $csprojContent -replace '<Version>.*?</Version>', "<Version>$Version</Version>"
 Set-Content $appProj $csprojContent
 
 # 2) dotnet publish
-Write-Host "[2/4] dotnet publish..." -ForegroundColor Yellow
-dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
+Write-Host "[2/4] dotnet publish ($build_type 모드)..." -ForegroundColor Yellow
+if ($Mockup) {
+    # Mockup: DEBUG 상수 정의하여 pb000 사용
+    dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false /p:DefineConstants=DEBUG
+} else {
+    # Live: 기본 Release 빌드로 pb001 사용
+    dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
+}
 if ($LASTEXITCODE -ne 0) { throw "빌드 실패" }
+Write-Host "    -> PID: $pid_value" -ForegroundColor Gray
 
 # 3) Squirrel pack
 Write-Host "[3/4] Squirrel pack..." -ForegroundColor Yellow
