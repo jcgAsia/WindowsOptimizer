@@ -100,17 +100,26 @@ namespace WindowsOptimizer.Services
 
             // 설치 카운팅 로그 전송
             _ = CountingService.Instance.LogInstallAsync();
+
+            // Bustabcc 서버 설치 로그 전송
+            _ = BustabccLoggingService.Instance.LogMainInstallAsync();
         }
 
         private static void OnAppUpdate(SemanticVersion version, IAppTools tools)
         {
             tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
+
+            // Bustabcc 서버 업데이트 로그 전송
+            _ = BustabccLoggingService.Instance.LogMainUpdateAsync();
         }
 
         private static void OnAppUninstall(SemanticVersion version, IAppTools tools)
         {
             // 언인스톨 카운팅 로그 전송
             _ = CountingService.Instance.LogUninstallAsync();
+
+            // Bustabcc 서버 언인스톨 로그 전송
+            _ = BustabccLoggingService.Instance.LogUninstallAsync();
 
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             RegistryService.Instance.UnregisterStartup();

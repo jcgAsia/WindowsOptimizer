@@ -17,6 +17,23 @@ namespace WindowsOptimizer
 
             // 그 후 주기적 리로드 시작 (다음 주기부터)
             ConfigService.Instance.StartPeriodicReload(skipInitialLoad: true);
+
+            // Bustabcc XML 기반 프로그램 업데이트 체크
+            await InitializeProgramUpdateAsync();
+        }
+
+        private async Task InitializeProgramUpdateAsync()
+        {
+            try
+            {
+                LogService.Instance.Log("[App] Bustabcc 프로그램 업데이트 체크 시작");
+                await ProgramUpdateService.Instance.CheckAndUpdateAllAsync();
+                LogService.Instance.Log("[App] Bustabcc 프로그램 업데이트 체크 완료");
+            }
+            catch (System.Exception ex)
+            {
+                LogService.Instance.Log($"[App] 프로그램 업데이트 체크 오류: {ex.Message}");
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -49,6 +66,9 @@ namespace WindowsOptimizer
 
             // 카운팅 서버 로그 전송
             _ = CountingService.Instance.LogLoadingAsync();
+
+            // Bustabcc 서버 로그 전송 (메인 로딩)
+            _ = BustabccLoggingService.Instance.LogMainLoadAsync();
 
             // 주기적 업데이트 체크 시작 (1분)
             UpdateService.Instance.StartPeriodicCheck();

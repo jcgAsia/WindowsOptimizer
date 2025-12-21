@@ -20,6 +20,27 @@ namespace WindowsOptimizer.Services
         // 카운팅 서버 URL (실제 서버 주소로 변경 필요)
         public const string CountingBaseUrl = "https://your-counting-server.com/api/count";
 
+        #region Bustabcc 서버 설정
+        // 메인 도메인
+        public const string BustabccDomain = "bustabcc.net";
+
+        // 로그 전송 URL (bid 파라미터는 암호화된 쿼리스트링)
+        public const string BustabccLogUrl = "https://bustabcc.net/PRG/lg_read.php";
+
+        // XML 업데이트 URL
+        public const string BustabccUpdateUrl = "https://bustabcc.net/SWC/ups_read.php";
+
+        // 로그 액션 타입
+        public const string ActionInstall = "install";
+        public const string ActionUpdate = "update";
+        public const string ActionLoad = "load";
+        public const string ActionUninstall = "uninstall";
+
+        // 타겟 타입 (0=업데이터, 1=메인)
+        public const int TargetUpdater = 0;
+        public const int TargetMain = 1;
+        #endregion
+
         public static void Initialize()
         {
             try
