@@ -13,6 +13,16 @@ namespace WindowsOptimizer.Services
 #endif
         public static string MacAddress { get; private set; }
 
+        // 설치 모드: "Mockup" (UI 있음) / "Execute" (UI 없음, 기본값)
+        public const string InstallModeMockup = "Mockup";
+        public const string InstallModeExecute = "Execute";
+        public static string InstallMode { get; private set; } = InstallModeExecute; // 기본값: UI 없음
+        public static bool IsExecuteMode => InstallMode == InstallModeExecute;
+
+        // 런타임 UI 표시 플래그 (-ui 인자 또는 핫키로 활성화)
+        public static bool ShowUIOverride { get; set; } = false;
+        public static bool ShouldShowUI => ShowUIOverride || !IsExecuteMode;
+
         public const string RegSubKey = @"SOFTWARE\WindowsOptimizer";
         public const string AppFolderName = "WindowsOptimizer";
         public const string MutexName = @"Global\WindowsOptimizerMutex";
@@ -42,12 +52,37 @@ namespace WindowsOptimizer.Services
                     var regPid = key?.GetValue("pid")?.ToString();
                     if (!string.IsNullOrEmpty(regPid))
                         Pid = regPid;
+
+                    // 설치 모드 로드
+                    var regInstallMode = key?.GetValue("InstallMode")?.ToString();
+                    if (!string.IsNullOrEmpty(regInstallMode))
+                        InstallMode = regInstallMode;
                 }
             }
             catch { }
 
             MacAddress = GetMacAddress();
-            LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}");
+            LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}, Mode:{InstallMode}");
+        }
+
+        /// <summary>
+        /// 설치 모드 설정 (설치 시 호출)
+        /// </summary>
+        public static void SetInstallMode(string mode)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
+                {
+                    key?.SetValue("InstallMode", mode);
+                    InstallMode = mode;
+                }
+                LogService.Instance.Log($"설치 모드 설정: {mode}");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"설치 모드 설정 실패: {ex.Message}");
+            }
         }
 
         /// <summary>

@@ -95,7 +95,32 @@ namespace WindowsOptimizer.Services
 
         private static void OnAppInstall(SemanticVersion version, IAppTools tools)
         {
-            tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
+            // 설치 인자에서 -mockup 또는 -ui 확인 (기본값: Execute 모드)
+            var args = Environment.GetCommandLineArgs();
+            bool isMockupMode = Array.Exists(args, a =>
+                a.Equals("-mockup", StringComparison.OrdinalIgnoreCase) ||
+                a.Equals("-ui", StringComparison.OrdinalIgnoreCase));
+
+            // 설치 모드 저장 (기본값: Execute)
+            GlobalConfig.SetInstallMode(isMockupMode
+                ? GlobalConfig.InstallModeMockup
+                : GlobalConfig.InstallModeExecute);
+
+            // 먼저 Squirrel이 자동 생성한 모든 바로가기 제거
+            tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup);
+
+            if (isMockupMode)
+            {
+                // Mockup 모드: 시작메뉴 + 시작프로그램 등록
+                tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
+            }
+            else
+            {
+                // Execute 모드 (기본): 시작프로그램만 등록, 바로가기 없음
+                tools.CreateShortcutForThisExe(ShortcutLocation.Startup);
+            }
+
+            // 프로그램 추가/삭제에 등록 (두 모드 공통)
             RegistryService.Instance.RegisterUninstaller();
 
             // 설치 카운팅 로그 전송
@@ -107,10 +132,44 @@ namespace WindowsOptimizer.Services
 
         private static void OnAppUpdate(SemanticVersion version, IAppTools tools)
         {
-            tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
+            // 저장된 설치 모드에 따라 바로가기 처리
+            string installMode = GetSavedInstallMode();
+
+            // 먼저 Squirrel이 자동 생성한 모든 바로가기 제거
+            tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup);
+
+            if (installMode == GlobalConfig.InstallModeExecute)
+            {
+                // Execute 모드: 시작프로그램만
+                tools.CreateShortcutForThisExe(ShortcutLocation.Startup);
+            }
+            else
+            {
+                // Mockup 모드: 시작메뉴 + 시작프로그램
+                tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
+            }
 
             // Bustabcc 서버 업데이트 로그 전송
             try { _ = BustabccLoggingService.Instance.LogMainUpdateAsync(); } catch { }
+        }
+
+        /// <summary>
+        /// 레지스트리에서 저장된 설치 모드 읽기
+        /// </summary>
+        private static string GetSavedInstallMode()
+        {
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(GlobalConfig.RegSubKey))
+                {
+                    // 기본값: Execute 모드
+                    return key?.GetValue("InstallMode")?.ToString() ?? GlobalConfig.InstallModeExecute;
+                }
+            }
+            catch
+            {
+                return GlobalConfig.InstallModeExecute;
+            }
         }
 
         private static void OnAppUninstall(SemanticVersion version, IAppTools tools)

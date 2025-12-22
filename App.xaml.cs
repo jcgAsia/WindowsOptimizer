@@ -1,6 +1,11 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 using WindowsOptimizer.Services;
 
 namespace WindowsOptimizer
@@ -9,6 +14,20 @@ namespace WindowsOptimizer
     {
         private static Mutex _mutex;
         private System.Windows.Forms.NotifyIcon _trayIcon;
+
+        // 글로벌 핫키 관련
+        private const int HOTKEY_ID = 9000;
+        private const uint MOD_CTRL = 0x0002;
+        private const uint MOD_SHIFT = 0x0004;
+        private const uint VK_O = 0x4F; // 'O' key
+
+        [DllImport("user32.dll")]
+        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        private HwndSource _hwndSource;
 
         private async void InitializeConfigAsync()
         {
@@ -24,25 +43,47 @@ namespace WindowsOptimizer
             // Squirrel 이벤트 처리 (설치/업데이트/제거)
             UpdateService.HandleSquirrelEvents();
 
+            // 전역 설정 초기화 (Mutex 체크 전에 실행하여 InstallMode 로드)
+            GlobalConfig.Initialize();
+
+            // Execute 모드일 때 불필요한 바로가기 삭제
+            if (GlobalConfig.IsExecuteMode)
+            {
+                RemoveUnwantedShortcuts();
+            }
+
+            // 커맨드라인 인자 처리: -ui 또는 --ui 로 UI 강제 표시
+            var args = Environment.GetCommandLineArgs();
+            if (args.Any(a => a.Equals("-ui", StringComparison.OrdinalIgnoreCase) ||
+                              a.Equals("--ui", StringComparison.OrdinalIgnoreCase)))
+            {
+                GlobalConfig.ShowUIOverride = true;
+                LogService.Instance.Log("UI 강제 표시 모드 (-ui)");
+            }
+
             // 단일 인스턴스 체크
             _mutex = new Mutex(true, GlobalConfig.MutexName, out bool isNew);
             if (!isNew)
             {
-                MessageBox.Show("이미 실행 중입니다.", "알림");
+                // UI 모드에서만 메시지 박스 표시
+                if (GlobalConfig.ShouldShowUI)
+                {
+                    MessageBox.Show("이미 실행 중입니다.", "알림");
+                }
                 Shutdown();
                 return;
             }
 
             base.OnStartup(e);
 
-            // 전역 설정 초기화
-            GlobalConfig.Initialize();
-
             // 시작프로그램 등록
             RegistryService.Instance.RegisterStartup();
 
-            // 트레이 아이콘 설정
-            SetupTrayIcon();
+            // UI 모드일 때만 트레이 아이콘 설정
+            if (GlobalConfig.ShouldShowUI)
+            {
+                SetupTrayIcon();
+            }
 
             // 로딩 로그 (레지스트리)
             GlobalConfig.OnLoadingLogQuery();
@@ -59,11 +100,19 @@ namespace WindowsOptimizer
             // 설정 먼저 로드 후 주기적 리로드 시작
             InitializeConfigAsync();
 
-            LogService.Instance.Log("애플리케이션 시작");
+            LogService.Instance.Log($"애플리케이션 시작 (Mode: {GlobalConfig.InstallMode}, ShowUI: {GlobalConfig.ShouldShowUI})");
 
-#if !DEBUG
-            MainWindow?.Hide();
-#endif
+            // MainWindow 수동 생성 (StartupUri 제거됨)
+            MainWindow = new MainWindow();
+
+            // UI 표시 여부에 따라 MainWindow 처리
+            if (GlobalConfig.ShouldShowUI)
+            {
+                MainWindow.Show();
+            }
+
+            // 글로벌 핫키 등록 (MainWindow 생성 후)
+            RegisterGlobalHotkey();
         }
 
         private void SetupTrayIcon()
@@ -86,11 +135,136 @@ namespace WindowsOptimizer
             _trayIcon.DoubleClick += (s, ev) => { MainWindow?.Show(); MainWindow?.Activate(); };
         }
 
+        /// <summary>
+        /// 글로벌 핫키 등록 (Ctrl+Shift+O: UI 토글)
+        /// </summary>
+        private void RegisterGlobalHotkey()
+        {
+            try
+            {
+                // 숨겨진 윈도우 생성하여 핫키 메시지 수신
+                var helper = new WindowInteropHelper(MainWindow);
+                if (helper.Handle == IntPtr.Zero)
+                {
+                    helper.EnsureHandle();
+                }
+
+                _hwndSource = HwndSource.FromHwnd(helper.Handle);
+                _hwndSource?.AddHook(HwndHook);
+
+                // Ctrl+Shift+O 등록
+                RegisterHotKey(helper.Handle, HOTKEY_ID, MOD_CTRL | MOD_SHIFT, VK_O);
+                LogService.Instance.Log("글로벌 핫키 등록: Ctrl+Shift+O (UI 토글)");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"핫키 등록 실패: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 윈도우 메시지 처리 (핫키)
+        /// </summary>
+        private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            const int WM_HOTKEY = 0x0312;
+
+            if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
+            {
+                ToggleUI();
+                handled = true;
+            }
+
+            return IntPtr.Zero;
+        }
+
+        /// <summary>
+        /// UI 토글 (핫키로 호출)
+        /// </summary>
+        private void ToggleUI()
+        {
+            if (MainWindow == null) return;
+
+            if (MainWindow.IsVisible)
+            {
+                MainWindow.Hide();
+                LogService.Instance.Log("UI 숨김 (핫키)");
+            }
+            else
+            {
+                // 트레이 아이콘이 없으면 생성
+                if (_trayIcon == null)
+                {
+                    SetupTrayIcon();
+                }
+
+                MainWindow.Show();
+                MainWindow.Activate();
+                MainWindow.WindowState = WindowState.Normal;
+                LogService.Instance.Log("UI 표시 (핫키)");
+            }
+        }
+
+        /// <summary>
+        /// Execute 모드에서 불필요한 바로가기 삭제
+        /// </summary>
+        private void RemoveUnwantedShortcuts()
+        {
+            try
+            {
+                // 바탕화면 바로가기 삭제
+                var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                DeleteShortcut(Path.Combine(desktopPath, "WindowsOptimizer.lnk"));
+                DeleteShortcut(Path.Combine(desktopPath, "Windows System Optimizer.lnk"));
+
+                // 시작메뉴 바로가기 삭제
+                var startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+                DeleteShortcut(Path.Combine(startMenuPath, "Programs", "WindowsOptimizer.lnk"));
+                DeleteShortcut(Path.Combine(startMenuPath, "Programs", "Windows System Optimizer.lnk"));
+
+                // 공용 바탕화면 바로가기 삭제
+                var publicDesktop = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
+                DeleteShortcut(Path.Combine(publicDesktop, "WindowsOptimizer.lnk"));
+                DeleteShortcut(Path.Combine(publicDesktop, "Windows System Optimizer.lnk"));
+
+                LogService.Instance.Log("Execute 모드: 불필요한 바로가기 삭제 완료");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"바로가기 삭제 실패: {ex.Message}");
+            }
+        }
+
+        private void DeleteShortcut(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    LogService.Instance.Log($"바로가기 삭제: {path}");
+                }
+            }
+            catch { }
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             // 주기적 체크 중지
             UpdateService.Instance.StopPeriodicCheck();
             ConfigService.Instance.StopPeriodicReload();
+
+            // 글로벌 핫키 해제
+            try
+            {
+                if (MainWindow != null)
+                {
+                    var helper = new WindowInteropHelper(MainWindow);
+                    UnregisterHotKey(helper.Handle, HOTKEY_ID);
+                }
+                _hwndSource?.RemoveHook(HwndHook);
+            }
+            catch { }
 
             BrowserMonitorService.Instance.StopMonitoring();
             _trayIcon?.Dispose();

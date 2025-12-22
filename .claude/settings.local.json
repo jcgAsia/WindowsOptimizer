@@ -23,7 +23,9 @@
       "Bash(powershell:*)",
       "Bash(git checkout:*)",
       "Bash(del \"D:\\\\dev\\\\WindowsOptimizer\\\\Services\\\\BustabccLoggingService.cs\")",
-      "Bash(del \"D:\\\\dev\\\\WindowsOptimizer\\\\Services\\\\Xor256CryptoService.cs\")"
+      "Bash(del \"D:\\\\dev\\\\WindowsOptimizer\\\\Services\\\\Xor256CryptoService.cs\")",
+      "Bash(git pull:*)",
+      "Bash(git push:*)"
     ]
   }
 }

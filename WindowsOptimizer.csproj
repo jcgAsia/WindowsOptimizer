@@ -7,7 +7,7 @@
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <AssemblyName>WindowsOptimizer</AssemblyName>
     <RootNamespace>WindowsOptimizer</RootNamespace>
-    <Version>1.1.47</Version>
+    <Version>1.1.53</Version>
     <Product>Windows System Optimizer</Product>
     <Company>JCG</Company>
     <Authors>JCG</Authors>
@@ -16,14 +16,17 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <!-- Squirrel Aware -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>SquirrelAwareVersion</_Parameter1>
+      <_Parameter2>1</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Clowd.Squirrel" Version="2.11.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Costura.Fody" Version="5.7.0" />
-    <PackageReference Include="Fody" Version="6.8.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +72,17 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

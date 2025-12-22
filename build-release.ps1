@@ -61,7 +61,7 @@ if (-not (Test-Path $releasesDir)) {
     --packDirectory $publishDir `
     --releaseDir $releasesDir `
     --icon $iconPath `
-	--allowUnaware
+    --allowUnaware
 
 if ($LASTEXITCODE -ne 0) { throw "Squirrel pack 실패" }
 
