@@ -480,6 +480,7 @@
         <Grid Grid.Row="5" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -491,7 +492,17 @@
                 Foreground="{StaticResource TextSecondary}"
                 Text="{Binding VersionInfo}" />
 
-            <StackPanel Grid.Column="2" Orientation="Horizontal">
+            <TextBlock
+                Grid.Column="1"
+                Margin="20,0,0,5"
+                VerticalAlignment="Bottom"
+                Foreground="{StaticResource AccentBlue}">
+                <Hyperlink NavigateUri="https://jcgasia.github.io/WindowsOptimizer_Updater/mapping_editor.html" RequestNavigate="Hyperlink_RequestNavigate">
+                    설정 사이트
+                </Hyperlink>
+            </TextBlock>
+
+            <StackPanel Grid.Column="3" Orientation="Horizontal">
                 <Button
                     Margin="0,0,8,0"
                     Command="{Binding ClearLogCommand}"

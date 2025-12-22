@@ -400,8 +400,15 @@ namespace WindowsOptimizer.Services
 
                 if (newWindows.Count > 0)
                 {
-                    PostMessage(newWindows.First(), WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                    LogService.Instance.Log($"[OpenHd] ✓ 쿠키 드롭 완료, 히든 창 닫음");
+                    var hwnd = newWindows.First();
+
+                    // 창 닫기 전에 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
+                    // 화면 중앙 부근으로 이동
+                    SetWindowPos(hwnd, IntPtr.Zero, 100, 100, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+                    Thread.Sleep(100); // 위치 저장을 위한 짧은 대기
+
+                    PostMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    LogService.Instance.Log($"[OpenHd] ✓ 쿠키 드롭 완료, 히든 창 닫음 (위치 복원 후)");
                 }
                 else
                 {
@@ -428,8 +435,12 @@ namespace WindowsOptimizer.Services
                     GetClassName(hWnd, className, 256);
                     if (className.ToString() == "Chrome_WidgetWin_1")
                     {
+                        // 창 닫기 전에 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
+                        SetWindowPos(hWnd, IntPtr.Zero, 100, 100, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+                        Thread.Sleep(100);
+
                         PostMessage(hWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                        LogService.Instance.Log($"[OpenHd] 제목으로 창 닫음: {titlePart}");
+                        LogService.Instance.Log($"[OpenHd] 제목으로 창 닫음: {titlePart} (위치 복원 후)");
                         return false;
                     }
                 }
