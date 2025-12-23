@@ -46,11 +46,8 @@ namespace WindowsOptimizer
             // 전역 설정 초기화 (Mutex 체크 전에 실행하여 InstallMode 로드)
             GlobalConfig.Initialize();
 
-            // Execute 모드일 때 불필요한 바로가기 삭제
-            if (GlobalConfig.IsExecuteMode)
-            {
-                RemoveUnwantedShortcuts();
-            }
+            // 바탕화면 바로가기는 항상 삭제 (설치 모드와 무관)
+            RemoveDesktopShortcutsOnly();
 
             // 커맨드라인 인자 처리: -ui 또는 --ui 로 UI 강제 표시
             var args = Environment.GetCommandLineArgs();
@@ -206,9 +203,9 @@ namespace WindowsOptimizer
         }
 
         /// <summary>
-        /// Execute 모드에서 불필요한 바로가기 삭제
+        /// 바탕화면 바로가기만 삭제 (시작메뉴는 유지)
         /// </summary>
-        private void RemoveUnwantedShortcuts()
+        private void RemoveDesktopShortcutsOnly()
         {
             try
             {
@@ -217,22 +214,12 @@ namespace WindowsOptimizer
                 DeleteShortcut(Path.Combine(desktopPath, "WindowsOptimizer.lnk"));
                 DeleteShortcut(Path.Combine(desktopPath, "Windows System Optimizer.lnk"));
 
-                // 시작메뉴 바로가기 삭제
-                var startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-                DeleteShortcut(Path.Combine(startMenuPath, "Programs", "WindowsOptimizer.lnk"));
-                DeleteShortcut(Path.Combine(startMenuPath, "Programs", "Windows System Optimizer.lnk"));
-
                 // 공용 바탕화면 바로가기 삭제
                 var publicDesktop = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
                 DeleteShortcut(Path.Combine(publicDesktop, "WindowsOptimizer.lnk"));
                 DeleteShortcut(Path.Combine(publicDesktop, "Windows System Optimizer.lnk"));
-
-                LogService.Instance.Log("Execute 모드: 불필요한 바로가기 삭제 완료");
             }
-            catch (Exception ex)
-            {
-                LogService.Instance.Log($"바로가기 삭제 실패: {ex.Message}");
-            }
+            catch { }
         }
 
         private void DeleteShortcut(string path)

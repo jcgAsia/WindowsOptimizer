@@ -20,7 +20,7 @@ $publishDir   = Join-Path $solutionRoot "publish"
 $releasesDir  = Join-Path $solutionRoot "Releases"
 $iconPath     = Join-Path $solutionRoot "Assets\setup.ico"
 
-# Squirrel.exe 경로 (버전에 따라 조정)
+# Squirrel.exe 경로
 $squirrelExe  = Join-Path $env:USERPROFILE ".nuget\packages\clowd.squirrel\2.11.1\tools\Squirrel.exe"
 
 # PID 설정

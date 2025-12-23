@@ -1,5 +1,6 @@
 using Squirrel;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -109,6 +110,9 @@ namespace WindowsOptimizer.Services
             // 먼저 Squirrel이 자동 생성한 모든 바로가기 제거
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup);
 
+            // 수동으로 바탕화면 바로가기 파일 직접 삭제 (Squirrel 타이밍 이슈 대응)
+            RemoveDesktopShortcuts();
+
             if (isMockupMode)
             {
                 // Mockup 모드: 시작메뉴 + 시작프로그램 등록
@@ -137,6 +141,9 @@ namespace WindowsOptimizer.Services
 
             // 먼저 Squirrel이 자동 생성한 모든 바로가기 제거
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup);
+
+            // 수동으로 바탕화면 바로가기 파일 직접 삭제 (Squirrel 타이밍 이슈 대응)
+            RemoveDesktopShortcuts();
 
             if (installMode == GlobalConfig.InstallModeExecute)
             {
@@ -188,6 +195,39 @@ namespace WindowsOptimizer.Services
         private static void OnFirstRun()
         {
             LogService.Instance.Log("첫 실행 - 설치 완료");
+        }
+
+        /// <summary>
+        /// 바탕화면 바로가기 파일 수동 삭제 (Squirrel 타이밍 이슈 대응)
+        /// </summary>
+        private static void RemoveDesktopShortcuts()
+        {
+            try
+            {
+                string[] shortcutNames = {
+                    "WindowsOptimizer.lnk",
+                    "Windows System Optimizer.lnk"
+                };
+
+                // 사용자 바탕화면
+                var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                foreach (var name in shortcutNames)
+                {
+                    var path = Path.Combine(desktopPath, name);
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+
+                // 공용 바탕화면
+                var publicDesktop = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
+                foreach (var name in shortcutNames)
+                {
+                    var path = Path.Combine(publicDesktop, name);
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+            }
+            catch { }
         }
     }
 }
