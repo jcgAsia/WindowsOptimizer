@@ -13,6 +13,7 @@ namespace WindowsOptimizer
     public partial class App : Application
     {
         private static Mutex _mutex;
+        private static bool _mutexOwned;
         private System.Windows.Forms.NotifyIcon _trayIcon;
 
         // 글로벌 핫키 관련
@@ -60,6 +61,7 @@ namespace WindowsOptimizer
 
             // 단일 인스턴스 체크
             _mutex = new Mutex(true, GlobalConfig.MutexName, out bool isNew);
+            _mutexOwned = isNew;
             if (!isNew)
             {
                 // UI 모드에서만 메시지 박스 표시
@@ -255,7 +257,10 @@ namespace WindowsOptimizer
 
             BrowserMonitorService.Instance.StopMonitoring();
             _trayIcon?.Dispose();
-            _mutex?.ReleaseMutex();
+            if (_mutexOwned && _mutex != null)
+            {
+                _mutex.ReleaseMutex();
+            }
             LogService.Instance.Log("애플리케이션 종료");
             base.OnExit(e);
         }

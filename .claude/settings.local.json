@@ -28,7 +28,9 @@
       "Bash(git push:*)",
       "Bash(dotnet publish:*)",
       "Bash(del \"E:\\\\dev\\\\jcg\\\\WindowsOptimizer\\\\run-squirrel.ps1\")",
-      "Bash(del \"E:\\\\dev\\\\jcg\\\\WindowsOptimizer\\\\check-squirrel.ps1\")"
+      "Bash(del \"E:\\\\dev\\\\jcg\\\\WindowsOptimizer\\\\check-squirrel.ps1\")",
+      "Bash(tasklist /FI \"IMAGENAME eq WindowsOptimizer.exe\")",
+      "Bash(cmd /c \"tasklist | findstr WindowsOptimizer\")"
     ]
   }
 }

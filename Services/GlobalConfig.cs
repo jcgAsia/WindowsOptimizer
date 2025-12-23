@@ -21,7 +21,11 @@ namespace WindowsOptimizer.Services
 
         // 런타임 UI 표시 플래그 (-ui 인자 또는 핫키로 활성화)
         public static bool ShowUIOverride { get; set; } = false;
+#if DEBUG
+        public static bool ShouldShowUI => true;
+#else
         public static bool ShouldShowUI => ShowUIOverride || !IsExecuteMode;
+#endif
 
         public const string RegSubKey = @"SOFTWARE\WindowsOptimizer";
         public const string AppFolderName = "WindowsOptimizer";
