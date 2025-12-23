@@ -86,7 +86,21 @@ namespace WindowsOptimizer.Services
 
                 var response = await _http.SendAsync(request);
                 response.EnsureSuccessStatusCode();
-                var xml = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync();
+
+                // 암호화된 hex 문자열인지 확인 (XML은 <?xml 또는 <로 시작)
+                string xml;
+                content = content.Trim();
+                if (content.StartsWith("<?xml") || content.StartsWith("<"))
+                {
+                    xml = content; // 평문 XML
+                }
+                else
+                {
+                    // 암호화된 hex 문자열 -> 복호화
+                    xml = Xor256CryptoService.Instance.Decrypt(content);
+                    LogService.Instance.Log("[ConfigService] 암호화된 매핑 복호화 완료");
+                }
 
                 File.WriteAllText(localPath, xml);
                 LogService.Instance.Log("[ConfigService] mapping.xml 다운로드 완료 (GitHub API)");

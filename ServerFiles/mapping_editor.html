@@ -174,15 +174,245 @@
             <button class="btn btn-load" onclick="downloadXML()">Download XML</button>
         </div>
 
-        <div class="output-section">
-            <h2>Generated XML Output</h2>
-            <textarea id="xmlOutput" readonly placeholder="Click 'Generate XML' to see the output..."></textarea>
+        <div class="output-crypto-container" style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div class="output-section" style="flex: 1; min-width: 400px;">
+                <h2>Generated XML Output</h2>
+                <textarea id="xmlOutput" readonly placeholder="Click 'Generate XML' to see the output..."></textarea>
+            </div>
+            <div class="output-section crypto-section" style="flex: 1; min-width: 400px;">
+                <h2>Encrypt / Decrypt</h2>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 5px; color: #aaa;">Plain Text (UTF-8)</label>
+                    <textarea id="plainTextInput" placeholder="Enter plain text to encrypt..." style="width: 100%; height: 100px; background: #0a0a15; border: 1px solid #444; color: #4ade80; padding: 10px; font-family: 'Consolas', monospace; font-size: 13px; border-radius: 4px; resize: vertical;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px; justify-content: center;">
+                    <button class="btn" style="background: #666; color: #fff;" onclick="encryptXmlOutput()">Encrypt XML →</button>
+					<button class="btn btn-add" onclick="encryptText()">Encrypt ↓</button>
+                    <button class="btn btn-copy" onclick="decryptText()">Decrypt ↑</button>                    
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #aaa;">Encrypted Hex</label>
+                    <textarea id="encryptedHexOutput" placeholder="Encrypted hex will appear here..." style="width: 100%; height: 100px; background: #0a0a15; border: 1px solid #444; color: #fbbf24; padding: 10px; font-family: 'Consolas', monospace; font-size: 13px; border-radius: 4px; resize: vertical;"></textarea>
+                </div>
+                <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn btn-copy" onclick="copyEncrypted()">Copy Encrypted</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="toast" id="toast">Copied to clipboard!</div>
 
     <script>
+        // XOR256 Crypto Implementation
+        class ArcfourPrng {
+            constructor() {
+                this._state0 = new Uint8Array(256);
+                this._state = new Uint8Array(256);
+                this._i = 0;
+                this._j = 0;
+            }
+
+            setKey(keyData) {
+                for (let i = 0; i < 256; i++) this._state0[i] = i;
+                this._i = 0;
+                this._j = 0;
+
+                let keyIndex = 0;
+                for (let i = 0; i < 256; i++) {
+                    this._j = (this._j + this._state0[i] + keyData[keyIndex]) & 0xFF;
+                    let temp = this._state0[i];
+                    this._state0[i] = this._state0[this._j];
+                    this._state0[this._j] = temp;
+                    keyIndex = (keyIndex + 1) % keyData.length;
+                }
+
+                this._state.set(this._state0);
+                this._i = 0;
+                this._j = 0;
+            }
+
+            reset() {
+                this._state.set(this._state0);
+                this._i = 0;
+                this._j = 0;
+            }
+
+            rand() {
+                this._i = (this._i + 1) & 0xFF;
+                this._j = (this._j + this._state[this._i]) & 0xFF;
+                let temp = this._state[this._i];
+                this._state[this._i] = this._state[this._j];
+                this._state[this._j] = temp;
+                return this._state[(this._state[this._i] + this._state[this._j]) & 0xFF];
+            }
+        }
+
+        class Xor256CryptoService {
+            constructor() {
+                this.CRYPTO_PW = "TGA_util";
+                this.KEY_MAX = 256;
+                this.DEFAULT_ROUNDS = 4;
+            }
+
+            encrypt(plainText) {
+                if (!plainText) return '';
+
+                const prng = new ArcfourPrng();
+                const key = new Uint8Array(this.KEY_MAX);
+                const encoder = new TextEncoder();
+                const keyBytes = encoder.encode(this.CRYPTO_PW);
+
+                for (let i = 0, j = 0; i < this.KEY_MAX; i++, j = (j + 1) % keyBytes.length)
+                    key[i] = keyBytes[j];
+
+                prng.setKey(key);
+                const ucPrev0 = prng.rand();
+
+                prng.reset();
+                prng.rand();
+                let ucPrev = ucPrev0;
+
+                const input = encoder.encode(plainText);
+                const output = new Uint8Array(input.length);
+
+                for (let i = 0; i < input.length; i++) {
+                    ucPrev ^= input[i];
+                    let cipher = ((ucPrev ^ prng.rand()) + prng.rand()) & 0xFF;
+
+                    for (let j = 1; j < this.DEFAULT_ROUNDS; j++) {
+                        cipher ^= prng.rand();
+                        cipher = (cipher + prng.rand()) & 0xFF;
+                    }
+
+                    output[i] = cipher;
+                }
+
+                return Array.from(output).map(b => b.toString(16).padStart(2, '0').toUpperCase()).join('');
+            }
+
+            decrypt(hexCipherText) {
+                if (!hexCipherText) return '';
+
+                // Hex 문자열을 바이트 배열로 변환
+                let input;
+                try {
+                    const length = hexCipherText.length / 2;
+                    input = new Uint8Array(length);
+                    for (let i = 0; i < length; i++)
+                        input[i] = parseInt(hexCipherText.substring(i * 2, i * 2 + 2), 16);
+                } catch (e) {
+                    return '';
+                }
+
+                const prng = new ArcfourPrng();
+                const key = new Uint8Array(this.KEY_MAX);
+                const encoder = new TextEncoder();
+                const keyBytes = encoder.encode(this.CRYPTO_PW);
+
+                for (let i = 0, j = 0; i < this.KEY_MAX; i++, j = (j + 1) % keyBytes.length)
+                    key[i] = keyBytes[j];
+
+                prng.setKey(key);
+                const ucPrev0 = prng.rand();
+
+                prng.reset();
+                prng.rand();
+                let ucPrev = ucPrev0;
+
+                const output = new Uint8Array(input.length);
+                const seqX = new Uint8Array(this.DEFAULT_ROUNDS);
+                const seqM = new Uint8Array(this.DEFAULT_ROUNDS);
+
+                for (let i = 0; i < input.length; i++) {
+                    // 각 라운드에 대한 상수 계산
+                    for (let j = 0; j < this.DEFAULT_ROUNDS; j++) {
+                        seqX[j] = prng.rand();
+                        seqM[j] = prng.rand();
+                    }
+
+                    let plain = input[i];
+
+                    // 마지막 라운드부터 역순으로 처리
+                    for (let j = this.DEFAULT_ROUNDS - 1; j > 0; j--) {
+                        if (seqM[j] <= plain)
+                            plain = (plain - seqM[j]) & 0xFF;
+                        else
+                            plain = ((plain + ((~seqM[j]) & 0xFF)) + 1) & 0xFF;
+                        plain ^= seqX[j];
+                    }
+
+                    // 첫번째 라운드
+                    if (seqM[0] <= plain)
+                        plain = (plain - seqM[0]) & 0xFF;
+                    else
+                        plain = ((plain + ((~seqM[0]) & 0xFF)) + 1) & 0xFF;
+                    plain ^= (ucPrev ^ seqX[0]);
+
+                    output[i] = plain & 0xFF;
+                    ucPrev ^= plain;
+                }
+
+                const decoder = new TextDecoder('utf-8');
+                return decoder.decode(output);
+            }
+        }
+
+        const xor256Crypto = new Xor256CryptoService();
+
+        function encryptText() {
+            const plainText = document.getElementById('plainTextInput').value;
+            if (!plainText) {
+                showToast('Please enter plain text to encrypt', 'error');
+                return;
+            }
+            const encrypted = xor256Crypto.encrypt(plainText);
+            document.getElementById('encryptedHexOutput').value = encrypted;
+            showToast('Text encrypted successfully!');
+        }
+
+        function decryptText() {
+            const hexText = document.getElementById('encryptedHexOutput').value.trim();
+            if (!hexText) {
+                showToast('Please enter hex text to decrypt', 'error');
+                return;
+            }
+            try {
+                const decrypted = xor256Crypto.decrypt(hexText);
+                document.getElementById('plainTextInput').value = decrypted;
+                showToast('Text decrypted successfully!');
+            } catch (e) {
+                showToast('Decryption failed: Invalid hex format', 'error');
+            }
+        }
+
+        function encryptXmlOutput() {
+            const xmlOutput = document.getElementById('xmlOutput').value;
+            if (!xmlOutput) {
+                generateXML();
+            }
+            const xml = document.getElementById('xmlOutput').value;
+            if (!xml) {
+                showToast('No XML to encrypt', 'error');
+                return;
+            }
+            document.getElementById('plainTextInput').value = xml;
+            const encrypted = xor256Crypto.encrypt(xml);
+            document.getElementById('encryptedHexOutput').value = encrypted;
+            showToast('XML encrypted successfully!');
+        }
+
+        function copyEncrypted() {
+            const encrypted = document.getElementById('encryptedHexOutput').value;
+            if (!encrypted) {
+                showToast('No encrypted text to copy', 'error');
+                return;
+            }
+            navigator.clipboard.writeText(encrypted).then(() => {
+                showToast('Encrypted text copied to clipboard!');
+            });
+        }
+
         let mappings = [];
 
         // Initialize with sample data
@@ -417,7 +647,16 @@
                 }
 
                 const data = await response.json();
-                const content = atob(data.content);
+                let content = atob(data.content);
+
+                // 암호화된 hex인지 확인 (XML은 <?xml 또는 <로 시작)
+                content = content.trim();
+                if (!content.startsWith('<?xml') && !content.startsWith('<')) {
+                    // 암호화된 hex -> 복호화
+                    content = xor256Crypto.decrypt(content);
+                    showToast('암호화된 매핑 복호화 완료', 'info');
+                }
+
                 parseXML(content);
                 showToast('GitHub에서 불러오기 완료!');
             } catch (error) {
@@ -470,10 +709,14 @@
                     }
                 }
 
-                // Update or create file
+                // XML을 암호화
+                const encryptedContent = xor256Crypto.encrypt(content);
+                console.log('Encrypted content length:', encryptedContent.length);
+
+                // Update or create file (암호화된 hex 저장)
                 const body = {
-                    message: `Update mapping.xml via Mapping Editor`,
-                    content: btoa(unescape(encodeURIComponent(content))),
+                    message: `Update mapping.xml via Mapping Editor (encrypted)`,
+                    content: btoa(encryptedContent),
                     branch: GITHUB_BRANCH
                 };
                 if (sha) body.sha = sha;
