@@ -30,7 +30,11 @@
       "Bash(del \"E:\\\\dev\\\\jcg\\\\WindowsOptimizer\\\\run-squirrel.ps1\")",
       "Bash(del \"E:\\\\dev\\\\jcg\\\\WindowsOptimizer\\\\check-squirrel.ps1\")",
       "Bash(tasklist /FI \"IMAGENAME eq WindowsOptimizer.exe\")",
-      "Bash(cmd /c \"tasklist | findstr WindowsOptimizer\")"
+      "Bash(cmd /c \"tasklist | findstr WindowsOptimizer\")",
+      "Bash(git clone:*)",
+      "Bash(copy:*)",
+      "Bash(cmd /c \"copy D:\\\\dev\\\\WindowsOptimizer\\\\ServerFiles\\\\mapping.xml D:\\\\dev\\\\WindowsOptimizer_Updater\\\\mapping.xml /Y\")",
+      "Bash(cmd /c \"cd /d D:\\\\dev\\\\WindowsOptimizer_Updater && git status\")"
     ]
   }
 }
