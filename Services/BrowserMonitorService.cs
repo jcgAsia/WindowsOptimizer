@@ -31,9 +31,23 @@ namespace WindowsOptimizer.Services
         private const uint SWP_NOACTIVATE = 0x0010;
         private const int SW_SHOWNOACTIVATE = 4;
         private const int SW_MINIMIZE = 6;
+        private const int SW_HIDE = 0;
+
+        // 창 스타일 관련 상수
+        private const int GWL_EXSTYLE = -20;
+        private const int WS_EX_TOOLWINDOW = 0x00000080;
+        private const int WS_EX_APPWINDOW = 0x00040000;
+
+        [DllImport("user32.dll")] private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")] private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
         private const uint WM_CLOSE = 0x0010;
+
+        // 히든 브라우저 실행 중 여부 및 추적
+        private volatile bool _isHiddenBrowserRunning = false;
+        private readonly object _hiddenBrowserLock = new object();
+        private List<IntPtr> _hiddenBrowserWindows = new List<IntPtr>();
 
         private Thread _thread;
         private volatile bool _isMonitoring;
@@ -289,6 +303,17 @@ namespace WindowsOptimizer.Services
 
         private void OpenHiddenBrowserForCookie(string url, int delayTimeSec, int closeTimeSec)
         {
+            // 이미 히든 브라우저가 실행 중이면 스킵
+            lock (_hiddenBrowserLock)
+            {
+                if (_isHiddenBrowserRunning)
+                {
+                    LogService.Instance.Log($"[OpenHd] ⚠ 이미 히든 브라우저가 실행 중, 스킵");
+                    return;
+                }
+                _isHiddenBrowserRunning = true;
+            }
+
             // 비동기로 처리하여 메인 스레드 블로킹 방지
             Task.Run(async () =>
             {
@@ -318,27 +343,105 @@ namespace WindowsOptimizer.Services
                     {
                         FileName = browserExe,
                         Arguments = $"--new-window \"{targetUrl}\"",
-                        UseShellExecute = true
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Minimized  // 최소화 상태로 시작
                     };
 
                     Process.Start(startInfo);
-                    LogService.Instance.Log($"[OpenHd] ✓ 히든 브라우저 창 열기 완료");
+                    LogService.Instance.Log($"[OpenHd] ✓ 히든 브라우저 창 열기 완료 (최소화)");
 
-                    // 새 창이 생길 때까지 대기 후 화면 밖으로 이동
-                    await Task.Delay(500);
-                    MoveNewWindowOffScreen(existingWindows);
+                    // 새 창이 생길 때까지 빠르게 감지하여 숨기기 (깜박임 방지)
+                    await HideNewWindowQuickly(existingWindows);
 
                     // CloseTime 대기 후 창 닫기
                     var actualCloseTime = Math.Max(closeTimeSec, 10);
                     LogService.Instance.Log($"[OpenHd] ⏱ {actualCloseTime}초 후 자동 닫기 예약");
                     await Task.Delay(actualCloseTime * 1000);
-                    CloseNewBrowserWindow(existingWindows, targetUrl);
+                    CloseAllHiddenBrowserWindows(existingWindows, targetUrl);
                 }
                 catch (Exception ex)
                 {
                     LogService.Instance.Log($"[OpenHd] ✗ 히든 브라우저 열기 실패: {ex.Message}");
                 }
+                finally
+                {
+                    lock (_hiddenBrowserLock)
+                    {
+                        _isHiddenBrowserRunning = false;
+                        _hiddenBrowserWindows.Clear();
+                    }
+                }
             });
+        }
+
+        /// <summary>
+        /// 새 창을 빠르게 감지하여 숨깁니다 (깜박임 방지)
+        /// </summary>
+        private async Task HideNewWindowQuickly(List<IntPtr> existingWindows)
+        {
+            // 50ms 간격으로 10번 시도 (총 500ms)
+            for (int i = 0; i < 10; i++)
+            {
+                await Task.Delay(50);
+                var currentWindows = GetBrowserWindows();
+                var newWindows = currentWindows.Except(existingWindows).ToList();
+
+                if (newWindows.Count > 0)
+                {
+                    foreach (var hwnd in newWindows)
+                    {
+                        HideWindowFromTaskbar(hwnd);
+                        lock (_hiddenBrowserLock)
+                        {
+                            if (!_hiddenBrowserWindows.Contains(hwnd))
+                                _hiddenBrowserWindows.Add(hwnd);
+                        }
+                        LogService.Instance.Log($"[OpenHd] ✓ 창 숨김 처리 완료 (HWND: {hwnd})");
+                    }
+                    return;
+                }
+            }
+
+            // 10번 시도 후에도 못 찾으면 추가 시도
+            LogService.Instance.Log($"[OpenHd] ⚠ 새 창 감지 지연, 추가 대기 중...");
+            await Task.Delay(300);
+            var finalWindows = GetBrowserWindows();
+            var finalNewWindows = finalWindows.Except(existingWindows).ToList();
+            foreach (var hwnd in finalNewWindows)
+            {
+                HideWindowFromTaskbar(hwnd);
+                lock (_hiddenBrowserLock)
+                {
+                    if (!_hiddenBrowserWindows.Contains(hwnd))
+                        _hiddenBrowserWindows.Add(hwnd);
+                }
+                LogService.Instance.Log($"[OpenHd] ✓ 재시도 - 창 숨김 처리 완료 (HWND: {hwnd})");
+            }
+        }
+
+        /// <summary>
+        /// 창을 작업표시줄에서 숨기고 화면 밖으로 이동
+        /// </summary>
+        private void HideWindowFromTaskbar(IntPtr hwnd)
+        {
+            try
+            {
+                // 1. 화면 밖으로 이동
+                SetWindowPos(hwnd, IntPtr.Zero, -32000, -32000, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+                // 2. 작업표시줄에서 숨기기: WS_EX_TOOLWINDOW 스타일 추가, WS_EX_APPWINDOW 제거
+                int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+                exStyle |= WS_EX_TOOLWINDOW;      // 작업표시줄에서 숨김
+                exStyle &= ~WS_EX_APPWINDOW;       // 앱 창 스타일 제거
+                SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+
+                // 3. 창 숨기기
+                ShowWindow(hwnd, SW_HIDE);
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[OpenHd] ✗ 창 숨김 실패: {ex.Message}");
+            }
         }
 
         private void MoveNewWindowOffScreen(List<IntPtr> existingWindows)
@@ -389,10 +492,32 @@ namespace WindowsOptimizer.Services
             return windows;
         }
 
-        private void CloseNewBrowserWindow(List<IntPtr> existingWindows, string url)
+        /// <summary>
+        /// 추적 중인 모든 히든 브라우저 창을 닫습니다
+        /// </summary>
+        private void CloseAllHiddenBrowserWindows(List<IntPtr> existingWindows, string url)
         {
             try
             {
+                List<IntPtr> windowsToClose;
+                lock (_hiddenBrowserLock)
+                {
+                    windowsToClose = new List<IntPtr>(_hiddenBrowserWindows);
+                }
+
+                // 추적 중인 창이 있으면 모두 닫기
+                if (windowsToClose.Count > 0)
+                {
+                    LogService.Instance.Log($"[OpenHd] 추적 중인 히든 창: {windowsToClose.Count}개");
+                    foreach (var hwnd in windowsToClose)
+                    {
+                        CloseHiddenWindow(hwnd);
+                    }
+                    LogService.Instance.Log($"[OpenHd] ✓ 모든 히든 창 닫기 완료");
+                    return;
+                }
+
+                // 추적 중인 창이 없으면 기존 방식으로 찾아서 닫기
                 var currentWindows = GetBrowserWindows();
                 var newWindows = currentWindows.Except(existingWindows).ToList();
 
@@ -400,15 +525,11 @@ namespace WindowsOptimizer.Services
 
                 if (newWindows.Count > 0)
                 {
-                    var hwnd = newWindows.First();
-
-                    // 창 닫기 전에 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
-                    // 화면 중앙 부근으로 이동
-                    SetWindowPos(hwnd, IntPtr.Zero, 100, 100, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-                    Thread.Sleep(100); // 위치 저장을 위한 짧은 대기
-
-                    PostMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                    LogService.Instance.Log($"[OpenHd] ✓ 쿠키 드롭 완료, 히든 창 닫음 (위치 복원 후)");
+                    foreach (var hwnd in newWindows)
+                    {
+                        CloseHiddenWindow(hwnd);
+                    }
+                    LogService.Instance.Log($"[OpenHd] ✓ 모든 새 창 닫기 완료 ({newWindows.Count}개)");
                 }
                 else
                 {
@@ -419,6 +540,26 @@ namespace WindowsOptimizer.Services
             catch (Exception ex)
             {
                 LogService.Instance.Log($"[OpenHd] ✗ 창 닫기 실패: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 히든 창을 정상 위치로 복원 후 닫습니다
+        /// </summary>
+        private void CloseHiddenWindow(IntPtr hwnd)
+        {
+            try
+            {
+                // 창 닫기 전에 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
+                SetWindowPos(hwnd, IntPtr.Zero, 100, 100, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+                Thread.Sleep(50);
+
+                PostMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                LogService.Instance.Log($"[OpenHd] 히든 창 닫음 (HWND: {hwnd})");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[OpenHd] ✗ 창 닫기 실패 (HWND: {hwnd}): {ex.Message}");
             }
         }
 
