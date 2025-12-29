@@ -70,6 +70,33 @@ namespace WindowsOptimizer.Services
 
         private BrowserMonitorService() { }
 
+        /// <summary>
+        /// 브라우저 실행 파일의 전체 경로를 찾습니다
+        /// </summary>
+        private string GetBrowserExePath(int browserType)
+        {
+            var possiblePaths = browserType == 0
+                ? new[]
+                {
+                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Google\Chrome\Application\chrome.exe"),
+                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Google\Chrome\Application\chrome.exe"),
+                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\Application\chrome.exe"),
+                }
+                : new[]
+                {
+                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Microsoft\Edge\Application\msedge.exe"),
+                    System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Microsoft\Edge\Application\msedge.exe"),
+                };
+
+            foreach (var path in possiblePaths)
+            {
+                if (System.IO.File.Exists(path))
+                    return path;
+            }
+
+            return null;
+        }
+
         public void StartMonitoring()
         {
             if (_isMonitoring) return;
@@ -360,11 +387,18 @@ namespace WindowsOptimizer.Services
 
                     // 히든 브라우저 전용 프로필 사용 (기존 Chrome 프로필과 분리)
                     var hiddenProfilePath = GetHiddenBrowserProfilePath();
-                    var browserExe = _browserType == 0 ? "chrome" : "msedge";
+                    var browserExePath = GetBrowserExePath(_browserType);
+
+                    if (string.IsNullOrEmpty(browserExePath))
+                    {
+                        var browserName = _browserType == 0 ? "Chrome" : "Edge";
+                        LogService.Instance.Log($"[OpenHd] ✗ {browserName} 브라우저를 찾을 수 없습니다");
+                        return;
+                    }
 
                     var startInfo = new ProcessStartInfo
                     {
-                        FileName = browserExe,
+                        FileName = browserExePath,
                         // 별도 user-data-dir 사용, 화면 밖에서 시작, 자동화 플래그
                         Arguments = $"--user-data-dir=\"{hiddenProfilePath}\" --window-position=-32000,-32000 --window-size=800,600 --no-first-run --no-default-browser-check \"{targetUrl}\"",
                         UseShellExecute = false,
