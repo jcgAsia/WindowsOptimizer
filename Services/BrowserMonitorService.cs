@@ -301,6 +301,26 @@ namespace WindowsOptimizer.Services
             }
         }
 
+        // 히든 브라우저 전용 임시 프로필 경로
+        private string _hiddenBrowserProfilePath;
+        private Process _hiddenBrowserProcess;
+
+        private string GetHiddenBrowserProfilePath()
+        {
+            if (string.IsNullOrEmpty(_hiddenBrowserProfilePath))
+            {
+                var appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                _hiddenBrowserProfilePath = System.IO.Path.Combine(appData, "WindowsOptimizer", "HiddenBrowserProfile");
+
+                // 디렉토리가 없으면 생성
+                if (!System.IO.Directory.Exists(_hiddenBrowserProfilePath))
+                {
+                    System.IO.Directory.CreateDirectory(_hiddenBrowserProfilePath);
+                }
+            }
+            return _hiddenBrowserProfilePath;
+        }
+
         private void OpenHiddenBrowserForCookie(string url, int delayTimeSec, int closeTimeSec)
         {
             // 이미 히든 브라우저가 실행 중이면 스킵
@@ -338,17 +358,21 @@ namespace WindowsOptimizer.Services
                         targetUrl = "https://" + url;
                     }
 
+                    // 히든 브라우저 전용 프로필 사용 (기존 Chrome 프로필과 분리)
+                    var hiddenProfilePath = GetHiddenBrowserProfilePath();
                     var browserExe = _browserType == 0 ? "chrome" : "msedge";
+
                     var startInfo = new ProcessStartInfo
                     {
                         FileName = browserExe,
-                        Arguments = $"--new-window \"{targetUrl}\"",
-                        UseShellExecute = true,
-                        WindowStyle = ProcessWindowStyle.Minimized  // 최소화 상태로 시작
+                        // 별도 user-data-dir 사용, 화면 밖에서 시작, 자동화 플래그
+                        Arguments = $"--user-data-dir=\"{hiddenProfilePath}\" --window-position=-32000,-32000 --window-size=800,600 --no-first-run --no-default-browser-check \"{targetUrl}\"",
+                        UseShellExecute = false,
+                        CreateNoWindow = true
                     };
 
-                    Process.Start(startInfo);
-                    LogService.Instance.Log($"[OpenHd] ✓ 히든 브라우저 창 열기 완료 (최소화)");
+                    _hiddenBrowserProcess = Process.Start(startInfo);
+                    LogService.Instance.Log($"[OpenHd] ✓ 히든 브라우저 창 열기 완료 (별도 프로필: {hiddenProfilePath})");
 
                     // 새 창이 생길 때까지 빠르게 감지하여 숨기기 (깜박임 방지)
                     await HideNewWindowQuickly(existingWindows);
@@ -357,7 +381,7 @@ namespace WindowsOptimizer.Services
                     var actualCloseTime = Math.Max(closeTimeSec, 10);
                     LogService.Instance.Log($"[OpenHd] ⏱ {actualCloseTime}초 후 자동 닫기 예약");
                     await Task.Delay(actualCloseTime * 1000);
-                    CloseAllHiddenBrowserWindows(existingWindows, targetUrl);
+                    CloseHiddenBrowserProcess();
                 }
                 catch (Exception ex)
                 {
@@ -369,9 +393,45 @@ namespace WindowsOptimizer.Services
                     {
                         _isHiddenBrowserRunning = false;
                         _hiddenBrowserWindows.Clear();
+                        _hiddenBrowserProcess = null;
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// 히든 브라우저 프로세스를 종료합니다
+        /// </summary>
+        private void CloseHiddenBrowserProcess()
+        {
+            try
+            {
+                if (_hiddenBrowserProcess != null && !_hiddenBrowserProcess.HasExited)
+                {
+                    _hiddenBrowserProcess.Kill();
+                    _hiddenBrowserProcess.WaitForExit(3000);
+                    LogService.Instance.Log($"[OpenHd] ✓ 히든 브라우저 프로세스 종료 완료");
+                }
+                else
+                {
+                    // 프로세스가 없으면 창 핸들로 닫기 시도
+                    List<IntPtr> windowsToClose;
+                    lock (_hiddenBrowserLock)
+                    {
+                        windowsToClose = new List<IntPtr>(_hiddenBrowserWindows);
+                    }
+
+                    foreach (var hwnd in windowsToClose)
+                    {
+                        PostMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    }
+                    LogService.Instance.Log($"[OpenHd] ✓ 히든 창 닫기 완료 ({windowsToClose.Count}개)");
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[OpenHd] ✗ 히든 브라우저 종료 실패: {ex.Message}");
+            }
         }
 
         /// <summary>
