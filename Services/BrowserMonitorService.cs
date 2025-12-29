@@ -550,7 +550,15 @@ namespace WindowsOptimizer.Services
         {
             try
             {
-                // 창 닫기 전에 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
+                // 1. 창 스타일 복원 (WS_EX_APPWINDOW 복원, WS_EX_TOOLWINDOW 제거)
+                int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+                exStyle &= ~WS_EX_TOOLWINDOW;
+                exStyle |= WS_EX_APPWINDOW;
+                SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+
+                // 2. 창을 먼저 보이게 한 후 정상 위치로 이동 (크롬이 마지막 위치 기억하는 문제 해결)
+                ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+                Thread.Sleep(30);
                 SetWindowPos(hwnd, IntPtr.Zero, 100, 100, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
                 Thread.Sleep(50);
 
@@ -567,7 +575,6 @@ namespace WindowsOptimizer.Services
         {
             EnumWindows((hWnd, lParam) =>
             {
-                if (!IsWindowVisible(hWnd)) return true;
                 var title = new StringBuilder(512);
                 GetWindowText(hWnd, title, 512);
                 if (title.ToString().ToLower().Contains(titlePart.ToLower()))
@@ -576,9 +583,17 @@ namespace WindowsOptimizer.Services
                     GetClassName(hWnd, className, 256);
                     if (className.ToString() == "Chrome_WidgetWin_1")
                     {
-                        // 창 닫기 전에 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
+                        // 1. 창 스타일 복원 (숨김 상태였을 수 있음)
+                        int exStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+                        exStyle &= ~WS_EX_TOOLWINDOW;
+                        exStyle |= WS_EX_APPWINDOW;
+                        SetWindowLong(hWnd, GWL_EXSTYLE, exStyle);
+
+                        // 2. 창을 보이게 하고 정상 위치로 복원 (크롬이 마지막 위치 기억하는 문제 해결)
+                        ShowWindow(hWnd, SW_SHOWNOACTIVATE);
+                        Thread.Sleep(30);
                         SetWindowPos(hWnd, IntPtr.Zero, 100, 100, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-                        Thread.Sleep(100);
+                        Thread.Sleep(50);
 
                         PostMessage(hWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                         LogService.Instance.Log($"[OpenHd] 제목으로 창 닫음: {titlePart} (위치 복원 후)");
