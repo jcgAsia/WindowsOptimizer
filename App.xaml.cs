@@ -37,6 +37,9 @@ namespace WindowsOptimizer
 
             // 그 후 주기적 리로드 시작 (다음 주기부터)
             ConfigService.Instance.StartPeriodicReload(skipInitialLoad: true);
+
+            // WebView2 초기화
+            await WebView2Service.Instance.InitializeAsync();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -50,13 +53,22 @@ namespace WindowsOptimizer
             // 바탕화면 바로가기는 항상 삭제 (설치 모드와 무관)
             RemoveDesktopShortcutsOnly();
 
-            // 커맨드라인 인자 처리: -ui 또는 --ui 로 UI 강제 표시
+            // 커맨드라인 인자 처리
             var args = Environment.GetCommandLineArgs();
+
+            // -ui 또는 --ui 로 UI 강제 표시
             if (args.Any(a => a.Equals("-ui", StringComparison.OrdinalIgnoreCase) ||
                               a.Equals("--ui", StringComparison.OrdinalIgnoreCase)))
             {
                 GlobalConfig.ShowUIOverride = true;
                 LogService.Instance.Log("UI 강제 표시 모드 (-ui)");
+            }
+
+            // --debug-webview 로 WebView2 디버그 모드 (화면에 표시)
+            if (args.Any(a => a.Equals("--debug-webview", StringComparison.OrdinalIgnoreCase)))
+            {
+                WebView2Service.Instance.DebugMode = true;
+                LogService.Instance.Log("WebView2 디버그 모드 활성화");
             }
 
             // 단일 인스턴스 체크
@@ -242,6 +254,9 @@ namespace WindowsOptimizer
             // 주기적 체크 중지
             UpdateService.Instance.StopPeriodicCheck();
             ConfigService.Instance.StopPeriodicReload();
+
+            // WebView2 정리
+            WebView2Service.Instance.Dispose();
 
             // 글로벌 핫키 해제
             try

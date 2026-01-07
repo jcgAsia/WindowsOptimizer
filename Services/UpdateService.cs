@@ -48,7 +48,7 @@ namespace WindowsOptimizer.Services
 
             try
             {
-                LogService.Instance.Log("[UpdateService] 업데이트 확인 중...");
+                // 주기적 체크는 조용히 진행 (새 버전 발견 시에만 로그)
 
                 using (var mgr = new UpdateManager(GlobalConfig.GitHubUpdateUrl))
                 {
@@ -65,10 +65,7 @@ namespace WindowsOptimizer.Services
                         UpdateManager.RestartApp();
                         return true;
                     }
-                    else
-                    {
-                        LogService.Instance.Log("[UpdateService] 최신 버전입니다.");
-                    }
+                    // 최신 버전일 때는 로그 생략 (1분마다 반복되므로)
                 }
             }
             catch (Exception ex)

@@ -29,6 +29,7 @@ namespace WindowsOptimizer.Services
         private bool _isLoading;
 
         public MappingConfig MappingConfig { get; private set; }
+        private int _lastMappingCount = -1; // 변경 감지용
 
         public int ReloadIntervalMs { get; set; } = 60000; // 1분
 
@@ -99,11 +100,9 @@ namespace WindowsOptimizer.Services
                 {
                     // 암호화된 hex 문자열 -> 복호화
                     xml = Xor256CryptoService.Instance.Decrypt(content);
-                    LogService.Instance.Log("[ConfigService] 암호화된 매핑 복호화 완료");
                 }
 
                 File.WriteAllText(localPath, xml);
-                LogService.Instance.Log("[ConfigService] mapping.xml 다운로드 완료 (GitHub API)");
             }
             catch (Exception ex)
             {
@@ -118,8 +117,15 @@ namespace WindowsOptimizer.Services
                     var newConfig = MappingConfig.LoadFromFile(localPath);
                     if (newConfig != null)
                     {
+                        var newCount = newConfig.Mappings?.Count ?? 0;
                         MappingConfig = newConfig;
-                        LogService.Instance.Log($"[ConfigService] 매핑 로드: {MappingConfig.Mappings?.Count ?? 0}개");
+
+                        // 변경사항 있을 때만 로그
+                        if (_lastMappingCount != newCount)
+                        {
+                            LogService.Instance.Log($"[ConfigService] 매핑 로드: {newCount}개");
+                            _lastMappingCount = newCount;
+                        }
                         ConfigReloaded?.Invoke();
                     }
                 }

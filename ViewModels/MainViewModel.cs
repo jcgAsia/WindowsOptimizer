@@ -70,7 +70,6 @@ namespace WindowsOptimizer.ViewModels
                 UpdateConfigStatus();
                 UpdateFunctionStatus();
                 UpdateMappingItems();
-                LogService.Instance.Log("[Config] 서버 설정 리로드 완료");
             });
         }
 
