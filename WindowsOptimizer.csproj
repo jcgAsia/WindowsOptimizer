@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net48</TargetFramework>
@@ -56,6 +56,10 @@
     <Page Remove="publish\**" />
     <Page Remove="Releases\**" />
     <Compile Remove="Services\SftpService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\app.ico" />
   </ItemGroup>
 
   <ItemGroup>
