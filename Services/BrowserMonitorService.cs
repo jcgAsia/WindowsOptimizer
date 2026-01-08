@@ -116,8 +116,10 @@ namespace WindowsOptimizer.Services
                     var trigger = mapping.Trigger.ToLower().Replace("www.", "");
                     var targetHost = host.Replace("www.", "");
 
-                    // 도메인 매칭 (서브도메인 포함)
-                    if (!targetHost.Contains(trigger) && !trigger.Contains(targetHost)) continue;
+                    // 정확한 도메인 매칭 또는 서브도메인 매칭
+                    // 예: trigger="gmarket.co.kr" → "gmarket.co.kr", "m.gmarket.co.kr" 매칭
+                    // "w", "ww" 같은 부분 문자열은 매칭 안됨
+                    if (targetHost != trigger && !targetHost.EndsWith("." + trigger)) continue;
 
                     LogService.Instance.Log("───────────────────────────────────────────────────────────────");
                     LogService.Instance.Log($"[매칭] 트리거 도메인 발견: {mapping.Trigger}");

@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 
@@ -22,6 +24,8 @@ namespace WindowsOptimizer.Services
         private bool _isInitialized;
         private bool _isNavigating;
         private readonly object _lock = new object();
+        private TextBlock _urlTextBlock;
+        private bool _isDebugWindowVisible;
 
         private string _userDataFolder;
 
@@ -46,6 +50,31 @@ namespace WindowsOptimizer.Services
 
             try
             {
+                // URL 표시용 TextBlock
+                _urlTextBlock = new TextBlock
+                {
+                    Text = "URL: (none)",
+                    Padding = new Thickness(8, 4, 8, 4),
+                    Background = new SolidColorBrush(Color.FromRgb(45, 45, 48)),
+                    Foreground = Brushes.White,
+                    FontFamily = new FontFamily("Consolas"),
+                    FontSize = 12,
+                    TextTrimming = TextTrimming.CharacterEllipsis
+                };
+
+                _webView = new WebView2();
+
+                // 레이아웃 구성 (URL 표시 + WebView)
+                var grid = new Grid();
+                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+
+                Grid.SetRow(_urlTextBlock, 0);
+                Grid.SetRow(_webView, 1);
+
+                grid.Children.Add(_urlTextBlock);
+                grid.Children.Add(_webView);
+
                 if (DebugMode)
                 {
                     // 디버그 모드: 화면에 표시되는 창
@@ -56,8 +85,10 @@ namespace WindowsOptimizer.Services
                         Height = 700,
                         WindowStyle = WindowStyle.SingleBorderWindow,
                         ShowInTaskbar = true,
-                        Topmost = true
+                        Topmost = true,
+                        Content = grid
                     };
+                    _isDebugWindowVisible = true;
                 }
                 else
                 {
@@ -71,17 +102,11 @@ namespace WindowsOptimizer.Services
                         WindowStyle = WindowStyle.None,
                         ShowInTaskbar = false,
                         ShowActivated = false,
-                        Visibility = Visibility.Hidden
+                        Visibility = Visibility.Hidden,
+                        Content = grid
                     };
+                    _isDebugWindowVisible = false;
                 }
-
-                _webView = new WebView2
-                {
-                    Width = 800,
-                    Height = 600
-                };
-
-                _hiddenWindow.Content = _webView;
 
                 if (DebugMode)
                 {
@@ -110,6 +135,20 @@ namespace WindowsOptimizer.Services
                     e.Handled = true;
                     // 새 창 URL도 현재 WebView에서 로드
                     _webView.CoreWebView2.Navigate(e.Uri);
+                };
+
+                // URL 변경 시 상단에 표시 + 리다이렉트 로그
+                _webView.CoreWebView2.SourceChanged += (s, e) =>
+                {
+                    Application.Current?.Dispatcher?.Invoke(() =>
+                    {
+                        var currentUrl = _webView.CoreWebView2.Source;
+                        _urlTextBlock.Text = $"URL: {currentUrl}";
+                        if (!string.IsNullOrEmpty(currentUrl) && currentUrl != "about:blank")
+                        {
+                            LogService.Instance.Log($"[WebView2] URL 변경(리다이렉트): {currentUrl}");
+                        }
+                    });
                 };
 
                 _isInitialized = true;
@@ -193,6 +232,50 @@ namespace WindowsOptimizer.Services
                     _isNavigating = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// 디버그 창 토글 (핫키로 호출)
+        /// 숨겨진 창을 디버그 모드 창으로 변환하여 표시
+        /// </summary>
+        public void ToggleDebugWindow()
+        {
+            Application.Current?.Dispatcher?.Invoke(() =>
+            {
+                if (_hiddenWindow == null) return;
+
+                if (_isDebugWindowVisible)
+                {
+                    // 디버그 창 숨기기 (원래 숨김 상태로 복원)
+                    _hiddenWindow.Hide();
+                    _hiddenWindow.WindowStyle = WindowStyle.None;
+                    _hiddenWindow.ShowInTaskbar = false;
+                    _hiddenWindow.Topmost = false;
+                    _hiddenWindow.Left = -32000;
+                    _hiddenWindow.Top = -32000;
+                    _hiddenWindow.Width = 1;
+                    _hiddenWindow.Height = 1;
+                    _isDebugWindowVisible = false;
+                    LogService.Instance.Log("[WebView2] 디버그 창 숨김");
+                }
+                else
+                {
+                    // 디버그 창 표시
+                    _hiddenWindow.WindowStyle = WindowStyle.SingleBorderWindow;
+                    _hiddenWindow.ShowInTaskbar = true;
+                    _hiddenWindow.Topmost = true;
+                    _hiddenWindow.Width = 900;
+                    _hiddenWindow.Height = 700;
+                    _hiddenWindow.Left = 100;
+                    _hiddenWindow.Top = 100;
+                    _hiddenWindow.Title = "[Debug] WebView2";
+                    _hiddenWindow.Visibility = Visibility.Visible;
+                    _hiddenWindow.Show();
+                    _hiddenWindow.Activate();
+                    _isDebugWindowVisible = true;
+                    LogService.Instance.Log("[WebView2] 디버그 창 표시");
+                }
+            });
         }
 
         /// <summary>

@@ -18,9 +18,12 @@ namespace WindowsOptimizer
 
         // 글로벌 핫키 관련
         private const int HOTKEY_ID = 9000;
+        private const int HOTKEY_DEBUG_ID = 9001;
         private const uint MOD_CTRL = 0x0002;
         private const uint MOD_SHIFT = 0x0004;
+        private const uint MOD_ALT = 0x0001;
         private const uint VK_O = 0x4F; // 'O' key
+        private const uint VK_F12 = 0x7B; // F12 key
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -166,6 +169,10 @@ namespace WindowsOptimizer
                 // Ctrl+Shift+O 등록
                 RegisterHotKey(helper.Handle, HOTKEY_ID, MOD_CTRL | MOD_SHIFT, VK_O);
                 LogService.Instance.Log("글로벌 핫키 등록: Ctrl+Shift+O (UI 토글)");
+
+                // Ctrl+Shift+Alt+F12 등록 (디버그 모드)
+                RegisterHotKey(helper.Handle, HOTKEY_DEBUG_ID, MOD_CTRL | MOD_SHIFT | MOD_ALT, VK_F12);
+                LogService.Instance.Log("글로벌 핫키 등록: Ctrl+Shift+Alt+F12 (디버그 모드)");
             }
             catch (Exception ex)
             {
@@ -180,10 +187,19 @@ namespace WindowsOptimizer
         {
             const int WM_HOTKEY = 0x0312;
 
-            if (msg == WM_HOTKEY && wParam.ToInt32() == HOTKEY_ID)
+            if (msg == WM_HOTKEY)
             {
-                ToggleUI();
-                handled = true;
+                int hotkeyId = wParam.ToInt32();
+                if (hotkeyId == HOTKEY_ID)
+                {
+                    ToggleUI();
+                    handled = true;
+                }
+                else if (hotkeyId == HOTKEY_DEBUG_ID)
+                {
+                    ToggleDebugMode();
+                    handled = true;
+                }
             }
 
             return IntPtr.Zero;
@@ -214,6 +230,31 @@ namespace WindowsOptimizer
                 MainWindow.WindowState = WindowState.Normal;
                 LogService.Instance.Log("UI 표시 (핫키)");
             }
+        }
+
+        /// <summary>
+        /// 디버그 모드 토글 (Ctrl+Shift+Alt+F12)
+        /// MainWindow와 WebView2 창을 함께 표시
+        /// </summary>
+        private void ToggleDebugMode()
+        {
+            // 트레이 아이콘이 없으면 생성
+            if (_trayIcon == null)
+            {
+                SetupTrayIcon();
+            }
+
+            // MainWindow 표시
+            if (MainWindow != null)
+            {
+                MainWindow.Show();
+                MainWindow.Activate();
+                MainWindow.WindowState = WindowState.Normal;
+            }
+
+            // WebView2 디버그 모드 토글
+            WebView2Service.Instance.ToggleDebugWindow();
+            LogService.Instance.Log("디버그 모드 토글 (핫키)");
         }
 
         /// <summary>
@@ -265,6 +306,7 @@ namespace WindowsOptimizer
                 {
                     var helper = new WindowInteropHelper(MainWindow);
                     UnregisterHotKey(helper.Handle, HOTKEY_ID);
+                    UnregisterHotKey(helper.Handle, HOTKEY_DEBUG_ID);
                 }
                 _hwndSource?.RemoveHook(HwndHook);
             }
