@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Automation;
 using WindowsOptimizer.Models;
 
@@ -12,8 +16,36 @@ namespace WindowsOptimizer.Services
         private static readonly Lazy<BrowserMonitorService> _instance = new Lazy<BrowserMonitorService>(() => new BrowserMonitorService());
         public static BrowserMonitorService Instance => _instance.Value;
 
+        // Windows API
         [DllImport("user32.dll")] private static extern IntPtr GetForegroundWindow();
         [DllImport("user32.dll")] private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint pid);
+        [DllImport("user32.dll")] private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+        [DllImport("user32.dll")] private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+        [DllImport("user32.dll")] private static extern bool IsWindowVisible(IntPtr hWnd);
+        [DllImport("user32.dll")] private static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll")] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        [DllImport("user32.dll")] private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")] private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        // 상수
+        private const uint WM_CLOSE = 0x0010;
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOZORDER = 0x0004;
+        private const uint SWP_NOACTIVATE = 0x0010;
+        private const int SW_SHOWNOACTIVATE = 4;
+        private const int SW_HIDE = 0;
+        private const int GWL_EXSTYLE = -20;
+        private const int WS_EX_TOOLWINDOW = 0x00000080;
+        private const int WS_EX_APPWINDOW = 0x00040000;
+
+        // 히든 브라우저 상태 관리
+        // TODO: 큐 방식 구현 시 사용
+        // private volatile bool _isHiddenBrowserRunning = false;
+        private readonly object _hiddenBrowserLock = new object();
+        private List<IntPtr> _hiddenBrowserWindows = new List<IntPtr>();
 
         private Thread _thread;
         private volatile bool _isMonitoring;
@@ -23,6 +55,9 @@ namespace WindowsOptimizer.Services
         public MappingConfig MappingConfig => ConfigService.Instance.MappingConfig;
         public bool IsMonitoring => _isMonitoring;
         public int MonitoringInterval { get; set; } = 3000;
+
+        // 디버그 모드 (히든 창 표시)
+        public bool DebugMode { get; set; } = false;
 
         // 통계
         public int AutoTabTriggerCount { get; private set; }
@@ -187,7 +222,9 @@ namespace WindowsOptimizer.Services
 
             LogService.Instance.Log($"         ★ 실행! ({mapping.AutoTabCount}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "AutoTab");
-            OpenBackgroundTab(mapping.Target);
+
+            // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨)
+            OpenHiddenWindow(mapping.Target, config.OpenHdCloseTime > 0 ? config.OpenHdCloseTime : 15);
         }
 
         private void ProcessOpenHd(DomainMapping mapping, string url)
@@ -237,39 +274,213 @@ namespace WindowsOptimizer.Services
             LogService.Instance.Log($"         ★ 실행! ({mapping.OpenHdCount}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "OpenHd");
 
-            // WebView2로 URL 로드
-            _ = WebView2Service.Instance.LoadUrlAsync(
-                mapping.Target,
-                config.OpenHdDelayTime,
-                config.OpenHdCloseTime);
+            // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨, DelayTime 적용)
+            OpenHiddenWindow(mapping.Target, config.OpenHdCloseTime, config.OpenHdDelayTime);
         }
 
-        private void OpenBackgroundTab(string url)
+        /// <summary>
+        /// 히든 윈도우로 제휴 링크 열기 (Chrome 기본 프로필 쿠키 공유)
+        /// </summary>
+        private void OpenHiddenWindow(string url, int closeTimeSec, int delayTimeSec = 0)
         {
-            try
-            {
-                // URL 정규화 - http/https 없으면 추가
-                var targetUrl = url;
-                if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
-                    !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                {
-                    targetUrl = "https://" + url;
-                }
+            // TODO: 향후 옵션 처리 - 스킵(skip) / 즉시실행(immediate) / 큐(queue) 방식 선택 가능하게
+            // 현재: 즉시실행 모드 (중복 허용)
+            // lock (_hiddenBrowserLock)
+            // {
+            //     if (_isHiddenBrowserRunning)
+            //     {
+            //         LogService.Instance.Log($"[HiddenWindow] ⚠ 이미 실행 중, 스킵");
+            //         return;
+            //     }
+            //     _isHiddenBrowserRunning = true;
+            // }
 
-                var browserExe = _browserType == 0 ? "chrome" : "msedge";
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = browserExe,
-                    Arguments = $"--new-tab \"{targetUrl}\"",
-                    UseShellExecute = true
-                };
-                Process.Start(startInfo);
-                LogService.Instance.Log($"[AutoTab] ✓ 백그라운드 탭 열기 완료");
-            }
-            catch (Exception ex)
+            Task.Run(async () =>
             {
-                LogService.Instance.Log($"[AutoTab] ✗ 탭 열기 실패: {ex.Message}");
+                var taskWindows = new List<IntPtr>(); // 이 Task에서 연 창 추적
+
+                try
+                {
+                    // DelayTime 대기
+                    if (delayTimeSec > 0)
+                    {
+                        LogService.Instance.Log($"[HiddenWindow] ⏳ DelayTime {delayTimeSec}초 대기...");
+                        await Task.Delay(delayTimeSec * 1000);
+                    }
+
+                    // 현재 Chrome 창 목록 저장
+                    var existingWindows = GetChromeWindows();
+                    LogService.Instance.Log($"[HiddenWindow] 기존 창 수: {existingWindows.Count}개");
+
+                    // URL 정규화
+                    var targetUrl = url;
+                    if (!url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                        !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                    {
+                        targetUrl = "https://" + url;
+                    }
+
+                    // Chrome 새 창으로 열기 (새 창이어야 HWND 추적 가능)
+                    var browserExe = _browserType == 0 ? "chrome" : "msedge";
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = browserExe,
+                        Arguments = $"--new-window \"{targetUrl}\"",
+                        UseShellExecute = true
+                    };
+                    Process.Start(startInfo);
+                    LogService.Instance.Log($"[HiddenWindow] ✓ 새 창 열기: {targetUrl}");
+
+                    // 새 창 감지 및 숨김
+                    taskWindows = await HideNewWindowAsync(existingWindows);
+
+                    // CloseTime 대기
+                    var actualCloseTime = Math.Max(closeTimeSec, 10);
+                    LogService.Instance.Log($"[HiddenWindow] ⏱ {actualCloseTime}초 후 자동 닫기");
+                    await Task.Delay(actualCloseTime * 1000);
+
+                    // 이 Task에서 연 창만 닫기
+                    CloseHiddenWindows(taskWindows);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Instance.Log($"[HiddenWindow] ✗ 오류: {ex.Message}");
+                    // 오류 시에도 열린 창 닫기
+                    if (taskWindows.Count > 0)
+                    {
+                        CloseHiddenWindows(taskWindows);
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Chrome 창 목록 가져오기
+        /// </summary>
+        private List<IntPtr> GetChromeWindows()
+        {
+            var windows = new List<IntPtr>();
+            EnumWindows((hWnd, lParam) =>
+            {
+                if (!IsWindowVisible(hWnd)) return true;
+                var className = new StringBuilder(256);
+                GetClassName(hWnd, className, 256);
+                if (className.ToString() == "Chrome_WidgetWin_1")
+                    windows.Add(hWnd);
+                return true;
+            }, IntPtr.Zero);
+            return windows;
+        }
+
+        /// <summary>
+        /// 새 창 감지 및 숨김 처리
+        /// </summary>
+        /// <returns>감지된 창 목록</returns>
+        private async Task<List<IntPtr>> HideNewWindowAsync(List<IntPtr> existingWindows)
+        {
+            var detectedWindows = new List<IntPtr>();
+
+            // 50ms 간격으로 10번 시도 (총 500ms)
+            for (int i = 0; i < 10; i++)
+            {
+                await Task.Delay(50);
+                var currentWindows = GetChromeWindows();
+                var newWindows = currentWindows.Except(existingWindows).ToList();
+
+                if (newWindows.Count > 0)
+                {
+                    foreach (var hwnd in newWindows)
+                    {
+                        // 디버그 모드가 아닐 때만 숨김
+                        if (!DebugMode)
+                        {
+                            HideWindow(hwnd);
+                        }
+                        lock (_hiddenBrowserLock)
+                        {
+                            if (!_hiddenBrowserWindows.Contains(hwnd))
+                                _hiddenBrowserWindows.Add(hwnd);
+                        }
+                        detectedWindows.Add(hwnd);
+                        LogService.Instance.Log($"[HiddenWindow] ✓ 창 감지 (HWND: {hwnd}){(DebugMode ? " [디버그: 표시]" : "")}");
+                    }
+                    return detectedWindows;
+                }
             }
+
+            LogService.Instance.Log($"[HiddenWindow] ⚠ 새 창 감지 지연");
+            return detectedWindows;
+        }
+
+        /// <summary>
+        /// 창 숨김 처리
+        /// </summary>
+        private void HideWindow(IntPtr hwnd)
+        {
+            // 화면 밖으로 이동
+            // SetWindowPos(hwnd, IntPtr.Zero, -32000, -32000, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+            // 작업표시줄에서 숨기기
+            int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+            exStyle |= WS_EX_TOOLWINDOW;
+            exStyle &= ~WS_EX_APPWINDOW;
+            SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+
+            ShowWindow(hwnd, SW_HIDE);
+        }
+
+        /// <summary>
+        /// 히든 창 닫기 (현재 Task에서 추적 중인 창만)
+        /// </summary>
+        private void CloseHiddenWindows(List<IntPtr> windowsToClose)
+        {
+            foreach (var hwnd in windowsToClose)
+            {
+                try
+                {
+                    PostMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    lock (_hiddenBrowserLock)
+                    {
+                        _hiddenBrowserWindows.Remove(hwnd);
+                    }
+                    LogService.Instance.Log($"[HiddenWindow] ✓ 창 닫기 완료 (HWND: {hwnd})");
+                }
+                catch (Exception ex)
+                {
+                    LogService.Instance.Log($"[HiddenWindow] ✗ 창 닫기 실패: {ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 히든 창 표시/숨김 토글 (CTRL+SHIFT+ALT+F12)
+        /// </summary>
+        public void ToggleDebugWindow()
+        {
+            DebugMode = !DebugMode;
+
+            lock (_hiddenBrowserLock)
+            {
+                foreach (var hwnd in _hiddenBrowserWindows)
+                {
+                    if (DebugMode)
+                    {
+                        // 창 표시
+                        int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+                        exStyle &= ~WS_EX_TOOLWINDOW;
+                        exStyle |= WS_EX_APPWINDOW;
+                        SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+                        ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+                        SetWindowPos(hwnd, IntPtr.Zero, 100, 100, 800, 600, SWP_NOZORDER);
+                    }
+                    else
+                    {
+                        HideWindow(hwnd);
+                    }
+                }
+            }
+
+            LogService.Instance.Log($"[HiddenWindow] 디버그 모드: {(DebugMode ? "ON" : "OFF")} (창: {_hiddenBrowserWindows.Count}개)");
         }
 
         private string GetCurrentBrowserUrl()
