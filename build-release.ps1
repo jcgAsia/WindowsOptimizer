@@ -65,6 +65,31 @@ if (-not (Test-Path $releasesDir)) {
 
 if ($LASTEXITCODE -ne 0) { throw "Squirrel pack 실패" }
 
+# 이전 버전 정리 (최근 2개 버전만 유지)
+Write-Host "[3.5/4] 이전 버전 정리 (최근 2개 유지)..." -ForegroundColor Yellow
+
+$allFullPkgs = Get-ChildItem $releasesDir -Filter "*-full.nupkg" | Sort-Object Name -Descending
+if ($allFullPkgs.Count -gt 2) {
+    $versionsToDelete = $allFullPkgs | Select-Object -Skip 2
+    foreach ($pkg in $versionsToDelete) {
+        $versionPattern = $pkg.Name -replace "-full\.nupkg$", ""
+        $deltaFile = Join-Path $releasesDir "$versionPattern-delta.nupkg"
+
+        # full 파일 삭제
+        Remove-Item $pkg.FullName -Force
+        Write-Host "    삭제: $($pkg.Name)" -ForegroundColor Gray
+
+        # delta 파일 삭제 (있으면)
+        if (Test-Path $deltaFile) {
+            Remove-Item $deltaFile -Force
+            Write-Host "    삭제: $versionPattern-delta.nupkg" -ForegroundColor Gray
+        }
+    }
+    Write-Host "    -> $($versionsToDelete.Count)개 버전 삭제됨" -ForegroundColor Green
+} else {
+    Write-Host "    -> 정리할 버전 없음" -ForegroundColor Gray
+}
+
 # 4) 결과 출력
 Write-Host "[4/4] 완료!" -ForegroundColor Green
 Write-Host ""

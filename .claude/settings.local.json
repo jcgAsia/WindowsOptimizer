@@ -36,7 +36,11 @@
       "Bash(cmd /c \"copy D:\\\\dev\\\\WindowsOptimizer\\\\ServerFiles\\\\mapping.xml D:\\\\dev\\\\WindowsOptimizer_Updater\\\\mapping.xml /Y\")",
       "Bash(cmd /c \"cd /d D:\\\\dev\\\\WindowsOptimizer_Updater && git status\")",
       "Bash(tasklist:*)",
-      "Bash(cmd /c \"tasklist | findstr chrome\")"
+      "Bash(cmd /c \"tasklist | findstr chrome\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(ls:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
