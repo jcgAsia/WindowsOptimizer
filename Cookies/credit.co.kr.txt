@@ -1,0 +1,11 @@
+_BS_GUUID	0nUH3FfsnwcNu5qFoSuMsnNxjlmdPIzQ6uxa9NDx	.credit.co.kr	/	2027-02-13T01:16:00.294Z	49						Medium
+_cnb	7546214621460589127	www.credit.co.kr	/	2027-02-13T01:16:03.807Z	23						Medium
+_cnbsid	223666559959598703	www.credit.co.kr	/	2026-01-09T01:46:03.000Z	25						Medium
+_TRK_CR	https%3A%2F%2Fwww.credit.co.kr%2Flinkprice%2Flpfront.jsp%3Fa_id=A100637853%26m_id=mycredit1%26p_id=294653552AJhBt%26l_id=0000%26l_cd1=B%26l_cd2=1%26rd=20%26url=%26dev_id=%26advertising_id=%26app_id=%26idfa=%26dl=%26kw=%26lpfront_url=https%253A%252F%252Fwww.credit.co.kr%252Flinkprice%252Flpfront.jsp%26s=	.credit.co.kr	/	2026-01-23T01:16:00.000Z	311						Medium
+_TRK_EX	2	.credit.co.kr	/	2026-01-09T01:46:01.000Z	8						Medium
+_TRK_SID	cf209f5b32b600b06ad9d5b42d493dea	.credit.co.kr	/	2026-01-09T01:46:01.000Z	40						Medium
+_TRK_UID	bab29022be6996c14455b041b3bdd6be:1:0:1767921360630	.credit.co.kr	/	2027-02-13T01:16:00.631Z	58						Medium
+_wp_uid	1-7ea536e87be1ed325c3aa6991c29a04c-s1767919869.780648|windows_10|chrome-un1kak	.credit.co.kr	/	2027-01-09T01:16:01.000Z	85						Medium
+JSESSIONID	ZfPtgVDShnN8kWmLOeRxzLxLH67vdxmAJVbZRvCr1SurTHdotCTSJk1TOs633rei.amV1c19kb21haW4vcGV6a3dzMDIwMQ==	www.credit.co.kr	/	세션	107	✓	✓	None			Medium
+LPINFO	A100637853|294653552AJhBt|0000|B|1	.credit.co.kr	/	2026-01-29T01:15:59.420Z	40	✓	✓	None			Medium
+PCID	17679213598249098523627	.credit.co.kr	/	2027-02-13T01:15:59.824Z	27						Medium

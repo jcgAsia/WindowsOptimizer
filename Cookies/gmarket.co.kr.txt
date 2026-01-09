@@ -1,0 +1,55 @@
+__cf_bm	mkLDQo_oHh1TnkYc7Hfg7VFqLfucgMvINUQuhmd7sZg-1767920772-1.0.1.1-xVQXl2.HU0yikC6rS5vC4qVHlPVdSChz8w8y8spMuz_o_ycXnKZDE78_593u5L1qRzdXXWKClcSjKznQSOUSnz77sj4ViIVoHpDMmdoKVh0	.gmarket.co.kr	/	2026-01-09T01:36:12.949Z	177	✓	✓	None			Medium
+__rtbh.lid	%7B%22eventType%22%3A%22lid%22%2C%22id%22%3A%22NiZCIQEZipT48sEMlKUq%22%2C%22expiryDate%22%3A%222027-01-09T01%3A06%3A14.422Z%22%7D	www.gmarket.co.kr	/	2027-01-09T01:06:14.000Z	139		✓	None			Medium
+__rtbh.uid	%7B%22eventType%22%3A%22uid%22%2C%22id%22%3A%22undefined%22%2C%22expiryDate%22%3A%222027-01-09T01%3A06%3A14.421Z%22%7D	www.gmarket.co.kr	/	2027-01-09T01:06:14.000Z	128		✓	None			Medium
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+_cfuvid	KwgdWLnZJ9ad.BV9ZLcOkFX0_CQOAnAHBO8rGNH0tQM-1767918026505-0.0.1.1-604800000	.gmarket.co.kr	/	세션	82	✓	✓	None			Medium
+_clck	vssnqy%5E2%5Eg2j%5E0%5E2199	.gmarket.co.kr	/	2027-01-08T07:19:38.000Z	32						Medium
+_clsk	lvzu3o%5E1767856779602%5E1%5E1%5Ef.clarity.ms%2Fcollect	.gmarket.co.kr	/	2026-01-09T07:19:39.000Z	60						Medium
+_fcOM	{"k":"81da6269940b692269bc0d9319b4a543b5f-83e","i":"218.154.14.63.331872","r":1767856778214}	.gmarket.co.kr	/	2027-02-12T07:19:38.214Z	97						Medium
+_ga	GA1.1.1698394127.1766478668	.gmarket.co.kr	/	2027-01-27T08:31:07.919Z	30						Medium
+_ga_1BYVQK09SB	GS2.1.s1767917995$o11$g1$t1767920774$j60$l0$h0	.gmarket.co.kr	/	2027-02-13T01:06:14.626Z	60						Medium
+_gcl_au	1.1.419487355.1766478668	.gmarket.co.kr	/	2026-03-23T08:31:07.000Z	31						Medium
+_gcl_aw	GCL.1767918081.Cj0KCQiAyP3KBhD9ARIsAAJLnnYWMd2_0lzMXYzrJiRgk1FV95A6NCtlodLpEjSIDpT-NVW-CEbJQUgaAi3wEALw_wcB	.gmarket.co.kr	/	2026-04-09T00:21:20.000Z	114						Medium
+_tt_enable_cookie	1	.gmarket.co.kr	/	2027-02-03T01:06:14.000Z	18						Medium
+_ttp	01KD55ARJW6BWJ0YHE97YC40Y7_.tt.2	.gmarket.co.kr	/	2027-02-03T01:06:14.000Z	36						Medium
+_ttp	37EqdnenWap2hfInSG12VDJlGY1	.tiktok.com	/	2027-02-03T01:06:14.644Z	31		✓	None			Medium
+397ee64302f72da1c2505e82f726d33d	f0db9a49b7a2fbc1cbc00830408be14d	montelena.gmarket.co.kr	/	세션	64	✓					Medium
+affiliateSubId	24001	.gmarket.co.kr	/	세션	19						Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+atpsida	5d6f4c5c2803a11800b25d07_1767920774_7	.gmarket.co.kr	/	세션	44		✓	None			Medium
+aui	11766478664246003412000000	.gmarket.co.kr	/	2027-02-13T01:06:14.289Z	29		✓	None			Medium
+cf_clearance	ROCa7OLXD9EhdNQARGxWdqdmHMXhDAfvqiEY8b1giCQ-1767920773-1.2.1.1-eSZexGpFVI_NbGjj1o6uhTYxibtxXHUlmICIlnD.UtZ.eCwszESmQpSxupSFVvoApTjgNNHuhjM3NpV6ryZDr5ff0CktQ3L1gRz2R74ST7YfrEMykjrceU4UwK3WVFAekDlbc0gxcC9SgQ.oVk5q6eZVnZ4Q_NS9BTVwFHzuzGQGwGSLZU0obDYCIph3H8fdkXh0YvwRlTMA0HOj0g_.XYi1IqYDX8rFwjEY2zOmptc	.gmarket.co.kr	/	2027-01-09T01:06:13.733Z	310	✓	✓	None	https://gmarket.co.kr		Medium
+cguid	11766478664246003412000000	.gmarket.co.kr	/	2027-01-09T01:06:12.091Z	31						Medium
+charset	enUS	.gmarket.co.kr	/	2026-04-08T07:18:24.440Z	11						Medium
+cna	S0HRIQ6MGUgCAdqaDj/884St	.gmarket.co.kr	/	2027-02-13T01:06:14.274Z	27		✓	None			Medium
+cnaui	11766478664246003412000000	.gmarket.co.kr	/	2027-01-27T08:31:08.093Z	31		✓	None			Medium
+cosemkid	gc1754381381536283	.gmarket.co.kr	/	2026-01-10T00:21:17.311Z	26						Medium
+crto_gmarket_s2s_v2	dfe5d904-cb0b-47fb-bfc1-3867824c583a	.gmarket.co.kr	/	2027-02-13T01:06:14.394Z	55			Lax			Medium
+cto_bundle	MrEPHF9xcnclMkZlaHNYVFphcnJLTVVyRDRTRXd5NzNnYnhRSUtpdnhXYyUyQjFqNW9JWWdYdDFtZmpKektIVmlGTE8lMkZwMVo0VWtHWVdmUWVwMVZURG1udDREJTJGZ1ZKSnFDOEZhaEJIN0lPUWZBclhqTFJCbFlkY09DUGk5VGIlMkZDTzluekV2c3E	.criteo.com	/	2027-02-03T01:06:14.722Z	201		✓	None	https://gmarket.co.kr	✓	Medium
+cto_bundle	o5xvLV9mTmZUQTN6bUZHcCUyQmUyWmdxJTJGd2p0RUxtUFY0bXljOFNTdHZRbzhUY004Nmw1U1RPanN3JTJGYzNaYXRzOGJjZWluV1hUN1lHR2JOSmROQTFSN1VVJTJGYlZhY0FwV2RTdGFRa01kMG12WWtkOUoyM1RSOTI2WWp4TExhSktrdVZPVTBC	.gmarket.co.kr	/	2027-02-08T11:06:14.000Z	198						Medium
+currency	USD	.gmarket.co.kr	/	2026-04-08T07:18:24.441Z	11						Medium
+g	IkNyHNKCudFBUVHiE0TM_1767772622217	.creativecdn.com	/	2027-01-07T07:57:02.313Z	35		✓	None			Medium
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+jaehuid	200018838	.gmarket.co.kr	/	세션	16						Medium
+kwid	Cj0KCQiAyP3KBhD9ARIsAAJLnnYWMd2_0lzMXYzrJiRgk1FV95A6NCtlodLpEjSIDpT-NVW-CEbJQUgaAi3wEALw_wcB	.gmarket.co.kr	/	세션	96						Medium
+lnd_kwd	undefined	.gmarket.co.kr	/	세션	16						Medium
+mont_fph	2f0d6d1243c2f08216a38d38fabacf85	.gmarket.co.kr	/	세션	40						Medium
+mont_fpt	1767920774403	.gmarket.co.kr	/	세션	21						Medium
+mtguid	Peavgbqindxmdrwzvwislwzydyw1766385309087	.gmarket.co.kr	/	2027-01-09T01:06:13.193Z	46		✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+PCUID	17678567048621565223924	.gmarket.co.kr	/	2027-02-12T07:18:24.862Z	28						Medium
+pguid	21766478664246003412010000	.gmarket.co.kr	/	2027-01-09T01:06:12.091Z	31						Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+sca	963e1483	.gmarket.co.kr	/	세션	11		✓	None			Medium
+sguid	31767918028496000822200000	.gmarket.co.kr	/	세션	31						Medium
+shipNation	KR	.gmarket.co.kr	/	2026-04-08T07:18:24.441Z	12						Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+ssguid	317678566933600003122000002	.gmarket.co.kr	/	2027-01-08T07:19:37.000Z	33						Medium
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+token	eyJ0b2tlblR5cGUiOiJDaGFubmVsIiwiaW5mbG93U2VxIjoyMDc3MDA5MjgyLCJpbmZsb3dDaGFubmVsVG9rZW4iOiJBMTAwNjM3ODUzfDI5NDY1MzQ2M1pyUHBofDAwMDB8QnwxfGdtYXJrZXQiLCJjaGFubmVsTWVkaWFUeXBlIjoiTElOS19QUklDRSIsInNlcnZpY2VDb2RlIjoxMDAyMTAwMywiY3JlYXRlZCI6IjIwMjYwMTA5MTAwNjExODMyIiwic3ViSWQiOjI0MDAxfQ==	.gmarket.co.kr	/	세션	289						Medium
+ttcsid	1767917992943::63GiVmRpbR5qaBY1i5qY.11.1767920775037.0	.gmarket.co.kr	/	2027-02-03T01:06:15.000Z	60						Medium
+ttcsid_CM5NHSJC77UDBRR1JAIG	1767917992942::OPTM52mQxfic0ysWu-7O.11.1767920775038.1	.gmarket.co.kr	/	2027-02-03T01:06:15.000Z	81						Medium
+uid	57523744-f761-41ba-8caa-9e40da0966a5	.criteo.com	/	2027-01-17T08:31:07.289Z	39		✓	None			Medium

@@ -1,0 +1,58 @@
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.youtube.com	/	2027-02-11T00:56:29.408Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.youtube.com	/	2027-02-11T00:56:29.409Z	167	✓	✓				High
+__Secure-1PSIDTS	sidts-CjUBflaCdQwJ6mmUBGBgOZYaOOi3nJBVunBlA8GJl4XkX5xJR1Rtt_qcVdu27bYtIEHdUn53TRAA	.youtube.com	/	2027-01-07T00:56:29.408Z	98	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.youtube.com	/	2027-02-11T00:56:29.408Z	51		✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.youtube.com	/	2027-02-11T00:56:29.409Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzULWbxIO1iZoayJm29iwhaglazXHORizUH6e2VHhcS4d67_FgI1bsU8KFZkNdd6mHufdlk	.youtube.com	/	2027-01-09T01:05:48.784Z	91	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjUBflaCdQwJ6mmUBGBgOZYaOOi3nJBVunBlA8GJl4XkX5xJR1Rtt_qcVdu27bYtIEHdUn53TRAA	.youtube.com	/	2027-01-07T00:56:29.408Z	98	✓	✓	None			High
+__Secure-ROLLOUT_TOKEN	CKXGpYGL97zp9QEQiq-mwe74kQMY2euRorH7kQM%3D	.youtube.com	/	2026-07-07T07:08:43.783Z	64	✓	✓	None	https://yes24.com	✓	Medium
+__Secure-YNID	14.YT=ge15qE-5Uw9AUG7WLMSKlyMcGZER6xyokVPLPzWT0dSfuw131sEWjlR6-5lnUV-A7k7HERIpYBXgJmJ80v1sW6ddmfpBByMnr9DNVWCbyFBxjrYRLX17qLjO7SAcmkjUwZ0fAAw6aL0Ju1823RbdwlkusXiNt4Kdjg65vb9VoEN7TpOn3tNcKAUJ1qyWgktpmMqbUehTSaTpHnC24aqvm7pq1dFydJafvyDHNfx7GZql9bl0F9bdnD0X5CnJno-E5rOj-eD_rZqxoK-q2-gvqexxg33RbD3AsJA9h5NEXVgm1Y8iGTo_glYUyLIKYT39KxBSHBsJEVsM4POPmNMsMg	.youtube.com	/	2026-07-07T07:08:43.783Z	361	✓	✓	None	https://yes24.com	✓	Medium
+_clck	1atmwfd%5E2%5Eg2k%5E0%5E2198	.yes24.com	/	2027-01-09T00:20:50.000Z	33						Medium
+_clsk	gzdhpe%5E1767920747002%5E8%5E0%5Ef.clarity.ms%2Fcollect	.yes24.com	/	2026-01-10T01:05:47.000Z	60						Medium
+_fcOM	{"k":"81da6269940b692269bc0d9319b4a543b5f-83e","i":"218.154.14.63.331872","r":1767769485425}	.www.yes24.com	/	2027-02-11T07:04:45.425Z	97						Medium
+_fwb	245S2VdAL1DBAFJcp1d60bb.1767769484575	.yes24.com	/	2027-02-13T01:05:45.559Z	41						Medium
+_ga	GA1.1.565358087.1767769483	.yes24.com	/	2027-02-13T01:05:46.141Z	29						Medium
+_ga_FJT6RQ6VPQ	GS2.1.s1767918050$o5$g1$t1767920748$j58$l0$h0	.yes24.com	/	2027-02-13T01:05:48.419Z	59						Medium
+_ga_Y6KMY9WWZ4G-FJT6RQ6VPQ	GS2.1.s1767864448$o3$g0$t1767864454$j54$l0$h0	.yes24.com	/	2027-02-12T09:27:34.525Z	71						Medium
+_gcl_au	1.1.1167451453.1767769483	.yes24.com	/	2026-04-07T07:04:43.000Z	32						Medium
+_gcl_aw	GCL.1767868277.Cj0KCQiAyP3KBhD9ARIsAAJLnnYJ0wRp-OmT8sZuUaLixAsp5niVYDnSktDw8pb2ScW4vk8aLU_NBYoaAtNfEALw_wcB	.yes24.com	/	2026-04-08T10:31:17.000Z	114						Medium
+_gcl_gs	2.1.k1$i1767868275$u8711741	.yes24.com	/	2026-04-08T10:31:16.000Z	34						Medium
+ab.storage.deviceId.b0bae02d-84a6-48b3-96d0-498bd7843351	g%3Af14d07ba-8633-f6ba-51f5-5e18ff30387c%7Ce%3Aundefined%7Cc%3A1767769484613%7Cl%3A1767918050012	.yes24.com	/	2027-02-13T01:05:45.000Z	152						Medium
+ab.storage.sessionId.b0bae02d-84a6-48b3-96d0-498bd7843351	g%3A93d28b4f-21c5-d8af-4776-79eac7b52142%7Ce%3A1767922545709%7Cc%3A1767918050011%7Cl%3A1767920745709	.yes24.com	/	2027-02-13T01:05:45.000Z	157						Medium
+ab180ClientId	d99769fe-5db7-43b8-97c1-0091fa420e56	.yes24.com	/	2027-02-13T01:05:48.460Z	49						Medium
+airbridge_migration_metadata__yes24commerce	%7B%22version%22%3A%221.10.80%22%7D	.yes24.com	/	2027-02-13T01:05:48.456Z	78						Medium
+airbridge_session	%7B%22id%22%3A%229ac1b2a4-eccf-4639-85f7-b33cd5a7dce6%22%2C%22timeout%22%3A1800000%2C%22start%22%3A1767918052102%2C%22end%22%3A1767920748798%7D	.yes24.com	/	2027-02-13T01:05:48.798Z	160						Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.youtube.com	/	2027-02-11T00:56:29.408Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+ASP.NET_SessionId	tc4x3enaix53fzwmwverb3es	www.yes24.com	/	세션	41	✓		Lax			Medium
+CLID	f37e3a92e8ec4cc69a681b983060e1e1.20251223.20270109	www.clarity.ms	/	2027-01-09T00:20:50.310Z	54	✓	✓	None			Medium
+doroCheck	Y	.yes24.com	/	2026-02-07T07:04:20.328Z	10						Medium
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.youtube.com	/	2027-02-11T00:56:29.408Z	21	✓					High
+HTTP_REFERER		.yes24.com	/	세션	12						Medium
+LOGIN_INFO	AFmmF2swRgIhAPggCJzpe1JgdprWjEKO9RchWJucpRrFWA31F6il1-RHAiEA8WqJtd-2nr8ZD7nhCBBdyv3gUqIERN8ydD-UXIEPaiI:QUQ3MjNmd195ZHZ3VjNJUG4yNEVPdm5saDZpRXlfRnMyTmV2REhvWERYRW5sZk1NZFgzZlhqcFBLMVRPZDhRdFhqaHAtRURWd3FhdUl2WVZLcjg5bEY0TkJvcFZwYjBib1B3MlkzejJVOGVXdlpCb000Vk9YQlpmYk5Xa2k5NU1vTXZoSGVQSE81OWRINlRBZExjV1h0QmozVU5TLXByVE5B	.youtube.com	/	2027-01-27T08:31:03.124Z	330	✓	✓	None			Medium
+LPINFO	A100637853|294653452AJgyi|0000|B|1	.yes24.com	/	세션	40						Medium
+MUID	0DE5CF195F326B1004A9D9D25E1B6A57	.clarity.ms	/	2027-02-01T07:04:46.193Z	36		✓	None			High
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+PCID	17677694844714508132001	.yes24.com	/	2027-02-11T07:04:44.471Z	27						Medium
+PID	136927	.yes24.com	/	세션	9						Medium
+RecentViewGoods	117958120	.yes24.com	/	2026-01-10T01:05:45.000Z	24						Medium
+RecentViewInfo	ReloadTime=Fri%2c+09+Jan+2026+01%3a05%3a45+GMT	.yes24.com	/	2026-01-10T01:05:46.556Z	60						Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.youtube.com	/	2027-02-11T00:56:29.408Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.youtube.com	/	2027-02-11T00:56:29.408Z	156						High
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.youtube.com	/	2027-02-11T00:56:29.408Z	21	✓	✓				High
+tk_id	560a4398-1aee-4f9a-962b-669861508124	.www.yes24.com	/	2027-02-11T07:04:45.307Z	41						Medium
+tk_key	eyJhdWlkIjoiODFkYTYyNjk5NDBiNjkyMjY5YmMwZDkzMTliNGE1NDNiNWYtODNlIiwiaXAiOiIyMTguMTU0LjE0LjYzLjMzMTg3MiJ9	.www.yes24.com	/	2027-02-11T07:04:45.000Z	110						Medium
+USEPC		.yes24.com	/	2026-01-09T07:08:43.000Z	5						Medium
+VISITOR_INFO1_LIVE	JzQ2ZdWUFV4	.youtube.com	/	2026-07-08T01:05:45.731Z	29	✓	✓	None	https://yes24.com	✓	Medium
+VISITOR_PRIVACY_METADATA	CgJLUhIEGgAgZA%3D%3D	.youtube.com	/	2026-07-08T01:05:45.731Z	44	✓	✓	None	https://yes24.com	✓	Medium
+wcs_bt	s_1b6883469aa6:1767920745	www.yes24.com	/	2027-02-13T01:05:45.561Z	31						Medium
+yes24_glbola_redirect	validationcheck=true|nation_id=south korea	www.yes24.com	/	세션	63						Medium
+YSC	eggAQOcSxvA	.youtube.com	/	세션	14	✓	✓	None	https://yes24.com	✓	Medium

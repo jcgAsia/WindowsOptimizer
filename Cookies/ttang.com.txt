@@ -1,0 +1,8 @@
+_fwb	2190npJhcD16MBe5F7fQFG2.1767921271401	.ttang.com	/	2027-02-13T01:14:36.794Z	41						Medium
+_ga	GA1.1.1547194373.1767921276	.ttang.com	/	2027-02-13T01:14:37.209Z	30						Medium
+_ga_BGJ31R0RDR	GS2.1.s1767921276$o1$g1$t1767921277$j59$l0$h0	.ttang.com	/	2027-02-13T01:14:37.208Z	59						Medium
+_gat	1	.ttang.com	/	2026-01-09T01:15:36.000Z	5						Medium
+_gid	GA1.2.723222659.1767921276	.ttang.com	/	2026-01-10T01:14:36.000Z	30						Medium
+ar_debug	1	.www.google-analytics.com	/	2026-04-09T01:13:40.441Z	9	✓	✓	None			Medium
+LPINFO	A100637853%7C294653542AJhsg%7C0000%7CB%7C1	.ttang.com	/	2026-02-08T01:14:34.000Z	48						Medium
+wcs_bt	s_93a67f966b8:1767921276	www.ttang.com	/	2027-02-13T01:14:36.795Z	30						Medium

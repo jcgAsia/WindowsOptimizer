@@ -1,0 +1,70 @@
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzX2mMYuYPPRMvWvvIuUhAzfASPdAfpCt21kjMe2bollynlt1LtFA9kC8IEEcrBmiSJsYw	.google.com	/	2027-01-09T01:13:46.195Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzXSWhpT7Cc6rSZLVhoh_Y2JhpA7UqTS4C85UNmAvumBNf8W7QS27cUP8jDKlkjVi7F2nA	.google.com	/	2027-01-09T01:13:48.880Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+__Secure-STRP	AD6DogulrbH5R-sJq4Go5AhXIx7joUv6DH-eb_Cyg5Ey81uQOZ3FauSfvRUZDBJgVOZUdTMqra4NNn5uVOqDXbxuoJgABMbeD-qk	.google.com	/	2026-01-09T01:17:44.701Z	113		✓	Strict			Medium
+_clck	cs3ri%5E2%5Eg2k%5E0%5E2200	.tstation.com	/	2027-01-09T01:13:49.000Z	31						Medium
+_clsk	1ceva40%5E1767921231668%5E1%5E1%5Ef.clarity.ms%2Fcollect	.tstation.com	/	2026-01-10T01:13:51.000Z	61						Medium
+_dc_gtm_UA-132737068-1	1	.tstation.com	/	2026-01-09T01:14:48.000Z	23						Medium
+_fwb	234NlnSLy96uNCh3CAIRtnD.1767921227557	.tstation.com	/	2027-02-13T01:13:47.557Z	41						Medium
+_ga	GA1.2.1943982192.1767921228	.tstation.com	/	2027-02-13T01:13:49.590Z	30						Medium
+_ga_NJ9GDF8JEV	GS2.1.s1767921228$o1$g0$t1767921229$j59$l0$h0	.tstation.com	/	2027-02-13T01:13:49.614Z	59						Medium
+_gcl_au	1.1.1763603674.1767921228	.tstation.com	/	2026-04-09T01:13:48.000Z	32						Medium
+_gid	GA1.2.178071923.1767921228	.tstation.com	/	2026-01-10T01:13:49.000Z	30						Medium
+_hjSession_1409094	eyJpZCI6IjY1ODZkMjUwLWNhZTktNDU4YS1hMzZlLWQ4MjNmYTNlZDRlOSIsImMiOjE3Njc5MjEyMjkwMTIsInMiOjAsInIiOjAsInNiIjowLCJzciI6MCwic2UiOjAsImZzIjoxLCJzcCI6MH0=	.tstation.com	/	2026-01-09T01:43:49.000Z	166		✓	None			Medium
+_hjSessionUser_1409094	eyJpZCI6ImIzOTNlNGI3LWY4MjItNTQ5MC04MjM1LTAyMDlmYmQ2ZjQ1NiIsImNyZWF0ZWQiOjE3Njc5MjEyMjkwMTAsImV4aXN0aW5nIjpmYWxzZX0=	.tstation.com	/	2027-01-09T01:13:49.000Z	138		✓	None			Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+ar_debug	1	.www.google-analytics.com	/	2026-04-09T01:13:40.441Z	9	✓	✓	None			Medium
+AWSELB	03477D831CCA41EB98C2C9AF9E23CE77277F4B635F66B37E8DC985E84A24668DABD2B2EB04FC0435A4E1D79AACD8042C08D78D3BBFB0369E308FEFE04645FA34E09BF1485CE88B4600A89EE612C213E396CC1A430D	www.tstation.com	/	세션	176	✓					Medium
+bg_id	35bd51c9-3988-48b7-9935-c20e143982a9	.tstation.com	/	2027-01-09T01:13:48.000Z	41						Medium
+bg_sid	428522a0-95e4-42ec-b83e-ff6f921e210d	.bigin.io	/	2027-01-09T01:13:48.450Z	42	✓	✓	None			Medium
+CLID	f37e3a92e8ec4cc69a681b983060e1e1.20251223.20270109	www.clarity.ms	/	2027-01-09T00:20:50.310Z	54	✓	✓	None			Medium
+dealInfo	D001960_%EC%98%B5%ED%8B%B0%EB%AA%A8+%EC%B5%9C%EB%8C%80+43%25_10_Y/D001023_%EC%9A%B0%EB%A6%AC%EB%8F%99%EB%84%A4+%ED%8A%B9%EA%B0%80_20_N/	www.tstation.com	/	2026-01-09T01:13:56.620Z	143						Medium
+foCartId	78CAE61076219EF5C1564723C0019AE3	.www.tstation.com	/	2026-01-09T04:13:47.830Z	40						Medium
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+JSESSIONID	78CAE61076219EF5C1564723C0019AE3	www.tstation.com	/	세션	42	✓					Medium
+LPINFO	A100637853%7C294653538sAIWQ%7C0000%7CB%7C1	.tstation.com	/	2026-01-10T01:13:46.000Z	48						Medium
+MUID	0DE5CF195F326B1004A9D9D25E1B6A57	.clarity.ms	/	2027-02-01T07:04:46.193Z	36		✓	None			High
+NAC	6Zf4CwBqnn3zA	.naver.com	/	2027-02-13T01:13:48.856Z	16		✓	None			Medium
+newDeal	Y	www.tstation.com	/	2026-01-09T01:18:46.620Z	8						Medium
+newEvent	Y	www.tstation.com	/	2026-01-09T01:18:46.620Z	9						Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+OAID	7ea536e87be1ed325c3aa6991c29a04c	.widerplanet.com	/	2027-02-13T01:04:06.799Z	36		✓	None			Medium
+OAID_S	s1767919869.780648	.widerplanet.com	/	2027-02-13T01:04:06.800Z	24		✓	None			Medium
+OAIDT	I	.widerplanet.com	/	2027-02-13T01:04:06.800Z	6		✓	None			Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SIDCC	AKEyXzVh-0hl9CYmfLiZ64As48AHCtXHX7kVntXK1KUa4_2DBYdOmjCzmTOAJNlCsPikJngk9e0	.google.com	/	2027-01-09T01:13:46.194Z	80						High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+wcs_bt	s_2f6f895f1f5f:1767921227	www.tstation.com	/	2027-02-13T01:13:47.576Z	31						Medium
+WMONID	Qs7GoHYRXmC	www.tstation.com	/	2027-01-09T10:13:46.620Z	17						Medium
+WPPG[b]	1	.widerplanet.com	/	2026-01-16T00:51:09.848Z	8		✓	None			Medium
+WPPG[c]	1	.widerplanet.com	/	2026-01-11T00:51:09.848Z	8		✓	None			Medium
+WPPG[d]	1	.widerplanet.com	/	2026-01-10T00:51:09.848Z	8		✓	None			Medium
+WPPG[g]	1	.widerplanet.com	/	2026-01-12T00:51:10.506Z	8		✓	None			Medium
+WPPG[h]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[i]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[n]	1	.widerplanet.com	/	2026-01-11T00:51:10.374Z	8		✓	None			Medium
+WPPG[o]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[p]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[y]	1	.widerplanet.com	/	2026-01-10T00:51:12.332Z	8		✓	None			Medium

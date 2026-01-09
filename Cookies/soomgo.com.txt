@@ -1,0 +1,77 @@
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzWKuh4i12z1jPFE1mKyFL6vmMXtWD6SB3x0QF0Dh62O5YT8z-QGqzRemblaDQUxViuafw	.google.com	/	2027-01-09T01:07:41.487Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzUGssi1JOvpg6Ez2eNRGpfA5CwDLyJIphZpyAgEGj4smR2udAzQsTJTu-Kjsl7HNXA-JQ	.google.com	/	2027-01-09T01:07:49.557Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+__Secure-STRP	AD6DogsrU3DlM_VFHGb9s85dqEWFPK9soPCVJelOMIyEwdipeCyvYX7tw_QQeGeKNYZyLTG7J9fcFlW8Wz-xkw2D-eSus374nXor	.google.com	/	2026-01-09T01:12:40.840Z	113		✓	Strict			Medium
+_fwb	120jyoxT4ZB2JJwa2RgBPgX.1767920865080	.soomgo.com	/	2027-02-13T01:07:48.925Z	41						Medium
+_ga	GA1.2.458209388.1767920862	.soomgo.com	/	2027-02-13T01:07:49.852Z	29						Medium
+_ga_GT7X501J23	GS2.1.s1767920866$o1$g1$t1767920869$j57$l0$h0	.soomgo.com	/	2027-02-13T01:07:49.432Z	59						Medium
+_ga_MMENLNN1X0	GS2.1.s1767920861$o1$g1$t1767920866$j55$l0$h0	.soomgo.com	/	2027-02-13T01:07:46.575Z	59						Medium
+_gat_UA-65520923-1	1	.soomgo.com	/	2026-01-09T01:08:45.000Z	19						Medium
+_gcl_au	1.1.1017354414.1767920862	.soomgo.com	/	2026-04-09T01:07:42.000Z	32						Medium
+_gid	GA1.2.1804126632.1767920866	.soomgo.com	/	2026-01-10T01:07:49.000Z	31						Medium
+_trs_flow		soomgo.com	/	2026-01-09T01:37:49.000Z	9						Medium
+_trs_id	eY6%3F7676312%3E%3E73%3E	soomgo.com	/	2027-02-13T01:07:48.105Z	31						Medium
+_trs_sid	G%5B6462454%3D5443%5Bg%5B4%3D5454130%3C%3C51%3C	soomgo.com	/	2026-01-09T01:37:49.000Z	55						Medium
+ab.storage.deviceId.11b65018-b5e1-4ccf-86bd-f114cf3caa79	%7B%22g%22%3A%2271b491eb-35ff-fcb6-fda5-93739a3fdaa4%22%2C%22c%22%3A1767920867237%2C%22l%22%3A1767920867237%7D	.soomgo.com	/	2027-02-13T01:07:47.000Z	166						Medium
+ab.storage.sessionId.11b65018-b5e1-4ccf-86bd-f114cf3caa79	%7B%22g%22%3A%22a6dfb7de-d0e8-0679-e3eb-c92b9065eb46%22%2C%22e%22%3A1767922671086%2C%22c%22%3A1767920862664%2C%22l%22%3A1767920871086%7D	.soomgo.com	/	2027-02-13T01:07:51.000Z	193						Medium
+ab180ClientId	fc4df096-d6d8-484b-b107-27d30a058dcb	.soomgo.com	/	2027-02-13T01:07:49.814Z	49						Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+airbridge_migration_metadata__smgo	%7B%22version%22%3A%221.10.80%22%7D	.soomgo.com	/	2027-02-13T01:07:49.809Z	69						Medium
+airbridge_session	%7B%22id%22%3A%2278a569b8-6b5c-42f4-9b80-cc7aa13e108c%22%2C%22timeout%22%3A1800000%2C%22start%22%3A1767920869534%2C%22end%22%3A1767920869949%7D	.soomgo.com	/	2027-02-13T01:07:49.948Z	160						Medium
+airbridge_user	%7B%7D	.soomgo.com	/	2027-02-13T01:07:50.015Z	20						Medium
+airbridge_utm	%7B%22channel%22%3A%22linkprice%22%2C%22parameter%22%3A%7B%22medium%22%3A%22affiliate%22%2C%22campaign%22%3A%22A100637853%22%2C%22term%22%3A%22linkprice_affiliate_A100637853%22%2C%22content%22%3A%22A100637853%22%7D%7D	.soomgo.com	/	2026-01-12T01:07:49.000Z	230						Medium
+airbridge_utm_timestamp	1767920869932	.soomgo.com	/	2026-01-12T01:07:49.000Z	36						Medium
+airbridge_utm_url	https%3A//soomgo.com/%3Futm_source%3Dlinkprice%26utm_medium%3Daffiliate%26utm_campaign%3DA100637853%26utm_content%3DA100637853%26utm_term%3Dlinkprice_affiliate_A100637853	.soomgo.com	/	2026-01-12T01:07:49.000Z	187						Medium
+ajs_anonymous_id	fc6650cf-88c6-4d61-9dd1-937e8351e20e	.soomgo.com	/	2027-01-09T01:07:52.000Z	52			Lax			Medium
+amplitude_id_d388fe2a7c6e2948278871aab18a1778soomgo.com	eyJkZXZpY2VJZCI6ImZjNjY1MGNmLTg4YzYtNGQ2MS05ZGQxLTkzN2U4MzUxZTIwZSIsInVzZXJJZCI6bnVsbCwib3B0T3V0IjpmYWxzZSwic2Vzc2lvbklkIjoxNzY3OTIwODY1NjE4LCJsYXN0RXZlbnRUaW1lIjoxNzY3OTIwODcyMzcxLCJldmVudElkIjo4LCJpZGVudGlmeUlkIjoyLCJzZXF1ZW5jZU51bWJlciI6MTB9	.soomgo.com	/	2027-02-13T01:07:52.371Z	299						Medium
+amplitude_idundefinedsoomgo.com	eyJvcHRPdXQiOmZhbHNlLCJzZXNzaW9uSWQiOm51bGwsImxhc3RFdmVudFRpbWUiOm51bGwsImV2ZW50SWQiOjAsImlkZW50aWZ5SWQiOjAsInNlcXVlbmNlTnVtYmVyIjowfQ==	.soomgo.com	/	세션	167						Medium
+anonymous_id	fc6650cf-88c6-4d61-9dd1-937e8351e20e	.soomgo.com	/	2027-01-09T01:07:45.000Z	48						Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+app-download-bottom-sheet	true	soomgo.com	/	2026-01-10T01:07:47.000Z	29						Medium
+ar_debug	1	.www.google-analytics.com	/	2026-04-09T01:07:49.615Z	9	✓	✓	None			Medium
+browser	Chrome	.soomgo.com	/	2027-01-09T01:07:47.000Z	13						Medium
+cto_bundle	6gquxl9GMUtNWGhOdmNUeUkyZ0RFb0Vka3VFTG0lMkZqN0gyUnNXQlBJU1o4SE4yNCUyQjhQMDNoYTNZTHhRcjZCZ1IxSFNZYVBIbjBBY0ozRkloYTBzcExNZmNyWlRmcWI3QTJGZHVBJTJGRUpadSUyQnVwODNKMU5FUFMxdm9RbVVTWThEeUs1YjdEYTBXT0M2cWM2cUlXSHElMkI3Yk5BeHp3JTNEJTNE	.criteo.com	/	2027-02-03T01:07:50.812Z	238		✓	None	https://soomgo.com	✓	Medium
+cto_bundle	eTXrLl9FNkVFTXJkaWt5bnc3djFEMUJGRXpsVDZ1ajlLdXk0Tmtud0dnT21jcERCb21kbnhLdG85NkdFUUFPd3hTdmFVNnhPVmFwN2pCa29nWmpZbDJDU3Z4ZXQ5NzBJQXVVZmxldHlQMmJReFlWVTZwcGdWNGYxall3UFB4WXUxc1pHM0dOTEpBdWFqcmQ5WlFQTHdVRm5ldmclM0QlM0Q	.soomgo.com	/	2027-02-08T11:07:48.000Z	225						Medium
+document_referrer	none	.soomgo.com	/	2027-01-09T01:07:47.000Z	21						Medium
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+LPINFO	A100637853%7C294653473ZrPy9%7C0000%7CB%7C1	.soomgo.com	/	2026-01-29T01:07:46.000Z	48						Medium
+mobile	N	.soomgo.com	/	2027-01-09T01:07:47.000Z	7						Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+platform	Windows	.soomgo.com	/	2027-01-09T01:07:47.000Z	15						Medium
+referrer	none	.soomgo.com	/	2027-01-09T01:07:47.000Z	12						Medium
+referrer_datetime	1767920867663	.soomgo.com	/	2027-01-09T01:07:47.000Z	30						Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+sep_device_id	4d97e020-98f8-49e3-8a0f-37fd53da6235	soomgo.com	/	2027-01-09T01:07:47.000Z	49						Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SIDCC	AKEyXzV7lpfQWpqa2SPebVhRK7taMNmxtQvcvk9uJy28Ft4VmWCnG6K-f4ZBm-dCGqf5CklMd-I	.google.com	/	2027-01-09T01:07:41.486Z	80						High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+uid	57523744-f761-41ba-8caa-9e40da0966a5	.criteo.com	/	2027-01-17T08:31:07.289Z	39		✓	None			Medium
+user_pseudo_id	458209388.1767920862	.soomgo.com	/	2027-01-09T01:07:47.000Z	34						Medium
+utm_campaign	A100637853	.soomgo.com	/	2027-01-09T01:07:47.000Z	22						Medium
+utm_content	A100637853	.soomgo.com	/	2027-01-09T01:07:47.000Z	21						Medium
+utm_datetime	1767920867663	.soomgo.com	/	2027-01-09T01:07:47.000Z	25						Medium
+utm_medium	affiliate	.soomgo.com	/	2027-01-09T01:07:47.000Z	19						Medium
+utm_source	linkprice	.soomgo.com	/	2027-01-09T01:07:47.000Z	19						Medium
+utm_term	linkprice_affiliate_A100637853	.soomgo.com	/	2027-01-09T01:07:47.000Z	38						Medium
+UUID	93fc9bb0-d87a-4297-a7c3-622e0712efbc	soomgo.com	/	2027-01-09T01:07:42.000Z	40						Medium
+wcs_bt	s_5a2c0a52a8dc:1767920868	soomgo.com	/	2027-02-13T01:07:48.930Z	31						Medium

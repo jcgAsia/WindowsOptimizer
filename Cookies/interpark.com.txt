@@ -1,0 +1,59 @@
+__rtbh.lid	%7B%22eventType%22%3A%22lid%22%2C%22id%22%3A%225yxOAuVBXkmNxOR4cMSO%22%2C%22expiryDate%22%3A%222027-01-09T01%3A09%3A35.733Z%22%7D	nol.interpark.com	/	2027-01-09T01:09:35.000Z	139		✓	None			Medium
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzWzr6id_wB-RMt-HXwd2tpLhIpFRN3Br64NP3T2X4ov72EtpaIoLnIvxgWg0TFbt91mFw	.google.com	/	2027-01-09T01:09:28.567Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzUy6VPrFuyjlPluHSWzYQAb7Vdc0apVwd1YyfIPwtTs-7-xWYEN_T4gudTx_xkYB-CGuA	.google.com	/	2027-01-09T01:09:36.381Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+__Secure-STRP	AD6DogsrU3DlM_VFHGb9s85dqEWFPK9soPCVJelOMIyEwdipeCyvYX7tw_QQeGeKNYZyLTG7J9fcFlW8Wz-xkw2D-eSus374nXor	.google.com	/	2026-01-09T01:12:40.840Z	113		✓	Strict			Medium
+_fcOM	{"k":"81da6269940b692269bc0d9319b4a543b5f-83e","i":"218.154.14.63.331872","r":1767920976286}	.nol.interpark.com	/	2027-02-13T01:09:36.286Z	97						Medium
+_fwb	24ql9P430mMh1InAH6MNGt.1767920970485	.nol.interpark.com	/	2027-02-13T01:09:36.133Z	40						Medium
+_ga	GA1.1.786033385.1767920971	.interpark.com	/	2027-02-13T01:09:35.821Z	29						Medium
+_ga_4SKTL7E8Q8	GS2.1.s1767920970$o1$g1$t1767920996$j34$l0$h0	.interpark.com	/	2027-02-13T01:09:56.210Z	59						Medium
+_gcl_au	1.1.1688289628.1767920970	.interpark.com	/	2026-04-09T01:09:30.000Z	32						Medium
+_kmpid	km|nol.interpark.com|1767920970574|6f37047e-c67e-4e0b-b808-edbd14eaac37	.nol.interpark.com	/	2026-04-09T01:09:30.000Z	77						Medium
+_kmpid	km|interpark.com|1767920970574|6f37047e-c67e-4e0b-b808-edbd14eaac37	.interpark.com	/	2026-04-09T01:09:30.000Z	73						Medium
+ab.storage.deviceId.cd97b079-ff05-4967-873a-324050c2a198	%7B%22g%22%3A%22768ab764-3e02-12a7-e096-355048971b2c%22%2C%22c%22%3A1767920970634%2C%22l%22%3A1767920970634%7D	.interpark.com	/	2027-01-09T06:58:30.000Z	166						Medium
+ab.storage.sessionId.cd97b079-ff05-4967-873a-324050c2a198	%7B%22g%22%3A%222c5ba948-737c-c05b-dffa-92841b21138b%22%2C%22e%22%3A1767922776154%2C%22c%22%3A1767920970632%2C%22l%22%3A1767920976154%7D	.interpark.com	/	2027-01-09T06:58:36.000Z	193						Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+cto_bundle	iAsUNV90YlpoUmolMkJNVzg4dXdJRHl3eVVyWWF6U3hiJTJCZTNDT3dwRWkybzFVOVRXdWl4OXI1a1o5ZkFJR2Q4T0xSOFNra1FQQ055VlhqYVcxcjhwY3RWU201UndSbGhud3RiQzlPQ3hVSnd6cHY3NDE5JTJCMjNwYllFOXFCZUlOVkoxJTJGaksyakwlMkJTd2dBdHJLQ0ZsSkJqb2JQZ0dnJTNEJTNE	.criteo.com	/	2027-02-03T01:09:35.655Z	238		✓	None	https://interpark.com	✓	Medium
+cto_bundle	n1fCrV9VR2Naa2V0WkJ0WCUyQkk3VUhmdEw2cG9KcU4zQ2E1UlE1JTJCdCUyRjhkb0dLNzRZc3ZKdDNoR1I1NGhtYnlzUEQxUXFxcEJwVHhiTVh4QWIwNW9NdWRRUk8zZk1ZY1JsdmtEbGt1alBjT0xPc2NobTRnRGFaJTJGYXdzOXZJak5TcWVzaFBSV0clMkI4SkNtbU9obENERjNFamg5TzJBJTNEJTNE	.interpark.com	/	2027-02-08T11:09:36.000Z	238						Medium
+extcid	8b8aa9e480c147a4aa0c49c77248e42b	lex.toss.im	/	2027-01-09T01:09:35.765Z	38		✓	None			Medium
+g	IkNyHNKCudFBUVHiE0TM_1767772622217	.creativecdn.com	/	2027-01-07T07:57:02.313Z	35		✓	None			Medium
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+LPINFO	A100637853%7C294653498sAIwD%7C0000%7CB%7C1%7Cinterpark3	.interpark.com	/	2026-01-10T01:09:32.000Z	61						Medium
+NAC	6Zf4CwBqnn3zA	.naver.com	/	2027-02-13T01:09:30.679Z	16		✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+NWB	67a8cb0586fb3d1d1c0cb1867fa6bbed.1767769484701	.wcs.naver.com	/	2027-02-13T01:09:35.790Z	49		✓	None			Medium
+NWB_LEGACY	67a8cb0586fb3d1d1c0cb1867fa6bbed.1767769484701	.wcs.naver.com	/	2027-02-13T01:09:35.790Z	56			
+Medium
+pcid	176792096981480072	.interpark.com	/	2027-01-09T01:09:29.815Z	22						Medium
+s_au_id	81da6269940b692269bc0d9319b4a543b5f-83e	.clickon.kr	/	2027-02-13T01:09:36.282Z	46		✓	None			Medium
+s_IP_info	218.154.14.63.331872	.clickon.kr	/	2027-02-13T01:09:36.282Z	29		✓	None			Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SCOUTER	x240q99ddqiul8	tk.clickon.kr	/	2027-01-27T08:31:08.033Z	21		✓	None			Medium
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+send_rtb_date	20260107160820	.clickon.kr	/	2027-02-11T07:08:20.112Z	27		✓	None			Medium
+send_rtb_date_g	20260107160820	.clickon.kr	/	2027-02-11T07:08:20.108Z	29		✓	None			Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SIDCC	AKEyXzVlzUHD5MDKp6aqP2XuBsmohYwrQeE9VxyHxefmj_XsGBATp2UmrNLnAScaAN5rd9ct6gA	.google.com	/	2027-01-09T01:09:28.567Z	80						High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+uid	57523744-f761-41ba-8caa-9e40da0966a5	.criteo.com	/	2027-01-17T08:31:07.289Z	39		✓	None			Medium
+wcs_bt	s_22aec0678481:1767920975	nol.interpark.com	/	2027-02-13T01:09:35.768Z	31						Medium

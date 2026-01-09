@@ -1,0 +1,22 @@
+_ga	GA1.1.919066366.1767921327	.expressvpn.com	/	2027-02-13T01:15:30.370Z	29						Medium
+_ga_5TPZN16PLF	GS2.1.s1767921326$o1$g1$t1767921329$j57$l0$h0	.expressvpn.com	/	2027-02-13T01:15:30.370Z	59						Medium
+_ga_ZDM0C7DHZZ	GS2.1.s1767921326$o1$g1$t1767921329$j57$l0$h0	.expressvpn.com	/	2027-02-13T01:15:30.363Z	59						Medium
+aid	Impact-linkprice	.expressvpn.com	/	2026-04-09T01:15:25.714Z	19		✓	Lax			Medium
+brwsr	ad83b5ac-ecf8-11f0-8569-cdb471cc1ad7	.expressvpn.com	/	2027-01-09T01:15:25.690Z	41	✓	✓	None			Medium
+data1	A100637853%7C294653553ZrQkH%7C0000%7CB%7C1%7Cexvpn	.expressvpn.com	/	2026-04-09T01:15:25.714Z	55		✓	Lax			Medium
+data2		.expressvpn.com	/	2026-04-09T01:15:25.714Z	5		✓	Lax			Medium
+data3		.expressvpn.com	/	2026-04-09T01:15:25.714Z	5		✓	Lax			Medium
+data4		.expressvpn.com	/	2026-04-09T01:15:25.714Z	5		✓	Lax			Medium
+distinct_id	19ba0528c2d70b-01d54633c9b76f-26061a51-1fa400-19ba0528c2ea95	.expressvpn.com	/	2026-02-08T01:15:27.000Z	71						Medium
+FullAdvParams	xvcid%3DWfzTnIXb8xycUlJQfYyyQxLiUkpXBrWaGRMXz40%26shareid%3D%26irclickid%3DWfzTnIXb8xycUlJQfYyyQxLiUkpXBrWaGRMXz40%26irgwc%3D1%26afsrc%3D1	.expressvpn.com	/	2026-02-08T01:15:27.000Z	151						Medium
+locale	en	.expressvpn.com	/	2026-02-08T01:15:27.000Z	8						Medium
+mp_f4478bfdf42cc3ed0644b5f16f3f2826_mixpanel	%7B%22distinct_id%22%3A%2219ba0528c2d70b-01d54633c9b76f-26061a51-1fa400-19ba0528c2ea95%22%2C%22%24device_id%22%3A%2243b8ca41-3651-485c-a3d2-5fd9de60fc6a%22%2C%22initial_source%22%3A%22direct%22%2C%22initial_referrer_id%22%3Anull%2C%22initial_website%22%3Anull%2C%22initial_search%22%3Anull%2C%22initial_direct%22%3A%221%22%2C%22initial_aid%22%3Anull%2C%22initial_gclid%22%3Anull%2C%22initial_yclid%22%3Anull%2C%22pageview_id%22%3A%221%7CMK66PM7BE7DJ2%22%2C%22xwsid%22%3A%221%7CMK66PJ85RSC4F%22%2C%22last_source%22%3A%22affiliates%22%2C%22last_referrer_id%22%3Anull%2C%22last_website%22%3Anull%2C%22last_search%22%3Anull%2C%22last_direct%22%3A%221%22%2C%22last_aid%22%3A%22Impact-linkprice%22%2C%22last_gclid%22%3Anull%2C%22last_yclid%22%3Anull%2C%22%24initial_referrer%22%3A%22%24direct%22%2C%22%24initial_referring_domain%22%3A%22%24direct%22%2C%22__mps%22%3A%7B%7D%2C%22__mpso%22%3A%7B%7D%2C%22__mpus%22%3A%7B%7D%2C%22__mpa%22%3A%7B%7D%2C%22__mpu%22%3A%7B%7D%2C%22__mpr%22%3A%5B%5D%2C%22__mpap%22%3A%5B%5D%2C%22%24user_id%22%3A%2219ba0528c2d70b-01d54633c9b76f-26061a51-1fa400-19ba0528c2ea95%22%2C%22initial_irclickid%22%3A%22WfzTnIXb8xycUlJQfYyyQxLiUkpXBrWaGRMXz40%22%2C%22initial_xvcid%22%3A%22WfzTnIXb8xycUlJQfYyyQxLiUkpXBrWaGRMXz40%22%2C%22last_irclickid%22%3A%22WfzTnIXb8xycUlJQfYyyQxLiUkpXBrWaGRMXz40%22%2C%22last_xvcid%22%3A%22WfzTnIXb8xycUlJQfYyyQxLiUkpXBrWaGRMXz40%22%7D	.expressvpn.com	/	2027-01-09T01:15:27.000Z	1424						Medium
+mp_ZXhwcmVzc3cwbg	=_alooma=%7B%22distinct_id%22%3A%20%2219ba0528c2d70b-01d54633c9b76f-26061a51-1fa400-19ba0528c2ea95%22%2C%22%24initial_referrer%22%3A%20%22%24direct%22%2C%22%24initial_referring_domain%22%3A%20%22%24direct%22%7D	.expressvpn.com	/	2027-01-09T01:15:27.000Z	227						Medium
+source	affiliates	.expressvpn.com	/	2026-02-08T01:15:27.000Z	16						Medium
+special_offer_source	affiliate	.expressvpn.com	/	2026-02-08T01:15:25.714Z	29	✓	✓	Lax			Medium
+xv_lp	%2F	.expressvpn.com	/	2026-02-08T01:15:23.000Z	8						Medium
+xvgtm	%7B%22report_aid_to_ga%22%3Atrue%7D	.expressvpn.com	/	세션	40		✓	Lax			Medium
+xvid	eO-BDLAMwBXZszlnaInHGw	.expressvpn.com	/	2027-01-09T01:15:23.000Z	26						Medium
+xvsrcdirect	1	.expressvpn.com	/	2026-02-08T01:15:27.000Z	12						Medium
+xvt	1767921325	.expressvpn.com	/	2026-04-09T01:15:25.714Z	13		✓	Lax			Medium
+xwsid	1%7CMK66PJ85RSC4F	.expressvpn.com	/	2026-07-08T01:15:23.000Z	22						Medium

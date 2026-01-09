@@ -1,0 +1,70 @@
+__Host-1PLSID	o.chromewebstore.google.com|o.play.google.com|s.KR|s.youtube:g.a0005QjmdqFSgPqVV16aT1ZdfMC4u2zuvMxYQqTqWgndgpgCCD1i90r4exC0pYIPXthGysFZIQACgYKAXgSARISFQHGX2Mi_xoS19QCQuxGTXLQVNT-IRoVAUF8yKrdj6jMh_vVzpf502cSut3y0076	accounts.google.com	/	2027-02-11T07:04:18.377Z	227	✓	✓				High
+__Host-3PLSID	o.chromewebstore.google.com|o.play.google.com|s.KR|s.youtube:g.a0005QjmdqFSgPqVV16aT1ZdfMC4u2zuvMxYQqTqWgndgpgCCD1i40nUJ35loRNV_JwtGHA4tQACgYKAVgSARISFQHGX2MiV5DiiAl62eRXo641kHQH9xoVAUF8yKpza3UlVf4W9pOiz4BZL0KZ0076	accounts.google.com	/	2027-02-11T07:04:18.377Z	227	✓	✓	None			High
+__Host-GAPS	1:JTO0ZnDfRpFuKgqhsjUNTOR7-LS_hPoZ2jBo7XP-NtBw6_j2e7_qmLUG7QdMfPhR9tduUUoK5Xp5uTZ2Loz3nue8id7AfZyYiqD_3lidnZrAY73XDrybzQTvvGMB9ygSh02sgBLTlvXCgvZZvBPQCwLirRz3tbYvliSH-rD_4HmtCOvjmQm0UA:vPo278oj3XYOs4G-	accounts.google.com	/	2027-02-11T00:53:19.583Z	212	✓	✓				High
+__Host-GAPSTS	gapsts-Ci0BGuzkgI-eXGnR7yRk80Q23wnKNUOuhs0SfeDo6zb2lRhNNLBlffSpx5OFRf0QAQ==	accounts.google.com	/	2027-02-13T00:20:19.518Z	88	✓	✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzWOqzGxCh3pXftdPU-WQfXt4BuoTZM3omT_wvgaM1OCjoSzh0Pvh43lq1y3eUuTeEZF7A	.google.com	/	2027-01-09T01:15:38.154Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2026-01-09T01:24:36.303Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2027-01-09T01:14:36.303Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzWduTxxAO4EtJE1fSHRK9rY0WRkX6XuthcohFKzJ_wzRCeUWfYTNIhtZVhNC8NDp1lDQw	.google.com	/	2027-01-09T01:16:47.742Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2026-01-09T01:24:36.303Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2027-01-09T01:14:36.303Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+__Secure-STRP	AD6DogulrbH5R-sJq4Go5AhXIx7joUv6DH-eb_Cyg5Ey81uQOZ3FauSfvRUZDBJgVOZUdTMqra4NNn5uVOqDXbxuoJgABMbeD-qk	.google.com	/	2026-01-09T01:17:44.701Z	113		✓	Strict			Medium
+_fbp	fb.1.1767921405000.0.11046739080843915	www.hotelscombined.co.kr	/	2026-12-31T01:16:45.983Z	42		✓	None			Medium
+_ga	GA1.1.1302950409.1767921406	.hotelscombined.co.kr	/	2027-02-13T01:16:46.296Z	30						Medium
+_ga_PWCRSK2Y5Y	GS2.1.s1767921406$o1$g0$t1767921406$j60$l0$h593662471	.hotelscombined.co.kr	/	2027-02-13T01:16:46.382Z	67						Medium
+_gcl_au	1.1.542776138.1767921406	.hotelscombined.co.kr	/	2026-04-09T01:16:45.000Z	31						Medium
+_uetsid	ddb38a00ecf811f0b6e2bbf688702dd7	.hotelscombined.co.kr	/	2026-01-10T01:16:47.000Z	39						Medium
+_uetvid	ddb3b020ecf811f085bb0b5d19596801	.hotelscombined.co.kr	/	2027-02-03T01:16:47.000Z	39						Medium
+a_aid		www.hotelscombined.co.kr	/	세션	5	✓	✓	None			Medium
+ACCOUNT_CHOOSER	AFx_qI4PIQQFzs2gUVnaxZR8BRx3h2UF4QjE8zyGL3qemkkc9pzxp8OcC5F56oC_jMoDW-QguKAxOdU3xpp0jr8DHEQB9ZZ4PxpN4g3KuME32WNu8ZWa9bGFzY491bg38oNX5C1mP3do	accounts.google.com	/	2027-01-27T08:13:09.158Z	155	✓	✓				High
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+Apache	2poOPw-AAABm6BTvu0-c8-IpwkXw	www.hotelscombined.co.kr	/	2027-02-13T01:16:52.286Z	34	✓	✓	None			Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+brandId		www.hotelscombined.co.kr	/	세션	7	✓	✓	None			Medium
+cluster	4	www.hotelscombined.co.kr	/	2026-01-09T02:01:52.286Z	8	✓	✓	None			Medium
+csid	d1345a50-5ffa-4adf-a8a6-a45b0cf282a2	www.hotelscombined.co.kr	/	세션	40		✓	Strict			Medium
+currencyCode	KRW	www.hotelscombined.co.kr	/	2027-02-13T01:16:52.286Z	15	✓	✓	None			Medium
+FPGSID	1.1767921406.1767921406.G-PWCRSK2Y5Y.75qP3eKQkIqXZTRYXy7gmg	.hotelscombined.co.kr	/	2026-01-09T01:46:46.590Z	65		✓	Strict			Medium
+g_state	{"i_l":1,"i_ll":1767921406191,"i_b":"6gcJsVAxLA6zQgXELnbUu9e1nP2I68nk1vAuE6dbR3M","i_e":{"enable_itp_optimization":0},"i_p":1767928609159}	www.hotelscombined.co.kr	/	2026-07-08T01:16:49.000Z	145						Medium
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+kanid		www.hotelscombined.co.kr	/	세션	5	✓	✓	None			Medium
+kanlabel		www.hotelscombined.co.kr	/	세션	8	✓	✓	None			Medium
+kayak	HZ3BQ73wQ2vKt0SJ1VHA	www.hotelscombined.co.kr	/	2027-02-13T01:16:41.780Z	25	✓	✓	None			Medium
+kayak.mc	AfLbFm2SBPhL6krLy3E9JIG5IHcxMIZDzDiDhRhGXDC9g5ilF-vNBM5ybxjP3OlmRP41uKVQSAVkzkk_9SM_JpnikY2MiK6VLotqheO8X0ddKRQftas78lI97UqLXsQsRihyhmzyl6AyaJ_Q5ZbxK7ff2VMTMcE--76ozZM_edGWk-h2jAyWdr4ma8wdiWH2GMAPfI-GuQewPY9cmQtsviGv7V_icVmFs6CR012mdaIlU5QeCLwB0KGp5bQ8sqH-bhHw49rksMpbfWWeK9mWSpjgaqtJfwFZEe1urEiikNGKZ4UGmPQSWL3u8ArG0O0PjbiQbr5W2L7RDmQ7BVBRpCQC9HoZp9JGaBcun2JTEq8N	www.hotelscombined.co.kr	/	2027-02-13T01:16:52.286Z	372	✓	✓	None			Medium
+kmkid	AdjbSpLz-zQmJ7kvN4b3jbo	www.hotelscombined.co.kr	/	2027-02-13T01:16:47.515Z	28	✓	✓	None			Medium
+label		www.hotelscombined.co.kr	/	세션	5	✓	✓	None			Medium
+languageCode	KO	www.hotelscombined.co.kr	/	2027-02-13T01:16:52.286Z	14	✓	✓	None			Medium
+LSID	o.chromewebstore.google.com|o.play.google.com|s.KR|s.youtube:g.a0005QjmdqFSgPqVV16aT1ZdfMC4u2zuvMxYQqTqWgndgpgCCD1iCtf8ITzvmsa1u0jo-_WBTgACgYKAeASARISFQHGX2MiNGkPi3apb0MVaFx80DyecBoVAUF8yKptxhlc0pFKaK6At-ubw6bN0076	accounts.google.com	/	2027-02-11T07:04:18.377Z	218	✓	✓				High
+Mobile	0	www.hotelscombined.co.kr	/	2026-02-08T01:16:41.779Z	7	✓	✓	None			Medium
+MR	0	.bat.bing.com	/	2026-01-14T07:05:08.659Z	3		✓	None			Medium
+mst_ADIrkw	IRjSXAPqG3xH03d4Dp43h9rg_7hKrBC2Dy0oKzB8_fP4W_xo6--CAqdQZmIj5wJ8ZcJqqQC7fNL4mhsvm7wzfQ	www.hotelscombined.co.kr	/	2026-01-09T01:31:48.291Z	96	✓					Medium
+mst_iBfK2g	Yk0RaiLYyyj3V3eUJAa-A9rg_7hKrBC2Dy0oKzB8_fMkNKTk1RMbD0Lasij3eJRVZusMMKW-qy7TrY4SlHD88Q	www.hotelscombined.co.kr	/	2026-01-09T01:31:48.290Z	96	✓					Medium
+MUID	0DE5CF195F326B1004A9D9D25E1B6A57	.bing.com	/	2027-02-01T07:05:08.658Z	36		✓	None			High
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+OTZ	8402893_20_20__20_	accounts.google.com	/	2026-01-22T08:12:47.000Z	21		✓				Medium
+p1.med.sid	R-4v1KTHcjYaI02KOVhyHFJ-jJzxEMIPGlr9o9ZY5gxGG8UV_M47gCpgRbyj792j1	www.hotelscombined.co.kr	/	세션	75	✓	✓	None			Medium
+QueryBasedAffiliate		www.hotelscombined.co.kr	/	세션	19	✓	✓	None			Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SIDCC	AKEyXzX6e1l4jPZ5_Jni4w7YBeG87NdWQ1vj1sZLYvZ_0SZlS3US8kYPJ_GxWC6xilhAjh6y8kU	.google.com	/	2027-01-09T01:15:38.154Z	80						High
+SMSV	ADHTe-DBucsMQJ1oSCugKG8Q0HiSwDd2lm32NM37hxVCkyVzCXtKI7INqnHaAzVN9TGjTLCDxVv3T0d5Z697OZ90Oc4G374vGBgoOiRgb8orcIl2ua8ni1k	accounts.google.com	/	2027-01-27T08:13:09.158Z	123	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+visit	date=2026-01-09T12:16:41.584697696+11:00&id=e4078742-96e7-4219-9425-751cf840448d	www.hotelscombined.co.kr	/	2026-01-09T05:16:41.779Z	85	✓	✓	None			Medium
+visitor	id=da5700dc-59a7-4c45-b931-c1f8ebaf819b&tracked=false	www.hotelscombined.co.kr	/	2026-02-08T01:16:41.779Z	60	✓	✓	None			Medium

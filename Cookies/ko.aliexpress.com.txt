@@ -1,0 +1,61 @@
+__rtbh.lid	%7B%22eventType%22%3A%22lid%22%2C%22id%22%3A%22OakA0XCsfxxNeoAepCg5%22%2C%22expiryDate%22%3A%222027-01-09T01%3A19%3A56.524Z%22%7D	best.aliexpress.com	/	2027-01-09T01:19:56.000Z	139		✓	None			Medium
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzWOqzGxCh3pXftdPU-WQfXt4BuoTZM3omT_wvgaM1OCjoSzh0Pvh43lq1y3eUuTeEZF7A	.google.com	/	2027-01-09T01:15:38.154Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2026-01-09T01:24:36.303Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2027-01-09T01:14:36.303Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzXpQaDVLBsKNzoEVCtO2fcBu1tppExBrMxudV01y2MfcgTXW97jpfuHZRsvgFFJJ3JTvA	.google.com	/	2027-01-09T01:19:58.115Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2026-01-09T01:24:36.303Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2027-01-09T01:14:36.303Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+_baxia_sec_cookie_	%257B%2522lwrid%2522%253A%2522AgGboFaviPjFM0dvsJDRX39uI13Q%2522%252C%2522tfstk%2522%253A%2522gAZEhzZYVMIFmY103-mPbsk-mZiKz05f4uGSE82odXchy9hoEfPrVJ6pV80uG8KIr6nQ45oLfytSO6nzESiPGssfcJeKy0ffGFmXwtiKUQDnKQgGjvirKNu7xRyK20f_HGJ6pJFQZBQir0XZjYDqK0DnqdXZUYAnqX0ksFDmsbmuZXYgIxMmKvxHqCXZefcoq0VojOkSsbmoq72iTKw3Ehkj-OL3p8fBVbuEiJcw0SEiKDYLLf-kqlzZ8jAI_3xubv2umfQv0aG0kXgj65j6Y0yiUSk4TCfZqRrL0Vqh63P4_rmZBPCyzjzudrUo79j3QDlEulg6hFnUrWErJyJRHRm36rhx-NCtQkZjzj3ws62_QX04zW19qXa4I5ubfCtjj-4Zbg79wAxEtuUeZUunBAlfQO8jMoMBCgKBVUL-SmHZG9MByU3nBAlfQO8JyVDxQj6Id%2522%252C%2522epssw%2522%253A%252211*mmLUomW3rT8DAEbgEN0kvN8-p6JETtkYHaLP1askeycVAoQdIuGypGcpqkyBVOCCnXtuestBM_YVkWeimTE4xRfi9EfmmCvOEki5Gm2R5OAZGmAPommmis9iOp-RCkxYEVL-1erYM2FzIork-nRKlOAZarbixgnzhjI1-GOCSIEmKvsME-bCAAzNY_utnW3RZ2RO-pulFiWmFBN-iux_1KNCs2Ic0c6uu_36imHnFZnotjHcFuucimAmmHdemAvq0taVN_aaBoJp0tuuG-Q0c-gEuuuuu_aEu0bLNhwTB_Cu0uuusRU9psmCPYP6fgq1Eme.%2522%252C%2522lwrtk%2522%253A%2522AAIEaWDIO%252BGpqi8KjWCSUldTtpBev4OGgx3HHQo84j3AF8Ti3O08jq8%253D%2522%257D	.aliexpress.com	/	2026-07-08T01:19:57.000Z	1035			Lax			Medium
+_ga	GA1.1.1914748164.1767921598	.aliexpress.com	/	2027-01-09T01:19:57.000Z	30						Medium
+_ga_VED1YSGNC7	GS2.1.s1767921597$o1$g0$t1767921597$j60$l0$h0	.aliexpress.com	/	2027-01-09T01:19:57.000Z	59						Medium
+_gcl_au	1.1.1099148698.1767921596	.aliexpress.com	/	2026-04-09T01:19:56.000Z	32						Medium
+_m_h5_tk	7bc60d3aea409fa94b1772116bfa7b7d_1767923934746	.aliexpress.com	/	2026-01-16T01:19:54.853Z	54		✓	None			Medium
+_m_h5_tk_enc	33bc5c4c8d49edb5d5d09dd38ec6d4a6	.aliexpress.com	/	2026-01-16T01:19:54.853Z	44		✓	None			Medium
+_pin_unauth	dWlkPU9HSTBaakl5TldRdFlUZ3paUzAwTjJRd0xUbGxPREl0TXpZMU56WmpPREk0TnpZeg	.best.aliexpress.com	/	2027-01-09T01:19:57.000Z	81						Medium
+_uetsid	4fb69bb0ecf911f0a7dcd9eb2543051b	.aliexpress.com	/	2026-01-10T01:19:57.000Z	39						Medium
+_uetvid	4fb6c1d0ecf911f0bfc84729d98e7ca6	.aliexpress.com	/	2027-02-03T01:19:57.000Z	39						Medium
+acs_usuc_t	x_csrf=di9xhutm0a_d&acs_rt=e230d26b408f4c2481a7e5675714b189	.aliexpress.com	/	세션	69		✓	None			Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+aep_usuc_f	site=kor&c_tp=KRW&region=KR&b_locale=ko_KR&ae_u_p_s=2	.aliexpress.com	/	2027-01-09T01:19:55.000Z	63						Medium
+aeu_cid	f18018049cd44f6eb2d1e439e09677bd-1767921593293-00049-_c3kMBO5R	.aliexpress.com	/	2027-02-13T01:19:53.435Z	69		✓	None			Medium
+af_ss_a	1	.aliexpress.com	/	2027-02-13T01:19:53.435Z	8		✓	None			Medium
+af_ss_b	1	.aliexpress.com	/	2027-02-13T01:19:53.435Z	8			Lax			Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+ar_debug	1	.pinterest.com	/	2027-01-09T01:19:56.893Z	9	✓	✓	None			Medium
+cbc	T2gAM9sK-BgnT-wiFaAJ9o2f2wZwBR3Lm0qUsx_jB2E4MuClrXPbXsAgy3AEhj2MiYY=	.ynuf.aliapp.org	/	2027-01-09T01:19:58.123Z	71		✓	None	https://aliexpress.com	✓	Medium
+cbc	T2gArJiDDmBKkV6LplsIyEX__bnayN7KBbKXYxI0x7HRk0B6fuTdurW5zxNXvuVm1uU=	.us.ynuf.aliapp.org	/	2027-01-09T01:19:56.106Z	71		✓	None			Medium
+cna	u0XnIVsD5woCAdqaDj/aFij9	.aliexpress.com	/	2027-01-09T01:19:56.245Z	27		✓	None			Medium
+cto_bundle	xFe7219jMXZJeXZDdk53VVRVdXVnREQlMkY5eVpuZ0hRTTByTEl4VXNXWnA5ZlYzeUZINHcwbmJuNUpGQ1o4Nm9ydThkWkVtTktyZmVYUkFqZ3VtMWdvQXVxZk9KM3FkOWMwcGxuSUZ5dFFGJTJGaG5DdCUyRkhHamZKTTZkd1I4JTJCU1h0Nm9XRmNaQmR0Q0QlMkZCUDRUWDJzTVdYTU4zbFZnJTNEJTNE	.criteo.com	/	2027-02-03T01:19:57.255Z	238		✓	None	https://aliexpress.com	✓	Medium
+cto_bundle	Adq0eF85MW9SNElRcWdFZkk2bTRJSXJtYUZidEZna2RrNzZRSUxiRGxMUjRhNlBsYWF2akplT0tONVNNNndocXFlN3FQTkwxa3NLOEJZJTJGc21zOGQxY3ZDTnYzRnNYNEd2a1dXJTJGNzNGWmVVcTc0WHNCRjBJbVdGeGolMkYxcHpSbnNvdlpvc0JpVzElMkIlMkJZYUhoTFpVUTR3bXNBNCUyRmclM0QlM0Q	.aliexpress.com	/	2027-02-08T11:19:58.000Z	241						Medium
+g	IkNyHNKCudFBUVHiE0TM_1767772622217	.creativecdn.com	/	2027-01-07T07:57:02.313Z	35		✓	None			Medium
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+MR	0	.bat.bing.com	/	2026-01-14T07:05:08.659Z	3		✓	None			Medium
+MUID	0DE5CF195F326B1004A9D9D25E1B6A57	.bing.com	/	2027-02-01T07:05:08.658Z	36		✓	None			High
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SIDCC	AKEyXzX6e1l4jPZ5_Jni4w7YBeG87NdWQ1vj1sZLYvZ_0SZlS3US8kYPJ_GxWC6xilhAjh6y8kU	.google.com	/	2027-01-09T01:15:38.154Z	80						High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+t_gid	9b8b9abb-cdae-4a88-ba38-e32eda321803-tuct1046017c	.taboola.com	/	2027-01-09T01:19:56.663Z	54		✓	None			Medium
+t_pt_gid	9b8b9abb-cdae-4a88-ba38-e32eda321803-tuct1046017c	.taboola.com	/	2027-01-09T01:19:56.663Z	57		✓	None	https://aliexpress.com	✓	Medium
+uid	57523744-f761-41ba-8caa-9e40da0966a5	.criteo.com	/	2027-01-17T08:31:07.289Z	39		✓	None			Medium
+xman_f	wiuVbiY4WXx3eGCkyn5MXz93K91wvUiqLRiT3HX+VCD1jH0YpfQDpikLnAJ0dio5rUg1i4m5zdhdcorkQm7/KbCuumBPJ/yd6dEPhA/hABITUkKAZHoAgA6VUCcQB8GAyC23P06E5/s=	.aliexpress.com	/	2027-01-04T01:19:53.755Z	146	✓	✓	None			Medium
+xman_t	chzI4rmiKZA7qasrlT16clc3il6ArQXVXyqIoBXocUqftiQVrXnBSHFGP8fyyblF	.aliexpress.com	/	2027-01-04T01:19:53.435Z	70	✓	✓	None			Medium
+xman_us_f	x_locale=ko_KR&x_l=1&x_c_chg=1&x_as_i=%7B%22aeuCID%22%3A%22f18018049cd44f6eb2d1e439e09677bd-1767921593293-00049-_c3kMBO5R%22%2C%22affiliateKey%22%3A%22_c3kMBO5R%22%2C%22channel%22%3A%22AFFILIATE%22%2C%22cv%22%3A%221%22%2C%22isCookieCache%22%3A%22N%22%2C%22ms%22%3A%221%22%2C%22pid%22%3A%22789531147%22%2C%22tagtime%22%3A1767921593293%7D&acs_rt=e230d26b408f4c2481a7e5675714b189&intl_locale=ko_KR	.aliexpress.com	/	2027-01-04T01:19:53.755Z	403		✓	None			Medium

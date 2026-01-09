@@ -1,0 +1,22 @@
+사이트,제휴 ID,쿠키값 (앞 10자리),LinkPrice 여부,쿠키명,암호화 방식,상태,비고
+gmarket.co.kr,A100637853,eyJ0b2tlbl...,LINK_PRICE,token,Base64 JSON,정상,inflowChannelToken에 ID 포함
+auction.co.kr,A100637853,A100637853...,LINK_PRICE,PARTNERSHIP_AID,Plain Text,정상,PARTNERSHIP 쿠키 시스템 사용
+11st.co.kr,A100637853,A100637853...,LINK_PRICE,XSITE_DETAIL,Plain Text (Pipe),정상,XSITE 시스템 사용
+yes24.com,A100637853,A100637853...,LINK_PRICE,LPINFO,Plain Text (Pipe),정상,표준 LPINFO 형식
+kyobobook.co.kr,A100637853,A100637853...,LINK_PRICE,LPINFO,URL Encoded (Pipe),정상,표준 LPINFO 형식
+interpark.com,A100637853,A100637853...,LINK_PRICE,LPINFO,URL Encoded (Pipe),정상,interpark3 suffix 포함
+lotteon.com,294653448,294653448s...,LINK_PRICE,ch_mem_no,Plain Text,정상,롯데온 자체 시스템
+coupang.com,AF9743124,AF9743124,...,쿠팡파트너스,trac_lptag,Plain Text,정상(쿠팡 자체 제휴 시스템)
+e-himart.co.kr,A100637853,A100637853...,LINK_PRICE,LPINFO,Plain Text (Pipe),정상,표준 LPINFO 형식
+soomgo.com,A100637853,A100637853...,LINK_PRICE,LPINFO / airbridge_utm,URL Encoded + JSON,정상,Airbridge 연동
+klook.com,A100637853,A100637853...,LINK_PRICE,aid_extra,JSON,정상,aff_pid 필드에 ID
+ko.aliexpress.com,789531147,-,-,xman_us_f,JSON (URL Encoded),정상,AliExpress 자체 시스템 (affiliateKey: _c3kMBO5R)
+99flower.co.kr,A100637853,A100637853...,LINK_PRICE,LPINFO,URL Encoded (Pipe),정상,표준 LPINFO 형식
+mootoon.co.kr,A100637853,A100637853...,LINK_PRICE,LPINFO,URL Encoded (Pipe),정상,표준 LPINFO 형식
+tstation.com,A100637853,A100637853...,LINK_PRICE,LPINFO,URL Encoded (Pipe),정상,표준 LPINFO 형식
+ttang.com,A100637853,A100637853...,LINK_PRICE,LPINFO,URL Encoded (Pipe),정상,표준 LPINFO 형식
+expressvpn.com,A100637853,A100637853...,LINK_PRICE,data1,URL Encoded (Pipe),정상,Impact-linkprice aid
+credit.co.kr,A100637853,A100637853...,LINK_PRICE,LPINFO,Plain Text (Pipe),정상,표준 LPINFO 형식
+nordvpn.com,113701,-,-,aff_id,Plain Text,정상,NordVPN 자체 제휴 시스템
+agoda.com,-,-,미작동,-,-,미작동,LinkPrice 쿠키 없음
+hotelscombined.co.kr,-,-,미작동,-,-,미작동,LinkPrice 쿠키 없음

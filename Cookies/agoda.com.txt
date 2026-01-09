@@ -1,0 +1,79 @@
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzWl7mbwC-IwdaWmn3HdxAR6KQJlTi6g2bPEA5zHPIeqfFEYgxiozwywKFWRjJ9IbM3uiQ	.google.com	/	2027-01-09T01:21:00.113Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2026-01-09T01:24:36.303Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2027-01-09T01:14:36.303Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzWiBg7YoRc4FWzYrUkQdiBfH7nSFk12Rcx29q-lCaAqxnwVIEDVyhmAlLVu1wEjnlLjjw	.google.com	/	2027-01-09T01:21:09.563Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2026-01-09T01:24:36.303Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcB7I_69KzJHTmvItOoQ40j362hVVS3ZnjReWiiZnVKqfjMuW0rIo3_778zbNOiFEKNcONHXzPUEAA	.google.com	/	2027-01-09T01:14:36.303Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+_40-40-20Split	Group40A	.www.agoda.com	/	2027-01-28T23:49:05.997Z	22						Medium
+_ab50group	GroupA	.www.agoda.com	/	2027-01-28T23:49:05.996Z	16						Medium
+_ga	GA1.2.1543017242.1766620148	.agoda.com	/	2027-02-13T01:21:09.330Z	30						Medium
+_ga_C07L4VP9DZ	GS2.2.s1767921651$o5$g1$t1767921669$j42$l0$h0	.agoda.com	/	2027-02-13T01:21:09.571Z	59						Medium
+_ga_T408Z268D2	GS2.1.s1767920854$o5$g1$t1767921665$j41$l0$h310530583	.agoda.com	/	2027-02-13T01:21:05.176Z	67						Medium
+_gat_t3	1	.agoda.com	/	2026-01-09T01:21:51.000Z	8						Medium
+_gcl_au	1.1.1770095412.1766620147	.agoda.com	/	2026-03-24T23:49:07.000Z	32						Medium
+_gid	GA1.2.1035137769.1767856744	.agoda.com	/	2026-01-10T01:21:09.000Z	31						Medium
+_uetsid	4ae06400ec6211f0ae9c73925f20c54e|1gsqgjs|2|g2k|0|2199	.agoda.com	/	2026-01-10T01:21:09.000Z	60						Medium
+_uetvid	23b647c0e12311f09cd1936639010fc0|l049kl|1767921665685|3|1|bat.bing.com/p/conversions/c/f	.agoda.com	/	2027-02-03T01:21:09.000Z	95						Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+agoda.analytics	Id=-8903804738546271447&Signature=1657288030993635074&Expiry=1767925263555	.agoda.com	/	2026-01-09T02:21:04.702Z	89		✓				Medium
+agoda.attr.03	ATItems=1729890$12-25-2025 06:49$294436698s5q8O694c7bf116|1844104$01-07-2026 14:05$|1729890$01-08-2026 14:18$294642783ZUvOM695f5a5d5a|-1$01-09-2026 07:28$|1729890$01-09-2026 07:28$294653087PQz4n69604bc164|1729890$01-09-2026 07:28$294653082ATZMY69604bca93|1729890$01-09-2026 07:32$294653128s3pmp69604c8e83|1729890$01-09-2026 07:33$294653137PQzxM69604ce931|1729890$01-09-2026 08:20$294653603ZrQTT696057ed12|1729890$01-09-2026 08:21$294653613ZrQVL696057ff3a	.agoda.com	/	2027-01-09T00:00:00.276Z	467	✓	✓				Medium
+agoda.consent	KR||2026-01-09 01:20:46Z	.agoda.com	/	2027-01-09T01:20:46.180Z	37		✓				Medium
+agoda.firstclicks	1729890||294436698s5q8O694c7bf116||2025-12-25T06:49:05||xraksjrifke0oxh0d0btclfw||{"IsPaid":true,"gclid":"","Type":""}	.agoda.com	/	2026-12-25T00:00:00.523Z	135	✓	✓				Medium
+agoda.landings	-1|||hrxqdw445xj5kjm1zaxrf0v5|2026-01-09T07:28:48|False|19----1729890|294653613ZrQVL696057ff3a||hrxqdw445xj5kjm1zaxrf0v5|2026-01-09T08:21:04|True|20----1729890|294653613ZrQVL696057ff3a||hrxqdw445xj5kjm1zaxrf0v5|2026-01-09T08:21:04|True|99	.agoda.com	/	2027-01-09T00:00:00.276Z	252	✓	✓				Medium
+agoda.lastclicks	1729890||294436698s5q8O694c7bf116||2025-12-25T06:49:05||xraksjrifke0oxh0d0btclfw||{"IsPaid":true,"gclid":"","Type":""}	.agoda.com	/	2026-12-25T00:00:00.523Z	134	✓	✓				Medium
+agoda.mse.01	%7B%22property%22%3A%5B%5D%2C%22activity%22%3A%5B%5D%7D	.agoda.com	/	2026-01-09T01:51:03.710Z	67	✓	✓				Medium
+agoda.price.01	PriceView=1	.agoda.com	/	2027-01-07T14:05:05.492Z	25		✓				Medium
+agoda.prius	PriusID=0&PointsMaxTraffic=Agoda	.agoda.com	/	2026-12-24T23:49:05.386Z	43						Medium
+agoda.user.03	UserId=dff96ce0-1eac-4521-aa12-bfe02e290046	.agoda.com	/	2026-12-24T23:49:05.233Z	56		✓	None			Medium
+agoda.version.03	CookieId=ed861636-37c0-459f-982a-3222d9aeafc4&DLang=ko-kr&CurLabel=KRW&CuLang=9	.agoda.com	/	2027-01-09T00:00:00.275Z	95		✓				Medium
+ai_session	OjyzUoWp2G1X8BEzWhiFgi|1767921646204|1767921664745	www.agoda.com	/	2026-01-09T01:51:04.745Z	60		✓	None			Medium
+ai_user	INj4I18e45iTBURgAjp7pa|2025-12-24T23:49:06.373Z	www.agoda.com	/	2026-12-24T23:49:06.373Z	54		✓	None			Medium
+anj	dTM7k!M4/rCxrEQF']wIg2C%yupTnb!]tc#HH^+N`80ieSBBmHfSasq=tU+r__Nz!'mGIPs4(^Z<ivmD'!9[u$[I:A'ImJg<nGr9)Y_H0sQLc@9RFMZ9T5_m!wyQE+%3i@	.adnxs.com	/	2026-04-09T01:12:49.998Z	133	✓	✓	None			Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+ar_debug	1	.googleadservices.com	/	2026-03-24T23:43:48.221Z	9	✓	✓	None			Medium
+ar_debug	1	.www.google-analytics.com	/	2026-04-09T01:13:40.441Z	9	✓	✓	None			Medium
+ASP.NET_SessionId	hrxqdw445xj5kjm1zaxrf0v5	.www.agoda.com	/	세션	41	✓	✓	Lax			Medium
+cto_bundle	yVVrlV9PU3o3TXdvJTJGJTJCZmJidnI2dE85QnBvTmI5Y3pXaCUyRlNyODBzYiUyQkVFRTUxdGFuZlQwTXZoc2tEcHlOOTNOUGhFWjF0Y3FLVXZjRyUyRlVmdnlUQTZuJTJCMHdtN3pjWDF2MzdKcUliWktqNWZ0blduaSUyRmxMVU9ENHBuZmlUeDklMkJIS01WQlI2WU51UnVsUmp6ZHdWdWNjQlJWR3ZRJTNEJTNE	.agoda.com	/	2027-02-08T11:20:52.000Z	246						Medium
+FPID	FPID2.2.11Mcjj1qAVfohUXUcqPUiKPA4DCBiChD0uc6hOX4%2BtU%3D.1766620148	.agoda.com	/	2027-02-13T01:21:05.482Z	71	✓	✓				Medium
+FPLC	sgNCiC76IT0uX%2F%2Bo3TsmjwSE0uc0ktsbgHlKMHUIvc%2BhEft6JPaHffVZ3cN6NLeaOT2LHBg0CkaxAEWYMiX7z0c0TPSJ1KS7yV%2FqWJ6PlG4COu4TNk6JHx05L9yLuQ%3D%3D	.agoda.com	/	2026-01-09T03:18:55.871Z	144		✓				Medium
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+lastRskxRun	1767856742270	.agoda.com	/	2027-02-12T07:19:02.270Z	24						Medium
+MR	0	.bat.bing.com	/	2026-01-14T07:05:08.659Z	3		✓	None			Medium
+MUID	0DE5CF195F326B1004A9D9D25E1B6A57	.bing.com	/	2027-02-01T07:05:08.658Z	36		✓	None			High
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+rCookie	b728ts07k63dk5p3mxuv1mk549c4o	.agoda.com	/	2027-02-12T07:19:03.220Z	36						Medium
+rskxRunCookie	0	.agoda.com	/	2027-02-12T07:19:02.270Z	14						Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SIDCC	AKEyXzX6jC-wN9QRkm-ET0sfuqwjnKq7EAwI5oz2615CgZmBPgeyJEIZibLIvGZucE7vXYIKxpw	.google.com	/	2027-01-09T01:21:00.113Z	80						High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+t_gid	9b8b9abb-cdae-4a88-ba38-e32eda321803-tuct1046017c	.taboola.com	/	2027-01-09T01:21:09.490Z	54		✓	None			Medium
+t_pp	KSvDquhxjouE2Li9:fHlFZigOtEU6FpODC6YuvA==:W4mvcZybj3/r8oTT/thwwNhEuhWAzo4i52UI2Gy/lmufUZt6AOO4ladBNuC1nGhIqu25Z3VliifpljEYLBHx5tQyI9p7PxU7UrGdSxMHSQYzpviG0VHBRnPlryxjB3Z2UwzOXe806FkTi+RXJKTlWckGAzVqix4ptJY4mN6he96sKX5dlT18uooeA2u3jawD4Zub109W3yVEYebku/tAlu1f2HhNQlBpwqN1nw8kEU72	.agoda.com	/	2026-01-09T01:28:48.589Z	282	✓	✓	None			Medium
+t_pt_gid	9b8b9abb-cdae-4a88-ba38-e32eda321803-tuct1046017c	.taboola.com	/	2027-01-09T01:21:09.490Z	57		✓	None	https://agoda.com	✓	Medium
+t_rc	t=64&8ETD+1m6XA3NQYm7DVQvpQ=7	.agoda.com	/	2026-01-10T01:21:04.635Z	33	✓	✓	None			Medium
+TapAd_3WAY_SYNCS	1!217-3!175-2!217	.tapad.com	/	2026-03-10T01:21:09.808Z	33		✓	None			Medium
+TapAd_DID	559f03c5-8126-4cfa-8654-c02f675259f2	.tapad.com	/	2026-03-10T01:21:09.807Z	45		✓	None			Medium
+TapAd_TS	1766620155968	.tapad.com	/	2026-03-10T01:21:09.807Z	21		✓	None			Medium
+tealiumEnable	true	.agoda.com	/	2026-01-10T01:21:04.000Z	17						Medium
+uids	eyJ0ZW1wVUlEcyI6eyJhZG54cyI6eyJ1aWQiOiIxMTE1MTIxNzQ5ODg3ODU3MDMyIiwiZXhwaXJlcyI6IjIwMjYtMDEtMjFUMDc6NTc6MDEuMTU1NjI3MDQ2WiJ9LCJhbXgiOnsidWlkIjoiZmM5ODk4NjItMDU4MC00NWZkLTllNDgtZDk3ZWJiOWE3NDg5IiwiZXhwaXJlcyI6IjIwMjYtMDEtMjFUMDc6NTc6MDIuNzU3NDQ4MjUzWiJ9fX0=	.adnxs.com	/	2026-04-07T07:57:02.735Z	260		✓	None			Medium
+utag_main	v_id:019b52c4294d00222ae64f5630f00506f005b06700bd0$_sn:5$_se:3$_ss:0$_st:1767923464755$ses_id:1767921646222%3Bexp-session$_pn:3%3Bexp-session	.agoda.com	/	2027-01-09T01:21:04.000Z	150						Medium
+uuid2	1115121749887857032	.adnxs.com	/	2026-04-09T01:21:09.756Z	24	✓	✓	None			Medium
+XANDR_PANID	gFRkY73m-loz2vbo3OkDLJBK8riSjofmnFBzOTcKXu_ES1pagQ1Sw-gIK7GQkOpqFHvzPTZGLrKFNDeIhYh6dDrcj9dbCV0BKF8tRZshcHA.	.adnxs.com	/	2026-04-09T01:21:09.756Z	119		✓	None	https://agoda.com	✓	Medium
+xsrf_token	CfDJ8Dkuqwv-0VhLoFfD8dw7lYz2giBxg0qzL4p0XCy7DFwcrGa1XszTanATBWIotu3yCfWslczDW5tsJ3vYLLMvqX-1wwV7d0-RYTYVgiR5tM3NqJ6u_iA0SeyaLodhwVCC1v-XRJTulbmlRUEjSkKD9jc	www.agoda.com	/	세션	165	✓	✓	Strict			Medium

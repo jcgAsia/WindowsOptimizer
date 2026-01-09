@@ -1,0 +1,65 @@
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzWoaV9k_18zUrvB7aCsSNgBnDP7wIMEL51UTPkb3qp1eJWdDMEod76RUCdRl8sHOpWtDQ	.google.com	/	2027-01-09T01:12:00.120Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzXoqXV3LCWrOkR4RmPaFIjMu93FtMqoX5pB9kpqABVSpuDAJw5vifI2Ka3owGTO8jd3iQ	.google.com	/	2027-01-09T01:12:06.381Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+__Secure-STRP	AD6DogsrU3DlM_VFHGb9s85dqEWFPK9soPCVJelOMIyEwdipeCyvYX7tw_QQeGeKNYZyLTG7J9fcFlW8Wz-xkw2D-eSus374nXor	.google.com	/	2026-01-09T01:12:40.840Z	113		✓	Strict			Medium
+__utma	264973255.1264210944.1767867327.1767867328.1767921120.3	.99flower.co.kr	/	2027-02-13T01:12:05.469Z	61						Medium
+__utmb	264973255.3.10.1767921120	.99flower.co.kr	/	2026-01-09T01:42:05.000Z	31						Medium
+__utmc	264973255	.99flower.co.kr	/	세션	15						Medium
+__utmt	1	.99flower.co.kr	/	2026-01-09T01:21:59.000Z	7						Medium
+__utmz	264973255.1767867328.2.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided)	.99flower.co.kr	/	2026-07-10T13:12:05.000Z	100						Medium
+_fcOM	{"k":"81da6269940b692269bc0d9319b4a543b5f-83e","i":"218.154.14.63.331872","r":1767921123972}	.link.99flower.co.kr	/	2027-02-13T01:12:03.972Z	97						Medium
+_fcOM	{"k":"81da6269940b692269bc0d9319b4a543b5f-83e","i":"218.154.14.63.331872","r":1767921120574}	.99flower.co.kr	/	2027-02-13T01:12:00.574Z	97						Medium
+_fwb	96f73aWBxdsYoq7vD4p8ew.1767867326719	.link.99flower.co.kr	/	2027-02-13T01:12:03.820Z	40						Medium
+_fwb	96f73aWBxdsYoq7vD4p8ew.1767867326719	.99flower.co.kr	/	2027-02-13T01:11:59.429Z	40						Medium
+_ga	GA1.1.407301033.1767867328	.99flower.co.kr	/	2027-02-12T10:15:27.837Z	29						Medium
+_ga_6DWSY9MPER	GS2.1.s1767921120$o2$g1$t1767921127$j53$l0$h250664324	.99flower.co.kr	/	2027-02-13T01:12:07.251Z	67						Medium
+_gcl_au	1.1.1790368137.1767867327	.99flower.co.kr	/	2026-04-08T10:15:27.000Z	32						Medium
+_ttp	37EqdnenWap2hfInSG12VDJlGY1	.tiktok.com	/	2027-02-03T01:12:05.959Z	31		✓	None			Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+ar_debug	1	.googleadservices.com	/	2026-03-24T23:43:48.221Z	9	✓	✓	None			Medium
+fk_refer_idx	29458869	.99flower.co.kr	/	세션	20						Medium
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+IDE	AHWqTUlcRk6OqoExk1X5P1HBXzuR5noDucTTJaPkjT-WQzCTykOgeYkoZtGQC_jB9cE	.doubleclick.net	/	2027-02-13T00:28:53.460Z	70	✓	✓	None			Medium
+isFrameSet	yes	.99flower.co.kr	/	세션	13						Medium
+left_2dna_rand	2	.99flower.co.kr	/	세션	15						Medium
+longbanner_rand	2	.99flower.co.kr	/	세션	16						Medium
+LPINFO	A100637853%7C294653527PdWTz%7C0000%7CB%7C1	.99flower.co.kr	/	2026-01-29T01:12:02.000Z	48						Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+onebanner_rand	2	.99flower.co.kr	/	세션	15						Medium
+right_fix_cnt	1	link.99flower.co.kr	/	2026-01-10T01:12:04.000Z	14						Medium
+same_connect	29458869	.99flower.co.kr	/	세션	20						Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SIDCC	AKEyXzVowspPy1fDx2DO-EZdkuwM9JMXi19RtwQ0oay13lr8GS2LhjTYa7QyVnyPc6_uEcnAnsc	.google.com	/	2027-01-09T01:12:00.120Z	80						High
+smtg_cKey	1767867328074932603	.99flower.co.kr	/	2027-01-08T10:15:27.000Z	28						Medium
+smtg_fsID	1	.99flower.co.kr	/	세션	10						Medium
+smtg_sAd	0	.link.99flower.co.kr	/	세션	9						Medium
+smtg_sAd	0	.99flower.co.kr	/	세션	9						Medium
+smtg_sKey	1767921120682265573	.link.99flower.co.kr	/	세션	28						Medium
+smtg_sKey	1767921120682265573	.99flower.co.kr	/	세션	28						Medium
+smtg_vTime	1767921121	.99flower.co.kr	/	2026-04-09T01:12:00.000Z	20						Medium
+smtg_vTime	1767921124	.link.99flower.co.kr	/	2026-04-09T01:12:04.000Z	20						Medium
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+top_banner_rand	2	.99flower.co.kr	/	세션	16						Medium
+user_agent_insert	yes	.99flower.co.kr	/	세션	20						Medium
+wcs_bt	s_48e1a37c2495:1767921123	link.99flower.co.kr	/	2027-02-13T01:12:03.827Z	31						Medium

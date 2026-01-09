@@ -1,0 +1,83 @@
+__lt__cid	3aa4ce1f-c1af-4881-9522-97bcdc701f39	.www.klook.com	/	2027-02-13T01:08:41.991Z	45						Medium
+__lt__cid.c83939be	3aa4ce1f-c1af-4881-9522-97bcdc701f39	.klook.com	/	2027-02-13T01:08:41.991Z	54						Medium
+__lt__sid	e2eac541-e7e761c4	.www.klook.com	/	2026-01-09T01:38:41.000Z	26						Medium
+__lt__sid.c83939be	e2eac541-e7e761c4	.klook.com	/	2026-01-09T01:38:41.000Z	35						Medium
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzX1CYFVLSq5uUEixvVr4c2lo7zbke7ZEE_utBdfBxYDovfwLuFC5oBbb23_e-6w0jhFnw	.google.com	/	2027-01-09T01:08:35.007Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzVshfp0ubN7o5tX_RNh_-uySEW92wu6Cw0xL1p7quX9P4cT8OAX-oWVhvYRs_N9mamtSw	.google.com	/	2027-01-09T01:08:35.007Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2026-01-09T01:16:50.975Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcBflaCdU6kI3LqBzEslvia4jQwkHav48m8SzDBXmKjpBJRJlYhC3Vx3vo-6F7ofJbH0H3RjwUMEAA	.google.com	/	2027-01-09T01:06:50.975Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+__Secure-STRP	AD6DogsrU3DlM_VFHGb9s85dqEWFPK9soPCVJelOMIyEwdipeCyvYX7tw_QQeGeKNYZyLTG7J9fcFlW8Wz-xkw2D-eSus374nXor	.google.com	/	2026-01-09T01:12:40.840Z	113		✓	Strict			Medium
+_cfuvid	G492V8j2LTrtkZB9ue2E6hmVJds.MaEKLu9bFC0vzP4-1767920931266-0.0.1.1-604800000	.log.klook.com	/	세션	82	✓	✓	None			Medium
+_cfuvid	_NMa3060hYRmp1gqGt6n.e_VoAnc.EfaUglBOkzzUTc-1767920917505-0.0.1.1-604800000	.klook.com	/	세션	82	✓	✓	None			Medium
+_dc_gtm_UA-86696233-1	1	.klook.com	/	2026-01-09T01:09:39.000Z	22						Medium
+_fwb	11718tzEAULwX1H5Gf3w71h.1767920918306	.klook.com	/	2027-02-13T01:08:41.732Z	41						Medium
+_ga	GA1.1.1857628125.1767920919	.klook.com	/	2027-02-13T01:08:43.069Z	30						Medium
+_ga_FW3CMDM313	GS2.1.s1767920918$o1$g1$t1767920922$j56$l0$h0	.klook.com	/	2027-02-13T01:08:43.051Z	59						Medium
+_ga_HSY7KJ18X2	GS2.1.s1767920918$o1$g1$t1767920922$j56$l0$h0	.klook.com	/	2027-02-13T01:08:43.058Z	59						Medium
+_ga_V8S4KC8ZXR	GS2.1.s1767920918$o1$g1$t1767920922$j56$l0$h1555338292	.klook.com	/	2027-02-13T01:08:43.096Z	68						Medium
+_gcl_au	1.1.1975118631.1767920919	.klook.com	/	2026-04-09T01:08:39.000Z	32						Medium
+_gid	GA1.2.1215803877.1767920919	.klook.com	/	2026-01-10T01:08:42.000Z	31						Medium
+_ldbrbid	tr__k1y/XGlgVRZ13z78B3BpAg==	.line.me	/	2027-02-13T01:08:42.039Z	36		✓	None			Medium
+_tt_enable_cookie	1	.klook.com	/	2027-02-03T01:08:42.000Z	18						Medium
+_ttp	37EqdnenWap2hfInSG12VDJlGY1	.tiktok.com	/	2027-02-03T01:08:41.768Z	31		✓	None			Medium
+_ttp	01KEG4RRAX8CR6D88A8V0MJZ1Y_.tt.1	.klook.com	/	2027-02-03T01:08:42.000Z	36						Medium
+_uetsid	bb151150ecf711f0b860c5d3b5661254	.klook.com	/	2026-01-10T01:08:42.000Z	39						Medium
+_uetvid	bb154800ecf711f0966029c343266858	.klook.com	/	2027-02-03T01:08:42.000Z	39						Medium
+_yjsu_yjad	1767920918.8bbf6074-31f7-4775-b300-58e0326d97e1	.klook.com	/	2027-01-09T01:08:38.000Z	57						Medium
+A3	d=AQABBM0RXmkCEK_kSUiyoEPGAABCuPuusNkFEgEBAQFjX2lnaWciPjIB_eMDAA&S=AQAAAseFfxnXPOg_7pGSdasJDzo	.yahoo.com	/	2027-01-09T07:08:42.552Z	96	✓	✓	None			Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+affiliate_type	network	www.klook.com	/	2026-02-08T01:08:41.052Z	21						Medium
+aid	3002	www.klook.com	/	2026-02-08T01:08:41.052Z	7						Medium
+aid_campaign	aid%3D3002%26utm_medium%3Daffiliate-alwayson%26utm_source%3Dnetwork%26utm_campaign%3D3002%26utm_term%3DA100637853%26aff_pid%3DA100637853%26aff_adid%3D1182980	www.klook.com	/	2026-02-08T01:08:42.000Z	169						Medium
+aid_extra	%7B%22aff_pid%22%3A%22A100637853%22%2C%22aff_userid%22%3A%22294653482AJgRj%22%2C%22aff_l%22%3A%220000%22%2C%22aff_l_cd1%22%3A%22B%22%2C%22aff_l_cd2%22%3A%221%22%2C%22aff_adid%22%3A1182980%2C%22aff_klick_id%22%3A%22119178520701-3002-1182980-c08699a%22%2C%22aff_lpath%22%3A%22www.klook.com%2Fko%2F%22%2C%22affiliate_partner%22%3A%22%22%2C%22content%22%3A%22%22%7D	www.klook.com	/	2026-02-08T01:08:41.052Z	370						Medium
+aid_query_string	aid%3D3002%26aff_pid%3DA100637853%26aff_ext%3D%26aff_userid%3D294653482AJgRj%26aff_l%3D0000%26aff_l_cd1%3DB%26aff_l_cd2%3D1%26aff_sid%3D%26aff_adid%3D1182980%26aff_klick_id%3D119178520701-3002-1182980-c08699a	www.klook.com	/	2026-02-08T01:08:41.052Z	224						Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+ar_debug	1	.www.google-analytics.com	/	2026-04-09T01:07:49.615Z	9	✓	✓	None			Medium
+campaign_tag	klc_l1%3DAffiliate	www.klook.com	/	2026-02-08T01:08:42.000Z	30						Medium
+clientside-cookie	a451bd3ce4c3a0e2e0a9cc130782c92ca44dd77795674e26fcce6838e589677bcb553568d6d02f1d072158a8f5c80f46c7c4f2071d8f9749227914c4de347363a16fbb5e5d9a2b122c192645599c2821b045afd28dcd11c3f14787bed9aa6f22594273649860689b7a8524c9a4688f00d3ebde9865a5bfbe084ae2713634bb6e0a400a88b3b0687c3c61f2b5ce7b3e9710cc649aafe9823ef4ed	www.klook.com	/	2027-01-09T01:08:40.000Z	325		✓	None			Medium
+datadome	cxGQbCosCLsZJL0Csrnz8J26LbF~WfZvSmqNJXhnnzf5YCyvxIi0wFGJgS9cQH5EMzJfH7mn2uJK7Z5ZgRA5h5yOFghMvJ3Aj9ux6pGwu59HFkUQjwmkVGSdk~LQjeP6	.klook.com	/	2026-01-16T01:08:52.712Z	136		✓	Lax			Medium
+forterToken	ef6affea37c14a78bde98339eb7485a8_1767920922233__UDF43-m4_21ck_	.klook.com	/	2027-02-13T01:08:44.000Z	73						Medium
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+IDSYNC	"18z8~2tkv:19gg~2tkv:19gw~2tkv:18za~2tkv"	.analytics.yahoo.com	/	2027-01-07T07:57:05.406Z	47		✓	None			Medium
+JSESSIONID	8B5B46509C0E52C3515A602DA25D9407	www.klook.com	/	세션	42	✓					Medium
+k_tff_ch	aid_3002	www.klook.com	/	2026-02-08T01:08:41.052Z	16						Medium
+kepler_id	1f6ed2c9-661d-4d08-8999-610d5628dc5a	.klook.com	/	세션	45		✓	None			Medium
+kepler_id	3a2f8db0-a191-4711-b08f-fbed6c2e26b2	www.klook.com	/	2027-02-13T01:08:37.582Z	45						Medium
+klk_currency	USD	www.klook.com	/	2026-01-16T01:08:37.582Z	15						Medium
+klk_ga_sn	2511313617..1767920921191	www.klook.com	/	2026-01-09T01:38:41.000Z	34						Medium
+klk_i_sn	7113204417..1767920928472	www.klook.com	/	2026-01-09T01:38:48.000Z	33						Medium
+klk_ps	1	www.klook.com	/	2027-01-09T01:08:37.582Z	7	✓					Medium
+klk_rdc	US	www.klook.com	/	2026-01-10T01:08:37.582Z	9	✓					Medium
+KOUNT_SESSION_ID	8B5B46509C0E52C3515A602DA25D9407	www.klook.com	/	2026-02-08T01:08:39.000Z	48						Medium
+KSID	MQ.6d3db9e769bb43bf519866af5690bdcf	www.klook.com	/	2026-01-09T01:38:41.137Z	39	✓					Medium
+MR	0	.bat.bing.com	/	2026-01-14T07:05:08.659Z	3		✓	None			Medium
+MUID	0DE5CF195F326B1004A9D9D25E1B6A57	.bing.com	/	2027-02-01T07:05:08.658Z	36		✓	None			High
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SIDCC	AKEyXzWkbDJwlK6_2WXXtEKayVwUU9oF6K2bjtycmUYfQjz0QE0f15_kVXhiuD8bJQDfNotA9xg	.google.com	/	2027-01-09T01:08:35.007Z	80						High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+tr_update_tt	1767920922019	www.klook.com	/	2026-02-08T01:08:42.000Z	25						Medium
+traffic_retain	false	www.klook.com	/	2026-02-08T01:08:42.000Z	19						Medium
+ttcsid	1767920918881::4MmXrFX5ZQHIJi3iFzBI.1.1767920932646.0	.klook.com	/	2027-02-03T01:08:52.000Z	59						Medium
+ttcsid_C1SIFQUHLSU5AAHCT7H0	1767920918881::-Ozr4mdQpwNiSu-VzqUH.1.1767920932649.1	.klook.com	/	2027-02-03T01:08:52.000Z	80						Medium
+wcs_bt	s_2cb388a4aa34:1767920921	www.klook.com	/	2027-02-13T01:08:41.735Z	31						Medium
+wid	3002	www.klook.com	/	2026-02-08T01:08:41.052Z	7						Medium

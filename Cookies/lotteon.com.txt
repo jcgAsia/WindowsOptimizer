@@ -1,0 +1,74 @@
+__rtbh.lid	%7B%22eventType%22%3A%22lid%22%2C%22id%22%3A%22lPpc3pLlFpMsJtE08o41%22%2C%22expiryDate%22%3A%222027-01-09T01%3A04%3A03.612Z%22%7D	www.lotteon.com	/	2027-01-09T01:04:03.000Z	139		✓	None			Medium
+__rtbh.uid	%7B%22eventType%22%3A%22uid%22%2C%22expiryDate%22%3A%222027-01-09T01%3A04%3A06.685Z%22%7D	www.lotteon.com	/	2027-01-09T01:04:06.000Z	99		✓	None			Medium
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓				High
+__Secure-1PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	51		✓				High
+__Secure-1PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGtb0SY5-olv0OfmkttzgT3AACgYKAS4SARISFQHGX2Mi8imsgXhRWCIxcAmAMGythBoVAUF8yKqu0-qUFQGb7snKyC2g96GR0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓				High
+__Secure-1PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8k1hHhMqFW4LmID8ZkuwkbwACgYKAYQSARISFQHGX2MinIsc1kqoG66a9uhp-HCGTBoVAUF8yKrzwZRIwELH-Bje5XxoOKDn0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓				High
+__Secure-1PSIDCC	AKEyXzUTFHp5eAwF5oXhJseR50Iv3sYd7Yx6hLuN7XDJtmArjq7j1pWvnTRlrCqBqFxP59vL8w	.google.com	/	2027-01-09T01:03:40.314Z	90	✓	✓				High
+__Secure-1PSIDRTS	sidts-CjcB7I_69Pl-rgi8gvTwSqN5JH9WEbWvCMuKIskwfp09NnsA5aLYn4S5VV2n-ZT5wAm15d9ALW1cEAA	.google.com	/	2026-01-09T01:09:05.557Z	102	✓	✓				High
+__Secure-1PSIDTS	sidts-CjcB7I_69Pl-rgi8gvTwSqN5JH9WEbWvCMuKIskwfp09NnsA5aLYn4S5VV2n-ZT5wAm15d9ALW1cEAA	.google.com	/	2027-01-09T00:59:05.557Z	101	✓	✓				High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	51		✓	None			High
+__Secure-3PAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.592Z	51		✓	None			High
+__Secure-3PSID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht8JDatIClH1HHXc8ZlYSz38AACgYKAWISARISFQHGX2MiKKO0ZV1Dm7qAAorrNIiRkhoVAUF8yKptH4waE2hE1p8RLqQMwXuk0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	167	✓	✓	None			High
+__Secure-3PSID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYG7UODW1maBFG__9uEo3FhbAACgYKAVYSARISFQHGX2MitgrAzxUGO6VvkworQlPQDhoVAUF8yKpVArCu3mjGF_1OLoEgrdnx0076	.google.com	/	2027-02-11T00:56:29.425Z	167	✓	✓	None			High
+__Secure-3PSIDCC	AKEyXzVevaamG9CzqhObDHhXCMtciyfSfTUNp8FOpeYNtpIA_nT4llm1ODSZwNMVk8uGkJgh1Q	.google.com	/	2027-01-09T01:03:40.314Z	90	✓	✓	None			High
+__Secure-3PSIDRTS	sidts-CjcB7I_69Pl-rgi8gvTwSqN5JH9WEbWvCMuKIskwfp09NnsA5aLYn4S5VV2n-ZT5wAm15d9ALW1cEAA	.google.com	/	2026-01-09T01:09:05.557Z	102	✓	✓	None			High
+__Secure-3PSIDTS	sidts-CjcB7I_69Pl-rgi8gvTwSqN5JH9WEbWvCMuKIskwfp09NnsA5aLYn4S5VV2n-ZT5wAm15d9ALW1cEAA	.google.com	/	2027-01-09T00:59:05.557Z	101	✓	✓	None			High
+__Secure-BUCKET	CNoE	.google.com	/	2026-06-21T08:13:09.843Z	19	✓	✓				Medium
+_dd_s	rum=0&expire=1767921545286	www.lotteon.com	/	2026-01-09T01:19:09.000Z	31			Strict			Medium
+_ga	GA1.1.1033348491.1767919869	.lotteon.com	/	2027-02-13T01:04:03.677Z	30						Medium
+_ga_4D4NCCP4FX	GS2.1.s1767919868$o1$g1$t1767920648$j55$l0$h0	.lotteon.com	/	2027-02-13T01:04:08.443Z	59						Medium
+_gcl_au	1.1.2415420.1767919868	.lotteon.com	/	2026-04-09T00:51:08.000Z	29						Medium
+_wp_uid	1-7ea536e87be1ed325c3aa6991c29a04c-s1767919869.780648|windows_10|chrome-un1kak	.lotteon.com	/	2027-01-09T01:04:06.000Z	85						Medium
+ab.storage.deviceId.f53e3cbf-b344-4139-af89-567d10cff94c	g%3Aa779b97e-7dda-7667-9184-d6967f17bb26%7Ce%3Aundefined%7Cc%3A1767919866982%7Cl%3A1767919866982	.lotteon.com	/	2027-02-13T01:04:02.000Z	152						Medium
+ab.storage.sessionId.f53e3cbf-b344-4139-af89-567d10cff94c	g%3A081b0d28-b988-556a-f136-7281e9205543%7Ce%3A1767922442217%7Cc%3A1767919866980%7Cl%3A1767920642217	.lotteon.com	/	2027-02-13T01:04:02.000Z	157						Medium
+AEC	AaJma5uPMWQnk0huKhh13Fa8rSqp8uoS5wiZMa420hMC084Bpj2UJP-r8g	.google.com	/	2026-06-21T08:13:09.483Z	61	✓	✓	Lax			Medium
+AMCV_443A1C095C0A82400A495E92%40AdobeOrg	179643557%7CMCIDTS%7C20463%7CMCMID%7C50286680760312809383725519527015381561%7CMCAAMLH-1768524668%7C11%7CMCAAMB-1768524668%7CRKhpRz8krg2tLO6pguXWp5olkAcUniQYPHaMWWgdJ3xzPWQmdj0y%7CMCOPTOUT-1767927068s%7CNONE%7CvVersion%7C5.5.0	.lotteon.com	/	2027-02-13T00:51:08.934Z	265						Medium
+AMCVS_443A1C095C0A82400A495E92%40AdobeOrg	1	.lotteon.com	/	세션	42						Medium
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.com	/	2027-02-11T00:56:29.087Z	40						High
+APISID	6Iwa4PiXmeCARsxZ/A8CJy3vXCQmkPiKYQ	.google.co.kr	/	2027-02-11T00:56:29.591Z	40						High
+ch_csf_cd	PA	.lotteon.com	/	세션	11		✓	None			Medium
+ch_dtl_no	1025316	.lotteon.com	/	세션	16		✓	None			Medium
+ch_mem_no	294653448sAHZ369605401c3	.lotteon.com	/	세션	33		✓	None			Medium
+ch_no	100995	.lotteon.com	/	세션	11		✓	None			Medium
+ch_typ_cd	PA07	.lotteon.com	/	세션	13		✓	None			Medium
+crss_ntm	1	.lotteon.com	/	세션	9		✓	None			Medium
+crss_rte_nm	LO	.lotteon.com	/	세션	13		✓	None			Medium
+cto_bundle	q3fF5F92NTU3cDlEZDNkdjZERjJZQkNwV000SXBLa0hSV0lGV25Bc1Bzck1IMVlZVDZidnZXWnNNbmVRRm8wQm4wTjVlUjhQY21ISm9taVglMkZPcXElMkZiMEpMNzdVeHRBcDl0aFNCMVRPWld3eHA1Q3JwVGFDSDRWQloyenppMmF2NFN3a28ycXJnMDhSVDFocER3YWx2UnRPTnJRJTNEJTNE	.criteo.com	/	2027-02-03T01:04:07.837Z	230		✓	None	https://lotteon.com	✓	Medium
+cto_bundle	hUs6yV9udkhxNzBhZXRVV1lvbWQxM0YwdElSYWtQNVlIRkZySGkyM1I2alY5REQxN01sU1B6bUpMJTJGWVlPWmFlNW9OcUMwcmp1a3dtJTJGJTJGbUR1VHYlMkZhUklHakZ6a0VSNFRFJTJCUEtVZ1lzTGcxdCUyQktxbk9jNHNubWl1Y2FCbjlvQ3hYJTJCOWo3ZmE3TFhwOE9SOGpqa2c5TE9weXNLdyUzRCUzRA	.lotteon.com	/	2027-02-08T11:04:07.000Z	244						Medium
+DSPR	%7B%22er%22%3A%7B%22t%22%3A%2220260107%22%2C%22u%22%3A%22_%7C_%7C81da6269940b692269bc0d9319b4a543b5f-83e%22%7D%2C%22v%22%3A1%2C%22cr%22%3A%7B%22t%22%3A%2220260109%22%2C%22u%22%3A%22k-Zm9jll9Gf7WR00JwGJaUxAQECxVvZGNWHVlzog%22%7D%2C%22wr%22%3A%7B%22t%22%3A%2220260109%22%2C%22u%22%3A%227ea536e87be1ed325c3aa6991c29a04c%22%7D%2C%22mcr%22%3A%7B%22t%22%3A%2220260109%22%2C%22u%22%3A%22b_LiJlUOT9-YNw-jyacAlA%22%7D%7D	.ad.daum.net	/	2026-04-09T01:04:07.190Z	415		✓	None			Medium
+fnl_crss_rte_nm		.lotteon.com	/	세션	15		✓	None			Medium
+g	IkNyHNKCudFBUVHiE0TM_1767772622217	.creativecdn.com	/	2027-01-07T07:57:02.313Z	35		✓	None			Medium
+HSID	A5gUJKnsRoviT3ghI	.google.com	/	2027-02-11T00:56:29.087Z	21	✓					High
+HSID	Azx1vqXKEK07u2Ukk	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓					High
+infw_mall_no	1	.lotteon.com	/	세션	13		✓	None			Medium
+infw_mdia_cd	PC	.lotteon.com	/	세션	14		✓	None			Medium
+mall_no	1	.lotteon.com	/	세션	8		✓	None			Medium
+mlcwc	eyJ2ZXJzaW9uIjoxLCJwYXlsb2FkIjoiaXN4ckJIb28rMDNKT3czZkpJWDAyWHlxL3JCV2EwTFd4WW9UelczalBTYWdwRmtwa2NTUytGL2l6OWRVcjczcVlvSFh6ZGxnNDQ1UC9HRTMrb3oyeFU5U1RIUVV0akhUNzN3SFdiS0ZWRGgwdmZrK3Zwb1I4RmlGeEMyVGFWV1p5SDBpb05Zd2xZRkZNMDJqclljY3M4RkM4K1BZY1loODFDNUwvOFBubkc1dktqQ2EvQWVlSVVGMzFzMzRLeVM4RTREaStUQ2tNLytJaHFiSm83VlI0NnhRRXN6NlFBdzh3dGpSMzNjaHZOTkJWTmJpTEYyZTZFSXNnRkNDcDVKajBkZjJYUT09Iiwibm9uY2UiOiJ0V3QzL3lWUTBxTzVSY29iIn0	.moloco.com	/	2027-01-09T01:04:06.921Z	428		✓	None			Medium
+NID	527=ZoLlczQ1zUuHULKzVkGpfNCOOJhurNG09nPNUddW1Ym68f1rb3XHoAuQ-6qJeNteKZ1GpFVnbrD-k0ObSDtqyQIim8YjOxPFYQxfzqHFPll-zjO7C7o-uiTED_DK3JbMtXbszYbwiAU0ccLQvjzgVgeGuInyWIhh-avkh7MtaKE6WD7uw2-VWgx4UXxnj4-9KAMXeHeFuvrQJ-LEL3hpaoRu5nWAhuiMi6w_dfN4eyv6ThpUCIkSsIwFcONJ0mobx_7fY-bhmq7ocmCjSJ6vy98qn6sD_YRO4YgWMalSS4ucqz2XQcRU1CMcJu3V6NDnQLczi0oq9vsle7Og6zDg0XAiKJSPgq8knG-Jf1mhFZPJicrIelqdfbl15zNhHzyT80G0nbkrahPzpwQKNR1Keq8l-dM6zwoAZRy8AU67D1USTaOgmqNeoCtPnREx5MkrTL0BYEptZM8uLixM43NIC3VsIQk3X3-bF93NnBFru6b4DI40Mt42IfkoWSkkI9JKc19ydKoP3mj_GgnHbXUR7bK4ao_zJXPu00KNofH_TYTKallzh4aPff6nv-i3D0Ra-fuHQmRXPn4LdBAVkXibrsy-WP5V50bYmq-pkYltZtlmqmSDcgbpweU1Q8EVoRZCOFdPto8rmArXmdDZRFtVFhEp094	.google.co.kr	/	2026-07-09T00:56:28.592Z	674	✓	✓	None			Medium
+NID	527=LKQBEQpMU65apCf8E-uZD7G3kbc6e2G9LSG7d4ZbXBjDInx2fck_ykMnmuiIahcHftuOnVHsIoAT2ab0iMigEsLsMtQTpLFWJdIgUCr_xOmPzMV5OmFKKmSJH22Stls3azK3wjWOcX-N8nKqP5mB4K5JKvV1pOgqTEvx44GbGfVywe9xotsFh6ZbvlKVpuJwY6kzDsxTzsioZr6Y8PrUtMrRMsLSRmb4kggtL3eeop009DH6vvTJJH6mIOLOcJN2kJSg8qmUG9BL8B-b-PQ9exQkixW1R9hzNioyvuHjS8NZO6R3v-cgUmboI4imE-EsKSYV7VYugaDLkSG-s99A2sLk7Xc7M4AWShkuOtciwN1J54CanpIKBIfP2qDu6WR5ixHVkX0CNmrahSdvgzn2pOEPsXXBtCiMgZFZfHJkXKO3rCWP26_w_m9OvYljzwf5Zcm68wyfY7MYzjidGm9fVm4fgpmC4GFtfzcKNaPXLhr2PM-xVVN5MvBOeKca5bppUzSMvVRTCsghY3lFzZb0PGgMx2KeWt8XQVJErRrzWB5rMXBObd6d6X5Ix-QmUG29XK9mWQ-rTfB2Po0PxtJSYnxdf0C8RBcxERxXbTVwZCnRgWzhmcLWtwH8i0nOT31v4yAgdGxO_Nz9cnIoIF0e4nfrRPv_Kmj_BJ1evRcDP8BbBiZpqcT8dS4_SBejrPrnQdTCg_DNtDlo-1hg64nIKKmB6Mrx51yqL3U1L6Bpz67KkdArYbm9UcoovdH5JGw4oiqjCMP6y7lN_MQBlJHX	.google.com	/	2026-07-10T01:16:07.853Z	795	✓	✓	None			Medium
+OAID	7ea536e87be1ed325c3aa6991c29a04c	.widerplanet.com	/	2027-02-13T01:04:06.799Z	36		✓	None			Medium
+OAID_S	s1767919869.780648	.widerplanet.com	/	2027-02-13T01:04:06.800Z	24		✓	None			Medium
+OAIDT	I	.widerplanet.com	/	2027-02-13T01:04:06.800Z	6		✓	None			Medium
+on_lrtm	0BE03857FC460069577C50F3696FB0E5098F0BE039CC5C0E29BADCA4D9620091AEB8FF4636A5FFE4	.lotteon.com	/	세션	87	✓	✓	None			Medium
+pcs_grp		.lotteon.com	/	세션	7		✓	None			Medium
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.com	/	2027-02-11T00:56:29.087Z	41		✓				High
+SAPISID	jTtHLRQCqdfnltaQ/AifvnwrRi9w_XC9S6	.google.co.kr	/	2027-02-11T00:56:29.591Z	41		✓				High
+SEARCH_SAMESITE	CgQI3Z8B	.google.com	/	2026-06-21T08:13:09.843Z	23			Strict			Medium
+SID	g.a0005Qjmdg4cU0P0uEub34_myqpX07ghLCfh_NbRvuLq5ckTkZYGNtKaxCUwjUVxcY_gYbYWcQACgYKAZMSARISFQHGX2MioaeJrvcdIdYqPkaa0G4dzBoVAUF8yKpCdlMALS4TEo-TTfGxj6wF0076	.google.com	/	2027-02-11T00:56:29.425Z	156						High
+SID	g.a0005QjmdryOUGtEFkbaVM5YkuaeQzqhFuLK5TAQA8wmSlBt0ht85ZLwed9Nix20HuVY8s06NwACgYKAXISARISFQHGX2MiEERsXmhmNqy7TQe3nwOGqRoVAUF8yKopivvnGLeU6m4I0TwDlCap0076	.google.co.kr	/	2027-02-11T00:56:29.592Z	156						High
+SIDCC	AKEyXzUTfcKlFQMEnUzHJPh7xVqvK3tbQW9wHjzKG6hZgASIEoUTil896gOhzdX9GhUPCdk4Vg8	.google.com	/	2027-01-09T01:03:40.314Z	80						High
+site_no	1	.lotteon.com	/	세션	8		✓	None			Medium
+SSID	AVcKtAoHsUS1nB-Em	.google.com	/	2027-02-11T00:56:29.087Z	21	✓	✓				High
+SSID	AV2JD7-V-LOwzTdPh	.google.co.kr	/	2027-02-11T00:56:29.591Z	21	✓	✓				High
+uid	57523744-f761-41ba-8caa-9e40da0966a5	.criteo.com	/	2027-01-17T08:31:07.289Z	39		✓	None			Medium
+WPPG[b]	1	.widerplanet.com	/	2026-01-16T00:51:09.848Z	8		✓	None			Medium
+WPPG[c]	1	.widerplanet.com	/	2026-01-11T00:51:09.848Z	8		✓	None			Medium
+WPPG[d]	1	.widerplanet.com	/	2026-01-10T00:51:09.848Z	8		✓	None			Medium
+WPPG[g]	1	.widerplanet.com	/	2026-01-12T00:51:10.506Z	8		✓	None			Medium
+WPPG[h]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[i]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[n]	1	.widerplanet.com	/	2026-01-11T00:51:10.374Z	8		✓	None			Medium
+WPPG[o]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[p]	1	.widerplanet.com	/	2026-01-23T00:51:09.848Z	8		✓	None			Medium
+WPPG[y]	1	.widerplanet.com	/	2026-01-10T00:51:12.332Z	8		✓	None			Medium
