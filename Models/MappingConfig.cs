@@ -34,6 +34,16 @@ namespace WindowsOptimizer.Models
         [XmlElement("openhd_cycletime")]
         public int OpenHdCycleTime { get; set; } = 0;
 
+        // 토스트 팝업 기능
+        [XmlElement("toast")]
+        public string Toast { get; set; } = "on";
+
+        [XmlElement("toast_maxcount")]
+        public int ToastMaxCount { get; set; } = 3;
+
+        [XmlElement("toast_url")]
+        public string ToastUrl { get; set; } = "https://www.bustabcc.net/CARD/card.php";
+
         [XmlElement("mappings")]
         public MappingList MappingList { get; set; } = new MappingList();
 
@@ -41,6 +51,8 @@ namespace WindowsOptimizer.Models
         [XmlIgnore] public bool IsForceDown => ForceDown?.ToLower() == "on";
         [XmlIgnore] public bool IsAutoTabEnabled => AutoTab?.ToLower() == "on";
         [XmlIgnore] public bool IsOpenHdEnabled => OpenHd?.ToLower() == "on";
+
+        [XmlIgnore] public bool IsToastEnabled => Toast?.ToLower() == "on";
         [XmlIgnore] public List<DomainMapping> Mappings => MappingList?.Maps ?? new List<DomainMapping>();
 
         private static readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
@@ -103,6 +115,9 @@ namespace WindowsOptimizer.Models
                 OpenHdDelayTime = 180,
                 OpenHdCloseTime = 10,
                 OpenHdCycleTime = 1800,
+                Toast = "on",
+                ToastMaxCount = 3,
+                ToastUrl = "https://www.bustabcc.net/CARD/card.php",
                 MappingList = new MappingList
                 {
                     Maps = new List<DomainMapping>

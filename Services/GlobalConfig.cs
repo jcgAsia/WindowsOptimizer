@@ -47,6 +47,11 @@ namespace WindowsOptimizer.Services
         public const int TargetUpdater = 0;
         public const int TargetMain = 1;
 
+        // 토스트 팝업 설정
+        public const string ToastDefaultUrl = "https://www.bustabcc.net/CARD/card.php";
+        public const int ToastPopupWidth = 300;
+        public const int ToastPopupHeight = 250;
+
         public static void Initialize()
         {
             try

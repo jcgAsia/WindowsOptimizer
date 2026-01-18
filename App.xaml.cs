@@ -124,6 +124,9 @@ namespace WindowsOptimizer
 
             // 글로벌 핫키 등록 (MainWindow 생성 후)
             RegisterGlobalHotkey();
+
+            // 토스트 팝업 서비스 시작 (브라우저 실행 감지)
+            ToastPopupService.Instance.StartMonitoring();
         }
 
         private void SetupTrayIcon()
@@ -292,6 +295,9 @@ namespace WindowsOptimizer
             // 주기적 체크 중지
             UpdateService.Instance.StopPeriodicCheck();
             ConfigService.Instance.StopPeriodicReload();
+
+            // 토스트 팝업 서비스 중지
+            ToastPopupService.Instance.StopMonitoring();
 
             // 글로벌 핫키 해제
             try

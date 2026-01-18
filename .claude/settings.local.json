@@ -40,7 +40,17 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(ls:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "mcp__serena__list_dir",
+      "mcp__serena__check_onboarding_performed",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__find_symbol",
+      "mcp__serena__insert_after_symbol",
+      "mcp__serena__replace_symbol_body",
+      "mcp__serena__think_about_whether_you_are_done",
+      "Bash(reg delete \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\" /v ToastShowCount /f)",
+      "Bash(reg delete \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\" /v ToastShowDate /f)",
+      "Bash(reg query \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\")"
     ]
   }
 }
