@@ -50,7 +50,9 @@
       "mcp__serena__think_about_whether_you_are_done",
       "Bash(reg delete \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\" /v ToastShowCount /f)",
       "Bash(reg delete \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\" /v ToastShowDate /f)",
-      "Bash(reg query \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\")"
+      "Bash(reg query \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\")",
+      "Bash(git init:*)",
+      "Bash(python3:*)"
     ]
   }
 }

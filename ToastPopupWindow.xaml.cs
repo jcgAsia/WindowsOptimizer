@@ -16,15 +16,16 @@ namespace WindowsOptimizer
             _contentUrl = contentUrl;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 // 화면 우측 하단에 위치
                 PositionToBottomRight();
 
-                // WebBrowser에 콘텐츠 로드
-                webBrowser.Navigate(_contentUrl);
+                // WebView2 초기화 및 콘텐츠 로드
+                await webView.EnsureCoreWebView2Async(null);
+                webView.Source = new Uri(_contentUrl);
 
                 // 30초 후 자동 닫기
                 _autoCloseTimer = new DispatcherTimer
@@ -128,6 +129,7 @@ namespace WindowsOptimizer
         protected override void OnClosed(EventArgs e)
         {
             _autoCloseTimer?.Stop();
+            webView?.Dispose();
             base.OnClosed(e);
             LogService.Instance.Log("[ToastPopup] 팝업 닫힘");
         }

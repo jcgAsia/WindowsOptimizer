@@ -52,6 +52,10 @@ namespace WindowsOptimizer.Services
         public const int ToastPopupWidth = 300;
         public const int ToastPopupHeight = 250;
 
+        // 런처 연동 설정
+        public static bool LaunchedByLauncher { get; set; } = false;
+        public static string LauncherVersion { get; set; }
+
         public static void Initialize()
         {
             try

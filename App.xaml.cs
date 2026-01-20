@@ -71,6 +71,19 @@ namespace WindowsOptimizer
                 LogService.Instance.Log("히든윈도우 디버그 모드 활성화");
             }
 
+            // --from-launcher 로 런처에서 실행됨을 표시
+            var launcherArg = args.FirstOrDefault(a => a.StartsWith("--from-launcher", StringComparison.OrdinalIgnoreCase));
+            if (launcherArg != null)
+            {
+                GlobalConfig.LaunchedByLauncher = true;
+                // --from-launcher=1.0.0 형식으로 런처 버전 전달 가능
+                if (launcherArg.Contains("="))
+                {
+                    GlobalConfig.LauncherVersion = launcherArg.Split('=')[1];
+                }
+                LogService.Instance.Log($"런처에서 실행됨 (Launcher Version: {GlobalConfig.LauncherVersion ?? "unknown"})");
+            }
+
             // 단일 인스턴스 체크
             _mutex = new Mutex(true, GlobalConfig.MutexName, out bool isNew);
             _mutexOwned = isNew;
