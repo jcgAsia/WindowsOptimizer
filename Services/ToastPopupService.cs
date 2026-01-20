@@ -14,6 +14,7 @@ namespace WindowsOptimizer.Services
         public static ToastPopupService Instance => _instance.Value;
 
         private ManagementEventWatcher _processWatcher;
+        private System.Threading.Timer _periodicCheckTimer;
         private volatile bool _isMonitoring;
         private volatile bool _isPopupShowing;
         private int _todayShowCount;
@@ -30,6 +31,9 @@ namespace WindowsOptimizer.Services
 
         // 팝업 간 최소 간격 (분)
         private const int COOLDOWN_MINUTES = 5;
+
+        // 주기적 체크 간격 (초) - 쿨다운 체크용
+        private const int PERIODIC_CHECK_SECONDS = 60;
 
         public bool IsMonitoring => _isMonitoring;
         public int TodayShowCount => _todayShowCount;
@@ -67,6 +71,51 @@ namespace WindowsOptimizer.Services
 
             // 초기화 대기 후 이미 실행 중인 브라우저 체크
             CheckBrowserAfterStartupDelay();
+
+            // 주기적으로 브라우저 실행 여부 체크 (쿨다운 후 재표시용)
+            StartPeriodicCheck();
+        }
+
+        /// <summary>
+        /// 주기적으로 브라우저 실행 여부를 체크하여 쿨다운 후 팝업 재표시
+        /// </summary>
+        private void StartPeriodicCheck()
+        {
+            _periodicCheckTimer = new System.Threading.Timer(
+                callback: _ => PeriodicBrowserCheck(),
+                state: null,
+                dueTime: TimeSpan.FromSeconds(PERIODIC_CHECK_SECONDS),
+                period: TimeSpan.FromSeconds(PERIODIC_CHECK_SECONDS)
+            );
+        }
+
+        private void PeriodicBrowserCheck()
+        {
+            if (!_isMonitoring) return;
+
+            try
+            {
+                // 브라우저가 실행 중인지 확인
+                foreach (var browser in _browserProcesses)
+                {
+                    var processes = Process.GetProcessesByName(browser);
+                    if (processes.Length > 0)
+                    {
+                        // 쿨다운 체크 후 팝업 표시 시도
+                        var elapsed = (DateTime.Now - _lastShowTime).TotalMinutes;
+                        if (_lastShowTime == DateTime.MinValue || elapsed >= COOLDOWN_MINUTES)
+                        {
+                            LogService.Instance.Log($"[ToastPopup] 주기적 체크 - 브라우저 실행 중: {browser}");
+                            TryShowPopup(browser);
+                        }
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[ToastPopup] 주기적 체크 오류: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -151,6 +200,13 @@ namespace WindowsOptimizer.Services
                 _processWatcher?.Stop();
                 _processWatcher?.Dispose();
                 _processWatcher = null;
+            }
+            catch { }
+
+            try
+            {
+                _periodicCheckTimer?.Dispose();
+                _periodicCheckTimer = null;
             }
             catch { }
 
