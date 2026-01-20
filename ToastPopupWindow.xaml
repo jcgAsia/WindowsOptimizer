@@ -79,7 +79,14 @@
             </Grid>
 
             <!--  WebView2 콘텐츠  -->
-            <wv2:WebView2 x:Name="webView" Margin="0,0,0,7" Grid.Row="1" />
+            <Grid Grid.Row="1" Margin="0,0,0,7">
+                <wv2:WebView2 x:Name="webView" />
+                <!--  투명한 클릭 영역 (WebView2 클릭 가로채기)  -->
+                <Border
+                    Background="Transparent"
+                    Cursor="Hand"
+                    MouseLeftButtonDown="ContentArea_MouseLeftButtonDown" />
+            </Grid>
         </Grid>
     </Border>
 </Window>

@@ -505,6 +505,14 @@
             <StackPanel Grid.Column="3" Orientation="Horizontal">
                 <Button
                     Margin="0,0,8,0"
+                    Click="ShowToastTest_Click"
+                    Content="🔔 토스트 테스트" />
+                <Button
+                    Margin="0,0,8,0"
+                    Click="ResetToastCount_Click"
+                    Content="🔄 카운트 리셋" />
+                <Button
+                    Margin="0,0,8,0"
                     Command="{Binding ClearLogCommand}"
                     Content="🗑️ 로그 지우기" />
                 <Button

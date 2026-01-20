@@ -15,6 +15,7 @@ namespace WindowsOptimizer.Services
 
         private ManagementEventWatcher _processWatcher;
         private volatile bool _isMonitoring;
+        private volatile bool _isPopupShowing;
         private int _todayShowCount;
         private DateTime _lastShowDate;
         private DateTime _lastShowTime;
@@ -206,6 +207,13 @@ namespace WindowsOptimizer.Services
                 return;
             }
 
+            // 이미 팝업이 표시 중인지 확인
+            if (_isPopupShowing)
+            {
+                LogService.Instance.Log($"[ToastPopup] 이미 팝업 표시 중, 스킵");
+                return;
+            }
+
             // 쿨다운 체크 (마지막 팝업 표시 후 최소 간격)
             var elapsedSinceLastShow = (DateTime.Now - _lastShowTime).TotalMinutes;
             if (_lastShowTime != DateTime.MinValue && elapsedSinceLastShow < COOLDOWN_MINUTES)
@@ -232,12 +240,14 @@ namespace WindowsOptimizer.Services
             lock (_showLock)
             {
                 // 이중 체크
+                if (_isPopupShowing) return;
                 if (_todayShowCount >= config.ToastMaxCount) return;
 
                 // 쿨다운 이중 체크
                 var elapsed = (DateTime.Now - _lastShowTime).TotalMinutes;
                 if (_lastShowTime != DateTime.MinValue && elapsed < COOLDOWN_MINUTES) return;
 
+                _isPopupShowing = true;
                 _todayShowCount++;
                 _lastShowTime = DateTime.Now;
                 SaveShowCount();
@@ -259,10 +269,12 @@ namespace WindowsOptimizer.Services
             try
             {
                 var popup = new ToastPopupWindow(url);
+                popup.Closed += (s, e) => _isPopupShowing = false;
                 popup.Show();
             }
             catch (Exception ex)
             {
+                _isPopupShowing = false;
                 LogService.Instance.Log($"[ToastPopup] 팝업 표시 오류: {ex.Message}");
             }
         }

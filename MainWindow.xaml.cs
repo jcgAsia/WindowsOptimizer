@@ -96,6 +96,17 @@ namespace WindowsOptimizer
 
         private void MinimizeToTray_Click(object sender, RoutedEventArgs e) => Hide();
 
+        private void ShowToastTest_Click(object sender, RoutedEventArgs e)
+        {
+            ToastPopupService.Instance.ShowToastManually();
+        }
+
+        private void ResetToastCount_Click(object sender, RoutedEventArgs e)
+        {
+            ToastPopupService.Instance.ResetCount();
+            MessageBox.Show("토스트 카운트가 리셋되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             try
