@@ -52,7 +52,12 @@
       "Bash(reg delete \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\" /v ToastShowDate /f)",
       "Bash(reg query \"HKCU\\\\SOFTWARE\\\\WindowsOptimizer\")",
       "Bash(git init:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "mcp__serena__find_file",
+      "mcp__serena__search_for_pattern",
+      "Bash(powershell.exe -NoProfile -File - <<'PS1'\n$squirrelExe = Join-Path $env:USERPROFILE \".nuget\\\\packages\\\\clowd.squirrel\\\\2.11.1\\\\tools\\\\Squirrel.exe\"\nif \\(Test-Path $squirrelExe\\) {\n    & $squirrelExe pack --help\n} else {\n    Write-Host \"Not found: $squirrelExe\"\n}\nPS1)",
+      "Bash(powershell.exe -NoProfile -Command \"& \\(Join-Path $env:USERPROFILE ''.nuget\\\\packages\\\\clowd.squirrel\\\\2.11.1\\\\tools\\\\Squirrel.exe''\\) pack --help\")",
+      "Bash(\"C:/Users/mellass/.nuget/packages/clowd.squirrel/2.11.1/tools/Squirrel.exe\" pack --help)"
     ]
   }
 }
