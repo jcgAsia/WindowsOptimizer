@@ -1,0 +1,97 @@
+[2026-02-05 13:09:31.017] [Information] [Waytotec.ControlSystem.Infrastructure.Services.NetworkConnectionService] 인터넷 연결 모니터링 시작
+[2026-02-05 13:09:31.061] [Information] [Waytotec.ControlSystem.Infrastructure.Services.NetworkConnectionService] 인터넷 연결 상태 변경: 연결됨
+[2026-02-05 13:09:31.596] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] TelemetryService 초기화 완료. DeviceId: t4ryLwC2Hwj2fqooDYgrNv, MachineName: DESKTOP-60TQD37, IP: 211.117.52.141
+[2026-02-05 13:09:31.695] [Information] [Microsoft.Hosting.Lifetime] Application started. Press Ctrl+C to shut down.
+[2026-02-05 13:09:31.695] [Information] [Microsoft.Hosting.Lifetime] Hosting environment: Production
+[2026-02-05 13:09:31.695] [Information] [Microsoft.Hosting.Lifetime] Content root path: C:\Users\user\AppData\Local\Waytotec.ControlSystem\app-1.1.76
+[2026-02-05 13:09:31.698] [Information] [Waytotec.ControlSystem.App.App] 백그라운드 업데이트 체크 스레드 시작
+[2026-02-05 13:09:31.698] [Information] [Waytotec.ControlSystem.App.App] IAppUpdateService 획득 성공
+[2026-02-05 13:09:31.699] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 업데이트 체크 시작. 로컬 경로: C:\Users\user\AppData\Local\Waytotec.ControlSystem\app-1.1.76\Documents\Waytotec_ControlSystem_Manual.pdf
+[2026-02-05 13:09:31.703] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] ========== 업데이트 체크 시작 ==========
+[2026-02-05 13:09:31.704] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] UpdateUrl: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:09:31.704] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] Silent 모드: False
+[2026-02-05 13:09:31.704] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 확인 시작: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:09:31.738] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] Last-Modified 헤더 없음, ETag 또는 파일 존재 여부로 판단
+[2026-02-05 13:09:31.746] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 최신 버전입니다.
+[2026-02-05 13:09:31.961] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 체크 완료. 적용할 업데이트 수: 1
+[2026-02-05 13:09:31.961] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 새 버전 발견: 현재 1.1.76, 최신 1.1.77
+[2026-02-05 13:09:32.323] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: app_start
+[2026-02-05 13:09:36.763] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 적용 완료. 앱을 재시작합니다.
+[2026-02-05 13:09:54.697] [Information] [Waytotec.ControlSystem.Infrastructure.Services.NetworkConnectionService] 인터넷 연결 모니터링 시작
+[2026-02-05 13:09:54.740] [Information] [Waytotec.ControlSystem.Infrastructure.Services.NetworkConnectionService] 인터넷 연결 상태 변경: 연결됨
+[2026-02-05 13:09:54.902] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] FirmwareUpdateService 초기화. CAMIF_PORT: 2020
+[2026-02-05 13:09:55.238] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] TelemetryService 초기화 완료. DeviceId: t4ryLwC2Hwj2fqooDYgrNv, MachineName: DESKTOP-60TQD37, IP: 211.117.52.141
+[2026-02-05 13:09:55.336] [Information] [Microsoft.Hosting.Lifetime] Application started. Press Ctrl+C to shut down.
+[2026-02-05 13:09:55.336] [Information] [Microsoft.Hosting.Lifetime] Hosting environment: Production
+[2026-02-05 13:09:55.336] [Information] [Microsoft.Hosting.Lifetime] Content root path: C:\Users\user\AppData\Local\Waytotec.ControlSystem\app-1.1.77
+[2026-02-05 13:09:55.339] [Information] [Waytotec.ControlSystem.App.App] 백그라운드 업데이트 체크 스레드 시작
+[2026-02-05 13:09:55.339] [Information] [Waytotec.ControlSystem.App.App] IAppUpdateService 획득 성공
+[2026-02-05 13:09:55.341] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 업데이트 체크 시작. 로컬 경로: C:\Users\user\AppData\Local\Waytotec.ControlSystem\app-1.1.77\Documents\Waytotec_ControlSystem_Manual.pdf
+[2026-02-05 13:09:55.344] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] ========== 업데이트 체크 시작 ==========
+[2026-02-05 13:09:55.344] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] UpdateUrl: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:09:55.344] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] Silent 모드: False
+[2026-02-05 13:09:55.344] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 확인 시작: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:09:55.378] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] Last-Modified 헤더 없음, ETag 또는 파일 존재 여부로 판단
+[2026-02-05 13:09:55.379] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 다운로드 시작...
+[2026-02-05 13:09:55.454] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 체크 완료. 적용할 업데이트 수: 0
+[2026-02-05 13:09:55.454] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 적용할 업데이트가 없습니다.
+[2026-02-05 13:09:55.553] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: app_start
+[2026-02-05 13:09:55.680] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 다운로드 완료: 3,411,442 bytes
+[2026-02-05 13:09:59.230] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: feature_use
+[2026-02-05 13:11:51.448] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: feature_use
+[2026-02-05 13:11:51.449] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] ========== 펌웨어 업데이트 시작 ==========
+[2026-02-05 13:11:51.449] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] 카메라 IP: 192.168.1.201, 포트: 2020, 파일: C:\1. WTT\김남호\펌웨어\영상유도 펌웨어\1. 노바텍\0. 노바텍 전방위카메라 펌웨어_OSD 기능 추가_260205\12ba100-sysupgrade-20260204.bin, 초기화모드: False
+[2026-02-05 13:11:51.477] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] 파일 로드 완료 - 파일명: 12ba100-sysupgrade-20260204.bin, 크기: 118928121 bytes (113.42 MB)
+[2026-02-05 13:11:51.477] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] TCP 연결 시도 - 192.168.1.201:2020
+[2026-02-05 13:11:53.516] [Error] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] 소켓 오류 - SocketErrorCode: ConnectionRefused, NativeErrorCode: 10061, Message: 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다.
+System.Net.Sockets.SocketException (10061): 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Threading.Tasks.ValueTask.ValueTaskSourceAsTask.<>c.<.cctor>b__4_0(Object state)
+--- End of stack trace from previous location ---
+   at System.Net.Sockets.TcpClient.CompleteConnectAsync(Task task)
+   at Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService.UpdateFirmwareAsync(DiscoveredCamera camera, String filePath, Boolean isDefaultUpdate, IProgress`1 progressReporter)
+[2026-02-05 13:11:53.516] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] 펌웨어 업데이트 종료 (IsUpdating=false)
+[2026-02-05 13:13:52.780] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 현재 Squirrel 버전: 1.1.77
+[2026-02-05 13:13:54.345] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] ========== 업데이트 체크 시작 ==========
+[2026-02-05 13:13:54.345] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] UpdateUrl: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:13:54.345] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] Silent 모드: False
+[2026-02-05 13:13:54.345] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 확인 시작: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:13:54.361] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 체크 완료. 적용할 업데이트 수: 1
+[2026-02-05 13:13:54.361] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 새 버전 발견: 현재 1.1.77, 최신 1.1.78
+[2026-02-05 13:13:58.257] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 적용 완료. 앱을 재시작합니다.
+[2026-02-05 13:14:04.132] [Information] [Waytotec.ControlSystem.Infrastructure.Services.NetworkConnectionService] 인터넷 연결 모니터링 시작
+[2026-02-05 13:14:04.177] [Information] [Waytotec.ControlSystem.Infrastructure.Services.NetworkConnectionService] 인터넷 연결 상태 변경: 연결됨
+[2026-02-05 13:14:04.389] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] FirmwareUpdateService 초기화. CAMIF_PORT: 2020
+[2026-02-05 13:14:04.734] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] TelemetryService 초기화 완료. DeviceId: t4ryLwC2Hwj2fqooDYgrNv, MachineName: DESKTOP-60TQD37, IP: 211.117.52.141
+[2026-02-05 13:14:04.811] [Information] [Microsoft.Hosting.Lifetime] Application started. Press Ctrl+C to shut down.
+[2026-02-05 13:14:04.812] [Information] [Microsoft.Hosting.Lifetime] Hosting environment: Production
+[2026-02-05 13:14:04.812] [Information] [Microsoft.Hosting.Lifetime] Content root path: C:\Users\user\AppData\Local\Waytotec.ControlSystem\app-1.1.78
+[2026-02-05 13:14:04.814] [Information] [Waytotec.ControlSystem.App.App] 백그라운드 업데이트 체크 스레드 시작
+[2026-02-05 13:14:04.814] [Information] [Waytotec.ControlSystem.App.App] IAppUpdateService 획득 성공
+[2026-02-05 13:14:04.815] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 업데이트 체크 시작. 로컬 경로: C:\Users\user\AppData\Local\Waytotec.ControlSystem\app-1.1.78\Documents\Waytotec_ControlSystem_Manual.pdf
+[2026-02-05 13:14:04.818] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] ========== 업데이트 체크 시작 ==========
+[2026-02-05 13:14:04.818] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] UpdateUrl: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:14:04.818] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] Silent 모드: False
+[2026-02-05 13:14:04.818] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 확인 시작: https://waytotec.github.io/Wtt-Updates
+[2026-02-05 13:14:04.895] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 업데이트 체크 완료. 적용할 업데이트 수: 0
+[2026-02-05 13:14:04.895] [Information] [Waytotec.ControlSystem.App.Services.SquirrelAppUpdateService] 적용할 업데이트가 없습니다.
+[2026-02-05 13:14:04.966] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: app_start
+[2026-02-05 13:14:05.069] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] Last-Modified 헤더 없음, ETag 또는 파일 존재 여부로 판단
+[2026-02-05 13:14:05.069] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 다운로드 시작...
+[2026-02-05 13:14:05.388] [Information] [Waytotec.ControlSystem.App.Services.ManualUpdateService] 매뉴얼 다운로드 완료: 3,411,442 bytes
+[2026-02-05 13:14:08.389] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: feature_use
+[2026-02-05 13:14:33.155] [Information] [Waytotec.ControlSystem.Infrastructure.Services.TelemetryService] 텔레메트리 전송 성공: feature_use
+[2026-02-05 13:14:33.155] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] ========== 펌웨어 업데이트 시작 ==========
+[2026-02-05 13:14:33.155] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] 카메라 IP: 192.168.1.201, 포트: 2020, 파일: C:\1. WTT\김남호\펌웨어\영상유도 펌웨어\1. 노바텍\0. 노바텍 전방위카메라 펌웨어_OSD 기능 추가_260205\12ba100-sysupgrade-20260204.bin, 초기화모드: False
+[2026-02-05 13:14:33.183] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] 파일 로드 완료 - 파일명: 12ba100-sysupgrade-20260204.bin, 크기: 118928121 bytes (113.42 MB)
+[2026-02-05 13:14:33.183] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] TCP 연결 시도 - 192.168.1.201:2020
+[2026-02-05 13:14:35.218] [Error] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] 소켓 오류 - SocketErrorCode: ConnectionRefused, NativeErrorCode: 10061, Message: 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다.
+System.Net.Sockets.SocketException (10061): 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Threading.Tasks.ValueTask.ValueTaskSourceAsTask.<>c.<.cctor>b__4_0(Object state)
+--- End of stack trace from previous location ---
+   at System.Net.Sockets.TcpClient.CompleteConnectAsync(Task task)
+   at Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService.UpdateFirmwareAsync(DiscoveredCamera camera, String filePath, Boolean isDefaultUpdate, IProgress`1 progressReporter)
+[2026-02-05 13:14:35.219] [Information] [Waytotec.ControlSystem.Infrastructure.Services.FirmwareUpdateService] [192.168.1.201] 펌웨어 업데이트 종료 (IsUpdating=false)
