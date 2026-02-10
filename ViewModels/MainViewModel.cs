@@ -45,6 +45,9 @@ namespace WindowsOptimizer.ViewModels
         // PID 정보
         [ObservableProperty] private string pidInfo = "PID: -";
 
+        // Mapping 파일명
+        public string MappingFileName => GlobalConfig.Pid == "pb000" ? "mapping_pb000.xml" : "mapping.xml";
+
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
         public event Action ClearLogRequested;
 

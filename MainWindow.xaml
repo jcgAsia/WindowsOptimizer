@@ -229,7 +229,7 @@
         </GroupBox>
 
         <!--  서버 설정 상태  -->
-        <GroupBox Grid.Row="1" Header="⚙️ 서버 설정 상태 (mapping.xml)">
+        <GroupBox Grid.Row="1" Header="{Binding MappingFileName, StringFormat='⚙️ 서버 설정 상태 ({0})'}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

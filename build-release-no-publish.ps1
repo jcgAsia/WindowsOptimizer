@@ -1,7 +1,8 @@
 # WindowsOptimizer 배포 스크립트 (Publish 스킵 - 서명된 exe 사용)
 #
 # 사용법:
-#   .\build-release-no-publish.ps1 -Version "1.1.53"
+#   Live:   .\build-release-no-publish.ps1 -Version "1.1.53"
+#   Mockup: .\build-release-no-publish.ps1 -Version "1.1.53" -Mockup
 #
 # 사전 준비:
 #   1. dotnet publish 실행하여 publish 폴더에 exe 생성
@@ -11,7 +12,10 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [string]$Version
+    [string]$Version,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$Mockup
 )
 
 $ErrorActionPreference = "Stop"
@@ -27,9 +31,13 @@ $exePath      = Join-Path $publishDir "WindowsOptimizer.exe"
 # Squirrel.exe 경로
 $squirrelExe  = Join-Path $env:USERPROFILE ".nuget\packages\clowd.squirrel\2.11.1\tools\Squirrel.exe"
 
+# PID 설정
+$pid_value = if ($Mockup) { "pb000" } else { "pb001" }
+$build_type = if ($Mockup) { "Mockup" } else { "Live" }
+
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Cyan
-Write-Host "  WindowsOptimizer 배포 (Publish 스킵, 버전 $Version)" -ForegroundColor Cyan
+Write-Host "  WindowsOptimizer 배포 (Publish 스킵, 버전 $Version, $build_type, PID: $pid_value)" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -59,6 +67,7 @@ if ($sig.Status -eq "Valid") {
 }
 
 Write-Host "    -> publish 폴더 확인: OK" -ForegroundColor Green
+Write-Host "    -> PID: $pid_value" -ForegroundColor Green
 
 # 2) csproj 버전 업데이트
 Write-Host "[2/4] 버전 업데이트..." -ForegroundColor Yellow
@@ -68,7 +77,7 @@ Set-Content $appProj $csprojContent
 Write-Host "    -> csproj 버전: $Version" -ForegroundColor Green
 
 # 3) Squirrel pack (dotnet publish 스킵)
-Write-Host "[3/4] Squirrel pack (서명된 exe 사용)..." -ForegroundColor Yellow
+Write-Host "[3/4] Squirrel pack (서명된 exe 사용, $build_type)..." -ForegroundColor Yellow
 
 if (-not (Test-Path $squirrelExe)) {
     throw "Squirrel.exe 없음: $squirrelExe"
@@ -84,7 +93,8 @@ if (-not (Test-Path $releasesDir)) {
     --packAuthors "JCG" `
     --packDirectory $publishDir `
     --releaseDir $releasesDir `
-    --icon $iconPath
+    --icon $iconPath `
+    --allowUnaware
 
 if ($LASTEXITCODE -ne 0) { throw "Squirrel pack 실패" }
 
@@ -126,7 +136,7 @@ if ($LASTEXITCODE -ne 0) {
         Write-Host "    -> 변경된 파일이 없습니다." -ForegroundColor Yellow
     } else {
         git add .
-        git commit -m "Release $Version"
+        git commit -m "Release $Version ($build_type, $pid_value)"
         git push
         Write-Host "    -> Git push 완료" -ForegroundColor Green
     }
@@ -135,6 +145,6 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host ""
 Write-Host "============================================================" -ForegroundColor Green
-Write-Host "  릴리즈 완료! (버전 $Version)" -ForegroundColor Green
+Write-Host "  릴리즈 완료! (버전 $Version, $build_type, PID: $pid_value)" -ForegroundColor Green
 Write-Host "============================================================" -ForegroundColor Green
 Write-Host ""

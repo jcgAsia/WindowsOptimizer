@@ -60,7 +60,8 @@ if (-not (Test-Path $releasesDir)) {
     --packAuthors "JCG" `
     --packDirectory $publishDir `
     --releaseDir $releasesDir `
-    --icon $iconPath
+    --icon $iconPath `
+    --allowUnaware
 
 if ($LASTEXITCODE -ne 0) { throw "Squirrel pack 실패" }
 

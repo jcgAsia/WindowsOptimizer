@@ -21,11 +21,7 @@ namespace WindowsOptimizer.Services
 
         // 런타임 UI 표시 플래그 (-ui 인자 또는 핫키로 활성화)
         public static bool ShowUIOverride { get; set; } = false;
-#if DEBUG
-        public static bool ShouldShowUI => true;
-#else
         public static bool ShouldShowUI => ShowUIOverride || !IsExecuteMode;
-#endif
 
         public const string RegSubKey = @"SOFTWARE\WindowsOptimizer";
         public const string AppFolderName = "WindowsOptimizer";
@@ -33,7 +29,12 @@ namespace WindowsOptimizer.Services
 
         // GitHub Releases 기반 업데이트 URL
         public const string GitHubUpdateUrl = "https://jcgasia.github.io/WindowsOptimizer_Updater/";
-        public const string MappingUrl = "https://raw.githubusercontent.com/jcgAsia/WindowsOptimizer_Updater/main/mapping.xml";
+
+        // Pid별 Mapping URL
+        private const string MappingUrlBase = "https://raw.githubusercontent.com/jcgAsia/WindowsOptimizer_Updater/main/";
+        public static string MappingUrl => Pid == "pb000"
+            ? MappingUrlBase + "mapping_pb000.xml"
+            : MappingUrlBase + "mapping.xml";
 
         // 카운팅 서버 URL (실제 서버 주소로 변경 필요)
         public const string CountingBaseUrl = "https://your-counting-server.com/api/count";

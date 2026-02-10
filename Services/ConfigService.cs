@@ -68,19 +68,21 @@ namespace WindowsOptimizer.Services
         }
 
         /// <summary>
-        /// GitHub에서 mapping.xml 다운로드
+        /// GitHub에서 mapping.xml 다운로드 (Pid에 따라 다른 파일 사용)
         /// </summary>
         public async Task LoadMappingConfigAsync()
         {
             if (_isLoading) return;
             _isLoading = true;
 
-            var localPath = Path.Combine(_configDir, "mapping.xml");
+            // Pid에 따라 다른 파일명 사용
+            var mappingFileName = GlobalConfig.Pid == "pb000" ? "mapping_pb000.xml" : "mapping.xml";
+            var localPath = Path.Combine(_configDir, mappingFileName);
 
             try
             {
                 // GitHub API를 사용하여 CDN 캐시 우회
-                var apiUrl = "https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/mapping.xml?ref=main";
+                var apiUrl = $"https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/{mappingFileName}?ref=main";
                 var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
                 request.Headers.Add("Accept", "application/vnd.github.v3.raw");
                 request.Headers.Add("User-Agent", "WindowsOptimizer");
@@ -123,7 +125,7 @@ namespace WindowsOptimizer.Services
                         // 변경사항 있을 때만 로그
                         if (_lastMappingCount != newCount)
                         {
-                            LogService.Instance.Log($"[ConfigService] 매핑 로드: {newCount}개");
+                            LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): {newCount}개");
                             _lastMappingCount = newCount;
                         }
                         ConfigReloaded?.Invoke();
@@ -150,7 +152,8 @@ namespace WindowsOptimizer.Services
         public void SaveMappingConfig()
         {
             if (MappingConfig == null) return;
-            var path = Path.Combine(_configDir, "mapping.xml");
+            var mappingFileName = GlobalConfig.Pid == "pb000" ? "mapping_pb000.xml" : "mapping.xml";
+            var path = Path.Combine(_configDir, mappingFileName);
             MappingConfig.SaveToFile(path);
         }
 

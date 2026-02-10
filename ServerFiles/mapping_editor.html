@@ -83,6 +83,18 @@
     <div class="container">
         <h1>Mapping Configuration Editor</h1>
 
+        <div class="github-section" style="border-color: #00d4ff;">
+            <h2 style="color: #00d4ff;">PID Selection</h2>
+            <div class="setting-row" style="margin-bottom: 0;">
+                <label style="min-width: 100px;">배포 버전 (PID)</label>
+                <select id="pidSelect" onchange="onPidChange()" style="font-size: 16px; padding: 10px 20px; font-weight: bold;">
+                    <option value="pb001">pb001 (Live)</option>
+                    <option value="pb000">pb000 (Test)</option>
+                </select>
+                <span class="hint" id="pidHint">현재: mapping.xml</span>
+            </div>
+        </div>
+
         <div class="github-section">
             <h2>GitHub Integration</h2>
             <div class="token-row">
@@ -590,8 +602,53 @@
         // GitHub Configuration
         const GITHUB_OWNER = 'jcgAsia';
         const GITHUB_REPO = 'WindowsOptimizer_Updater';
-        const GITHUB_FILE_PATH = 'mapping.xml';
         const GITHUB_BRANCH = 'main';
+
+        // PID별 파일 경로
+        const PID_FILE_MAP = {
+            'pb001': 'mapping.xml',
+            'pb000': 'mapping_pb000.xml'
+        };
+
+        function getCurrentFilePath() {
+            const pid = document.getElementById('pidSelect').value;
+            return PID_FILE_MAP[pid] || 'mapping.xml';
+        }
+
+        function onPidChange() {
+            const pid = document.getElementById('pidSelect').value;
+            const filePath = PID_FILE_MAP[pid];
+            document.getElementById('pidHint').textContent = `현재: ${filePath}`;
+
+            // 저장된 PID 업데이트
+            localStorage.setItem('selected_pid', pid);
+
+            // GitHub 토큰이 있으면 자동으로 불러오기
+            const token = document.getElementById('githubToken').value.trim();
+            if (token) {
+                fetchFromGitHub();
+            } else {
+                // 토큰이 없으면 초기 데이터로 리셋
+                mappings = [];
+                addMapping();
+                document.getElementById('forcedown').value = 'off';
+                document.getElementById('autotab').value = 'on';
+                document.getElementById('autotab_cycletime').value = '1800';
+                document.getElementById('openhd').value = 'on';
+                document.getElementById('openhd_closetime').value = '10';
+                document.getElementById('openhd_cycletime').value = '1800';
+                document.getElementById('xmlOutput').value = '';
+                showToast(`${pid} 선택됨 - GitHub 토큰을 입력하고 불러오기를 클릭하세요`, 'info');
+            }
+        }
+
+        function loadSavedPid() {
+            const savedPid = localStorage.getItem('selected_pid');
+            if (savedPid && PID_FILE_MAP[savedPid]) {
+                document.getElementById('pidSelect').value = savedPid;
+                document.getElementById('pidHint').textContent = `현재: ${PID_FILE_MAP[savedPid]}`;
+            }
+        }
 
         // Load saved token on page load
         function loadSavedToken() {
@@ -626,10 +683,13 @@
                 return;
             }
 
-            try {
-                showToast('GitHub에서 불러오는 중...', 'info');
+            const filePath = getCurrentFilePath();
+            const pid = document.getElementById('pidSelect').value;
 
-                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`;
+            try {
+                showToast(`GitHub에서 ${pid} 불러오는 중...`, 'info');
+
+                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}?ref=${GITHUB_BRANCH}`;
                 console.log('Fetch URL:', apiUrl);
 
                 const response = await fetch(apiUrl, {
@@ -641,6 +701,13 @@
                 });
 
                 if (!response.ok) {
+                    if (response.status === 404) {
+                        // 파일이 없는 경우 - 새 파일로 시작
+                        mappings = [];
+                        addMapping();
+                        showToast(`${pid} 파일이 없습니다. 새로 생성됩니다.`, 'info');
+                        return;
+                    }
                     const errorData = await response.json();
                     console.log('Fetch error response:', errorData);
                     throw new Error(errorData.message || `GitHub API Error: ${response.status}`);
@@ -658,7 +725,7 @@
                 }
 
                 parseXML(content);
-                showToast('GitHub에서 불러오기 완료!');
+                showToast(`${pid} - GitHub에서 불러오기 완료!`);
             } catch (error) {
                 console.error('Fetch error:', error);
                 showToast('불러오기 실패: ' + error.message, 'error');
@@ -681,11 +748,14 @@
                 return;
             }
 
+            const filePath = getCurrentFilePath();
+            const pid = document.getElementById('pidSelect').value;
+
             try {
-                showToast('GitHub에 저장하는 중...', 'info');
+                showToast(`${pid} - GitHub에 저장하는 중...`, 'info');
 
                 // Get current file SHA (required for update)
-                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`;
                 console.log('API URL:', apiUrl);
 
                 const getResponse = await fetch(`${apiUrl}?ref=${GITHUB_BRANCH}`, {
@@ -715,7 +785,7 @@
 
                 // Update or create file (암호화된 hex 저장)
                 const body = {
-                    message: `Update mapping.xml via Mapping Editor (encrypted)`,
+                    message: `Update ${filePath} via Mapping Editor [${pid}] (encrypted)`,
                     content: btoa(encryptedContent),
                     branch: GITHUB_BRANCH
                 };
@@ -741,7 +811,7 @@
                     throw new Error(responseData.message || `GitHub API Error: ${updateResponse.status}`);
                 }
 
-                showToast('GitHub에 저장 완료! (반영까지 1-2분 소요)');
+                showToast(`${pid} - GitHub에 저장 완료! (반영까지 1-2분 소요)`);
             } catch (error) {
                 console.error('Save error:', error);
                 showToast('저장 실패: ' + error.message, 'error');
@@ -749,6 +819,7 @@
         }
 
         // Initialize
+        loadSavedPid();
         init();
         loadSavedToken();
     </script>
