@@ -7,3 +7,5 @@
 /bin/Release/net48
 /bin/Debug/net48
 /.vs
+/ServerFiles/mapping.xml
+/nul
