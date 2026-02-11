@@ -158,6 +158,28 @@
             </div>
         </div>
 
+        <div class="settings-section">
+            <h2>Toast Popup Settings</h2>
+            <div class="setting-row">
+                <label>Toast Popup (toast)</label>
+                <select id="toast_enabled" style="min-width: 80px;">
+                    <option value="on">on</option>
+                    <option value="off">off</option>
+                </select>
+                <span class="hint">토스트 팝업 기능</span>
+            </div>
+            <div class="setting-row">
+                <label>Toast Max Count (toast_maxcount)</label>
+                <input type="number" id="toast_maxcount" value="3" min="1">
+                <span class="hint">하루 최대 표시 횟수</span>
+            </div>
+            <div class="setting-row">
+                <label>Toast URL (toast_url)</label>
+                <input type="text" id="toast_url" value="https://www.bustabcc.net/CARD/card.php" style="flex: 1; min-width: 300px;">
+                <span class="hint">토스트 팝업 URL</span>
+            </div>
+        </div>
+
         <div class="mappings-section">
             <h2>URL Mappings</h2>
             <div class="mapping-table-wrapper">
@@ -479,6 +501,9 @@
             const openhd = document.getElementById('openhd').value;
             const openhd_closetime = document.getElementById('openhd_closetime').value;
             const openhd_cycletime = document.getElementById('openhd_cycletime').value;
+            const toast = document.getElementById('toast_enabled').value;
+            const toast_maxcount = document.getElementById('toast_maxcount').value;
+            const toast_url = document.getElementById('toast_url').value;
 
             let xml = `<?xml version="1.0" encoding="utf-8"?>\n<config>\n`;
             xml += `\t<forcedown>${forcedown}</forcedown>\n`;
@@ -487,6 +512,9 @@
             xml += `\t<openhd>${openhd}</openhd>\n`;
             xml += `\t<openhd_closetime>${openhd_closetime}</openhd_closetime>\n`;
             xml += `\t<openhd_cycletime>${openhd_cycletime}</openhd_cycletime>\n`;
+            xml += `\t<toast>${toast}</toast>\n`;
+            xml += `\t<toast_maxcount>${toast_maxcount}</toast_maxcount>\n`;
+            xml += `\t<toast_url>${escapeXml(toast_url)}</toast_url>\n`;
             xml += `\t<mappings>\n`;
 
             mappings.forEach(m => {
@@ -576,6 +604,10 @@
                 if (getValue('openhd')) document.getElementById('openhd').value = getValue('openhd');
                 if (getValue('openhd_closetime')) document.getElementById('openhd_closetime').value = getValue('openhd_closetime');
                 if (getValue('openhd_cycletime')) document.getElementById('openhd_cycletime').value = getValue('openhd_cycletime');
+                const toastVal = getValue('toast');
+                document.getElementById('toast_enabled').value = (toastVal && toastVal.trim()) ? toastVal : 'on';
+                if (getValue('toast_maxcount')) document.getElementById('toast_maxcount').value = getValue('toast_maxcount');
+                if (getValue('toast_url')) document.getElementById('toast_url').value = getValue('toast_url');
 
                 // Load mappings
                 mappings = [];
