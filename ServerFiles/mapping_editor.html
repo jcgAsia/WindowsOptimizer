@@ -77,6 +77,35 @@
         .toast.error { background: #e94560; color: #fff; }
         .toast.info { background: #1f6feb; color: #fff; }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        /* Change History Section */
+        .history-section { background: #16213e; border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid #1f6feb; display: none; }
+        .history-section.visible { display: block; }
+        .history-section h2 { color: #1f6feb; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .btn-history { background: #1f6feb; color: #fff; }
+        .btn-history:hover { background: #388bfd; }
+        .commit-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .commit-table th { background: #0f3460; padding: 10px 12px; text-align: left; font-weight: 500; font-size: 0.9em; }
+        .commit-table td { padding: 10px 12px; border-bottom: 1px solid #333; font-size: 0.9em; }
+        .commit-row { cursor: pointer; transition: background 0.2s; }
+        .commit-row:hover { background: rgba(31,111,235,0.15); }
+        .commit-row.active { background: rgba(31,111,235,0.25); }
+        .commit-detail { display: none; }
+        .commit-detail.visible { display: table-row; }
+        .commit-detail td { padding: 0; }
+        .commit-detail-content { padding: 15px; background: #0a0a15; border-radius: 4px; margin: 5px 12px 12px; }
+        .commit-detail-content h3 { color: #00d4ff; font-size: 0.95em; margin-bottom: 10px; }
+        .diff-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.85em; }
+        .diff-table th { background: #16213e; padding: 6px 10px; text-align: left; color: #888; }
+        .diff-table td { padding: 6px 10px; border-bottom: 1px solid #222; }
+        .diff-changed { background: rgba(251,191,36,0.15); }
+        .diff-added { background: rgba(74,222,128,0.15); }
+        .diff-removed { background: rgba(233,69,96,0.15); }
+        .diff-value-old { color: #e94560; text-decoration: line-through; margin-right: 8px; }
+        .diff-value-new { color: #4ade80; }
+        .version-xml-pre { background: #0f3460; padding: 10px; border-radius: 4px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 12px; color: #4ade80; max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; margin-top: 10px; }
+        .history-loading { text-align: center; padding: 20px; color: #888; }
+        .commit-sha { color: #1f6feb; font-family: monospace; font-size: 0.85em; }
     </style>
 </head>
 <body>
@@ -206,6 +235,14 @@
             <button class="btn btn-github" onclick="saveToGitHub()">GitHub에 저장</button>
             <button class="btn btn-copy" onclick="copyToClipboard()">Copy to Clipboard</button>
             <button class="btn btn-load" onclick="downloadXML()">Download XML</button>
+            <button class="btn btn-history" onclick="toggleCommitHistory()">수정 이력 보기</button>
+        </div>
+
+        <div class="history-section" id="historySection">
+            <h2>Change History</h2>
+            <div id="historyContent">
+                <p class="history-loading">이력을 불러오려면 "수정 이력 보기" 버튼을 클릭하세요.</p>
+            </div>
         </div>
 
         <div class="output-crypto-container" style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -850,10 +887,281 @@
             }
         }
 
+        // ── Change History ──
+        let commitCache = []; // 캐시된 커밋 목록
+        let versionCache = {}; // sha → 복호화된 XML 문자열
+
+        function toggleCommitHistory() {
+            const section = document.getElementById('historySection');
+            const isVisible = section.classList.contains('visible');
+            if (isVisible) {
+                section.classList.remove('visible');
+                return;
+            }
+            section.classList.add('visible');
+            fetchCommitHistory();
+        }
+
+        async function fetchCommitHistory() {
+            const token = document.getElementById('githubToken').value.trim();
+            if (!token) {
+                showToast('GitHub Token을 입력하세요', 'error');
+                return;
+            }
+
+            const filePath = getCurrentFilePath();
+            const container = document.getElementById('historyContent');
+            container.innerHTML = '<p class="history-loading">커밋 이력을 불러오는 중...</p>';
+
+            try {
+                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits?path=${filePath}&per_page=5&sha=${GITHUB_BRANCH}`;
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'X-GitHub-Api-Version': '2022-11-28'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`GitHub API Error: ${response.status}`);
+                }
+
+                commitCache = await response.json();
+                versionCache = {};
+                renderCommitHistory();
+            } catch (error) {
+                container.innerHTML = `<p class="history-loading" style="color:#e94560;">이력 조회 실패: ${escapeHtml(error.message)}</p>`;
+            }
+        }
+
+        function renderCommitHistory() {
+            const container = document.getElementById('historyContent');
+            if (!commitCache.length) {
+                container.innerHTML = '<p class="history-loading">이 파일에 대한 커밋 이력이 없습니다.</p>';
+                return;
+            }
+
+            let html = `<table class="commit-table">
+                <thead><tr>
+                    <th style="width:18%">날짜 (KST)</th>
+                    <th style="width:12%">작성자</th>
+                    <th>커밋 메시지</th>
+                    <th style="width:10%">SHA</th>
+                </tr></thead><tbody>`;
+
+            commitCache.forEach((commit, idx) => {
+                const date = new Date(commit.commit.author.date);
+                const kst = date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+                const author = commit.commit.author.name || commit.author?.login || 'unknown';
+                const msg = commit.commit.message;
+                const sha = commit.sha.substring(0, 7);
+
+                html += `<tr class="commit-row" onclick="toggleCommitDetail(${idx}, '${commit.sha}')">
+                    <td>${escapeHtml(kst)}</td>
+                    <td>${escapeHtml(author)}</td>
+                    <td>${escapeHtml(msg)}</td>
+                    <td><span class="commit-sha">${sha}</span></td>
+                </tr>`;
+                html += `<tr class="commit-detail" id="commitDetail_${idx}"><td colspan="4">
+                    <div class="commit-detail-content" id="commitDetailContent_${idx}">
+                        <p class="history-loading">내용을 불러오는 중...</p>
+                    </div>
+                </td></tr>`;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        async function toggleCommitDetail(idx, sha) {
+            const detailRow = document.getElementById(`commitDetail_${idx}`);
+            const headerRow = detailRow.previousElementSibling;
+
+            if (detailRow.classList.contains('visible')) {
+                detailRow.classList.remove('visible');
+                headerRow.classList.remove('active');
+                return;
+            }
+
+            // 다른 열린 디테일 닫기
+            document.querySelectorAll('.commit-detail.visible').forEach(el => el.classList.remove('visible'));
+            document.querySelectorAll('.commit-row.active').forEach(el => el.classList.remove('active'));
+
+            detailRow.classList.add('visible');
+            headerRow.classList.add('active');
+
+            // 이미 로드된 경우 스킵
+            if (versionCache[sha]) {
+                renderVersionDetail(idx, sha);
+                return;
+            }
+
+            await fetchVersionContent(sha, idx);
+        }
+
+        async function fetchVersionContent(sha, idx) {
+            const token = document.getElementById('githubToken').value.trim();
+            const filePath = getCurrentFilePath();
+
+            try {
+                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}?ref=${sha}`;
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'X-GitHub-Api-Version': '2022-11-28'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                let content = atob(data.content);
+                content = content.trim();
+
+                // 암호화된 hex인지 확인
+                if (!content.startsWith('<?xml') && !content.startsWith('<')) {
+                    content = xor256Crypto.decrypt(content);
+                }
+
+                versionCache[sha] = content;
+                renderVersionDetail(idx, sha);
+            } catch (error) {
+                const container = document.getElementById(`commitDetailContent_${idx}`);
+                container.innerHTML = `<p style="color:#e94560;">파일 내용 로드 실패: ${escapeHtml(error.message)}</p>`;
+            }
+        }
+
+        function parseXmlToObject(xmlString) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xmlString, 'text/xml');
+            const obj = { settings: {}, mappings: [] };
+
+            const settingTags = ['forcedown', 'autotab', 'autotab_cycletime', 'openhd', 'openhd_closetime', 'openhd_cycletime', 'toast', 'toast_maxcount', 'toast_url'];
+            settingTags.forEach(tag => {
+                const el = doc.querySelector(tag);
+                obj.settings[tag] = el ? el.textContent : '';
+            });
+
+            doc.querySelectorAll('map').forEach(map => {
+                obj.mappings.push({
+                    trigger: map.querySelector('trigger')?.textContent || '',
+                    target: map.querySelector('target')?.textContent || '',
+                    frequency: map.querySelector('frequency')?.textContent || '1'
+                });
+            });
+
+            return obj;
+        }
+
+        function renderVersionDetail(idx, sha) {
+            const container = document.getElementById(`commitDetailContent_${idx}`);
+            const currentXml = versionCache[sha];
+            if (!currentXml) return;
+
+            let html = '';
+
+            // 이전 버전과 비교
+            const prevCommit = commitCache[idx + 1];
+            const prevSha = prevCommit ? prevCommit.sha : null;
+            const prevXml = prevSha ? versionCache[prevSha] : null;
+
+            const current = parseXmlToObject(currentXml);
+
+            if (prevXml) {
+                const prev = parseXmlToObject(prevXml);
+                html += '<h3>변경 사항 (이전 버전 대비)</h3>';
+                html += renderDiff(prev, current);
+            } else if (prevCommit && !prevXml) {
+                html += `<h3>변경 비교</h3><p style="color:#888; font-size:0.85em;">이전 버전을 클릭하면 비교할 수 있습니다.</p>`;
+            }
+
+            // 복호화된 XML 전문
+            html += '<h3>복호화된 XML</h3>';
+            html += `<div class="version-xml-pre">${escapeHtml(currentXml)}</div>`;
+
+            container.innerHTML = html;
+        }
+
+        function renderDiff(prev, current) {
+            let html = '<table class="diff-table"><thead><tr><th>항목</th><th>변경 내용</th></tr></thead><tbody>';
+            let hasChanges = false;
+
+            // 설정값 비교
+            const settingLabels = {
+                forcedown: 'Force Download', autotab: 'Auto Tab', autotab_cycletime: 'Auto Tab Cycle Time',
+                openhd: 'Open HD', openhd_closetime: 'Open HD Close Time', openhd_cycletime: 'Open HD Cycle Time',
+                toast: 'Toast', toast_maxcount: 'Toast Max Count', toast_url: 'Toast URL'
+            };
+
+            for (const [key, label] of Object.entries(settingLabels)) {
+                const oldVal = prev.settings[key] || '';
+                const newVal = current.settings[key] || '';
+                if (oldVal !== newVal) {
+                    hasChanges = true;
+                    html += `<tr class="diff-changed"><td>${escapeHtml(label)}</td><td>
+                        <span class="diff-value-old">${escapeHtml(oldVal)}</span>
+                        <span class="diff-value-new">${escapeHtml(newVal)}</span>
+                    </td></tr>`;
+                }
+            }
+
+            // 매핑 비교
+            const prevMap = prev.mappings.map(m => `${m.trigger}|${m.target}|${m.frequency}`);
+            const currMap = current.mappings.map(m => `${m.trigger}|${m.target}|${m.frequency}`);
+
+            // 추가된 매핑
+            current.mappings.forEach((m, i) => {
+                const key = currMap[i];
+                if (!prevMap.includes(key)) {
+                    hasChanges = true;
+                    html += `<tr class="diff-added"><td>매핑 추가</td><td>
+                        <span class="diff-value-new">${escapeHtml(m.trigger)} → ${escapeHtml(m.target)} (freq: ${m.frequency})</span>
+                    </td></tr>`;
+                }
+            });
+
+            // 삭제된 매핑
+            prev.mappings.forEach((m, i) => {
+                const key = prevMap[i];
+                if (!currMap.includes(key)) {
+                    hasChanges = true;
+                    html += `<tr class="diff-removed"><td>매핑 삭제</td><td>
+                        <span class="diff-value-old">${escapeHtml(m.trigger)} → ${escapeHtml(m.target)} (freq: ${m.frequency})</span>
+                    </td></tr>`;
+                }
+            });
+
+            if (!hasChanges) {
+                html += '<tr><td colspan="2" style="color:#888; text-align:center;">변경 사항 없음</td></tr>';
+            }
+
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // PID 변경 시 이력 섹션 갱신
+        const _originalOnPidChange = onPidChange;
+        onPidChange = function() {
+            _originalOnPidChange();
+            const section = document.getElementById('historySection');
+            if (section.classList.contains('visible')) {
+                fetchCommitHistory();
+            }
+        };
+
         // Initialize
         loadSavedPid();
-        init();
         loadSavedToken();
+        const savedToken = document.getElementById('githubToken').value.trim();
+        if (savedToken) {
+            fetchFromGitHub();
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
