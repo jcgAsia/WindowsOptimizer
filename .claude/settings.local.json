@@ -59,7 +59,15 @@
       "Bash(powershell.exe -NoProfile -Command \"& \\(Join-Path $env:USERPROFILE ''.nuget\\\\packages\\\\clowd.squirrel\\\\2.11.1\\\\tools\\\\Squirrel.exe''\\) pack --help\")",
       "Bash(\"C:/Users/mellass/.nuget/packages/clowd.squirrel/2.11.1/tools/Squirrel.exe\" pack --help)",
       "WebFetch(domain:jcgasia.github.io)",
-      "Bash(wmic:*)"
+      "Bash(wmic:*)",
+      "mcp__serena__list_memories",
+      "mcp__serena__onboarding",
+      "Bash(gh auth status:*)",
+      "Bash(gh api:*)",
+      "Bash(TMPDIR=\"C:/Users/mellass/AppData/Local/Temp\")",
+      "Bash(node:*)",
+      "Bash(git rebase:*)",
+      "Bash(git reset:*)"
     ]
   }
 }
