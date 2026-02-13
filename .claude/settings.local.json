@@ -68,7 +68,8 @@
       "Bash(node:*)",
       "Bash(git rebase:*)",
       "Bash(git reset:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(git rm:*)"
     ]
   }
 }

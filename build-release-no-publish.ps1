@@ -139,7 +139,8 @@ if ($LASTEXITCODE -ne 0) {
     if ([string]::IsNullOrWhiteSpace($changes)) {
         Write-Host "    -> 변경된 파일이 없습니다." -ForegroundColor Yellow
     } else {
-        git add .
+        # 릴리즈 파일만 add (mapping.xml은 mapping_editor에서만 관리)
+        git add RELEASES *.nupkg WindowsOptimizerSetup.exe
         git commit -m "Release $Version ($build_type, $pid_value)"
         git push
         Write-Host "    -> Git push 완료" -ForegroundColor Green
