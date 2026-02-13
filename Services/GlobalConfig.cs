@@ -1,16 +1,14 @@
 using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Net.NetworkInformation;
+using System.Reflection;
 
 namespace WindowsOptimizer.Services
 {
     public static class GlobalConfig
     {
-#if DEBUG
-        public static string Pid { get; private set; } = "pb000";
-#else
-        public static string Pid { get; private set; } = "pb001";
-#endif
+        public static string Pid { get; private set; } = "pb001"; // 기본값: 배포용
         public static string MacAddress { get; private set; }
 
         // 설치 모드: "Mockup" (UI 있음) / "Execute" (UI 없음, 기본값)
@@ -61,22 +59,76 @@ namespace WindowsOptimizer.Services
         {
             try
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(RegSubKey))
+                using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
                 {
-                    var regPid = key?.GetValue("pid")?.ToString();
-                    if (!string.IsNullOrEmpty(regPid))
-                        Pid = regPid;
+                    if (key != null)
+                    {
+                        var regPid = key.GetValue("pid")?.ToString();
+                        var lastPidTxt = key.GetValue("last_pid_txt")?.ToString();
+                        var autoUpdate = key.GetValue("auto_update");
+                        var currentPidTxt = ReadPidFromFile();
 
-                    // 설치 모드 로드
-                    var regInstallMode = key?.GetValue("InstallMode")?.ToString();
-                    if (!string.IsNullOrEmpty(regInstallMode))
-                        InstallMode = regInstallMode;
+                        if (autoUpdate != null)
+                        {
+                            // 자동 업데이트 직후: PID 유지, 마커 삭제, pid.txt 스냅샷 갱신
+                            key.DeleteValue("auto_update", false);
+                            if (!string.IsNullOrEmpty(currentPidTxt))
+                                key.SetValue("last_pid_txt", currentPidTxt);
+                            if (!string.IsNullOrEmpty(regPid))
+                                Pid = regPid;
+                        }
+                        else if (!string.IsNullOrEmpty(currentPidTxt) && currentPidTxt != lastPidTxt)
+                        {
+                            // pid.txt가 변경됨 (재설치 또는 최초 설치) → PID 갱신
+                            Pid = currentPidTxt;
+                            key.SetValue("pid", currentPidTxt);
+                            key.SetValue("last_pid_txt", currentPidTxt);
+                        }
+                        else if (!string.IsNullOrEmpty(regPid))
+                        {
+                            // 일반 시작: 레지스트리 PID 사용
+                            Pid = regPid;
+                        }
+                        else if (!string.IsNullOrEmpty(currentPidTxt))
+                        {
+                            // 레지스트리에 PID 없음 (마이그레이션): pid.txt 사용
+                            Pid = currentPidTxt;
+                            key.SetValue("pid", currentPidTxt);
+                            key.SetValue("last_pid_txt", currentPidTxt);
+                        }
+                        // else: 기본값 "pb001" 유지
+
+                        // 설치 모드 로드
+                        var regInstallMode = key.GetValue("InstallMode")?.ToString();
+                        if (!string.IsNullOrEmpty(regInstallMode))
+                            InstallMode = regInstallMode;
+                    }
                 }
             }
             catch { }
 
             MacAddress = GetMacAddress();
             LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}, Mode:{InstallMode}");
+        }
+
+        /// <summary>
+        /// exe와 같은 디렉토리의 pid.txt 파일에서 PID 읽기
+        /// </summary>
+        private static string ReadPidFromFile()
+        {
+            try
+            {
+                var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                var pidFile = Path.Combine(exeDir, "pid.txt");
+                if (File.Exists(pidFile))
+                {
+                    var pid = File.ReadAllText(pidFile).Trim();
+                    if (!string.IsNullOrEmpty(pid))
+                        return pid;
+                }
+            }
+            catch { }
+            return null;
         }
 
         /// <summary>

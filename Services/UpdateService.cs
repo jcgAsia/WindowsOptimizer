@@ -59,6 +59,9 @@ namespace WindowsOptimizer.Services
                         var newVersion = updateInfo.FutureReleaseEntry?.Version?.ToString();
                         LogService.Instance.Log($"[UpdateService] 새 버전 발견: {newVersion}");
 
+                        // 자동 업데이트 마커 저장 (OnAppUpdate에서 Setup.exe 재설치와 구분용)
+                        SetAutoUpdateMarker();
+
                         await mgr.UpdateApp();
                         LogService.Instance.Log("[UpdateService] 업데이트 완료. 재시작 중...");
 
@@ -104,6 +107,8 @@ namespace WindowsOptimizer.Services
                 ? GlobalConfig.InstallModeMockup
                 : GlobalConfig.InstallModeExecute);
 
+            // PID 처리는 GlobalConfig.Initialize()에서 pid.txt 기반으로 수행
+
             // 먼저 Squirrel이 자동 생성한 모든 바로가기 제거
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Desktop | ShortcutLocation.Startup);
 
@@ -133,6 +138,8 @@ namespace WindowsOptimizer.Services
 
         private static void OnAppUpdate(SemanticVersion version, IAppTools tools)
         {
+            // PID 처리는 GlobalConfig.Initialize()에서 auto_update 마커 기반으로 수행
+
             // 저장된 설치 모드에 따라 바로가기 처리
             string installMode = GetSavedInstallMode();
 
@@ -187,11 +194,29 @@ namespace WindowsOptimizer.Services
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             RegistryService.Instance.UnregisterStartup();
             RegistryService.Instance.UnregisterUninstaller();
+
+            // 앱 레지스트리 키 전체 삭제 (pid, InstallMode 등)
+            try { Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(GlobalConfig.RegSubKey, false); } catch { }
         }
 
         private static void OnFirstRun()
         {
             LogService.Instance.Log("첫 실행 - 설치 완료");
+        }
+
+        /// <summary>
+        /// 자동 업데이트 마커 저장 (Initialize에서 자동 업데이트와 Setup.exe 재설치 구분용)
+        /// </summary>
+        private static void SetAutoUpdateMarker()
+        {
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(GlobalConfig.RegSubKey))
+                {
+                    key?.SetValue("auto_update", "1");
+                }
+            }
+            catch { }
         }
 
         /// <summary>

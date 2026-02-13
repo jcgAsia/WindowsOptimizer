@@ -67,7 +67,8 @@
       "Bash(TMPDIR=\"C:/Users/mellass/AppData/Local/Temp\")",
       "Bash(node:*)",
       "Bash(git rebase:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(git log:*)"
     ]
   }
 }

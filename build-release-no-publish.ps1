@@ -69,6 +69,10 @@ if ($sig.Status -eq "Valid") {
 Write-Host "    -> publish 폴더 확인: OK" -ForegroundColor Green
 Write-Host "    -> PID: $pid_value" -ForegroundColor Green
 
+# pid.txt 주입 (Squirrel pack 전에 publish 폴더에 생성)
+$pid_value | Out-File -FilePath (Join-Path $publishDir "pid.txt") -Encoding UTF8 -NoNewline
+Write-Host "    -> pid.txt 생성됨" -ForegroundColor Green
+
 # 2) csproj 버전 업데이트
 Write-Host "[2/4] 버전 업데이트..." -ForegroundColor Yellow
 $csprojContent = Get-Content $appProj -Raw

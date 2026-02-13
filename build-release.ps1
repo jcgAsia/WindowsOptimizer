@@ -37,13 +37,12 @@ Set-Content $appProj $csprojContent
 
 # 2) dotnet publish
 Write-Host "[2/4] dotnet publish ($build_type)..." -ForegroundColor Yellow
-if ($Mockup) {
-    dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false /p:DefineConstants=DEBUG
-} else {
-    dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
-}
+dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
 if ($LASTEXITCODE -ne 0) { throw "빌드 실패" }
-Write-Host "    -> PID: $pid_value" -ForegroundColor Gray
+
+# pid.txt 주입 (빌드 후 publish 폴더에 생성)
+$pid_value | Out-File -FilePath (Join-Path $publishDir "pid.txt") -Encoding UTF8 -NoNewline
+Write-Host "    -> PID: $pid_value (pid.txt 생성됨)" -ForegroundColor Gray
 
 # 3) Squirrel pack
 Write-Host "[3/4] Squirrel pack..." -ForegroundColor Yellow
