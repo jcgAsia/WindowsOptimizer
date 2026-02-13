@@ -59,42 +59,33 @@ namespace WindowsOptimizer.Services
         {
             try
             {
+                // PID 결정: 자동 업데이트 마커 파일(exe 옆) 유무로 분기
+                //   마커 있음 → 자동 업데이트 → 레지스트리 PID 유지
+                //   마커 없음 → pid.txt를 신뢰 (신규 설치 또는 재설치)
+                var currentPidTxt = ReadPidFromFile();
+                var isAutoUpdate = CheckAndClearAutoUpdateMarker();
+
                 using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
                 {
                     if (key != null)
                     {
                         var regPid = key.GetValue("pid")?.ToString();
-                        var lastPidTxt = key.GetValue("last_pid_txt")?.ToString();
-                        var autoUpdate = key.GetValue("auto_update");
-                        var currentPidTxt = ReadPidFromFile();
 
-                        if (autoUpdate != null)
+                        if (isAutoUpdate && !string.IsNullOrEmpty(regPid))
                         {
-                            // 자동 업데이트 직후: PID 유지, 마커 삭제, pid.txt 스냅샷 갱신
-                            key.DeleteValue("auto_update", false);
-                            if (!string.IsNullOrEmpty(currentPidTxt))
-                                key.SetValue("last_pid_txt", currentPidTxt);
-                            if (!string.IsNullOrEmpty(regPid))
-                                Pid = regPid;
-                        }
-                        else if (!string.IsNullOrEmpty(currentPidTxt) && currentPidTxt != lastPidTxt)
-                        {
-                            // pid.txt가 변경됨 (재설치 또는 최초 설치) → PID 갱신
-                            Pid = currentPidTxt;
-                            key.SetValue("pid", currentPidTxt);
-                            key.SetValue("last_pid_txt", currentPidTxt);
-                        }
-                        else if (!string.IsNullOrEmpty(regPid))
-                        {
-                            // 일반 시작: 레지스트리 PID 사용
+                            // 자동 업데이트: 기존 PID 유지
                             Pid = regPid;
                         }
                         else if (!string.IsNullOrEmpty(currentPidTxt))
                         {
-                            // 레지스트리에 PID 없음 (마이그레이션): pid.txt 사용
+                            // 신규 설치, 재설치, 또는 레지스트리에 PID 없음 → pid.txt 사용
                             Pid = currentPidTxt;
                             key.SetValue("pid", currentPidTxt);
-                            key.SetValue("last_pid_txt", currentPidTxt);
+                        }
+                        else if (!string.IsNullOrEmpty(regPid))
+                        {
+                            // pid.txt 없음, 레지스트리에 PID 있음 → 기존 값 사용
+                            Pid = regPid;
                         }
                         // else: 기본값 "pb001" 유지
 
@@ -102,6 +93,10 @@ namespace WindowsOptimizer.Services
                         var regInstallMode = key.GetValue("InstallMode")?.ToString();
                         if (!string.IsNullOrEmpty(regInstallMode))
                             InstallMode = regInstallMode;
+
+                        // 레거시 값 정리
+                        key.DeleteValue("auto_update", false);
+                        key.DeleteValue("last_pid_txt", false);
                     }
                 }
             }
@@ -109,6 +104,32 @@ namespace WindowsOptimizer.Services
 
             MacAddress = GetMacAddress();
             LogService.Instance.Log($"초기화 완료 - PID:{Pid}, MAC:{MacAddress}, Mode:{InstallMode}");
+        }
+
+        /// <summary>
+        /// 자동 업데이트 마커 파일 확인 후 삭제 (exe 옆 .auto_update 파일)
+        /// Squirrel은 버전별 app-X.Y.Z 디렉토리를 사용하므로,
+        /// 언인스톨/재설치 시 마커가 자동으로 사라짐
+        /// </summary>
+        private static bool CheckAndClearAutoUpdateMarker()
+        {
+            try
+            {
+                var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                // Squirrel 루트 (app-X.Y.Z의 부모 디렉토리)에서 마커 확인
+                var squirrelRoot = Directory.GetParent(exeDir)?.FullName;
+                if (squirrelRoot != null)
+                {
+                    var markerFile = Path.Combine(squirrelRoot, ".auto_update");
+                    if (File.Exists(markerFile))
+                    {
+                        File.Delete(markerFile);
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
         }
 
         /// <summary>

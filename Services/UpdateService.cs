@@ -205,15 +205,22 @@ namespace WindowsOptimizer.Services
         }
 
         /// <summary>
-        /// 자동 업데이트 마커 저장 (Initialize에서 자동 업데이트와 Setup.exe 재설치 구분용)
+        /// 자동 업데이트 마커 파일 생성 (Initialize에서 자동 업데이트와 Setup.exe 재설치 구분용)
+        /// 새 버전의 app-X.Y.Z 디렉토리에 마커를 생성해야 하므로 Squirrel 앱 디렉토리에 저장
         /// </summary>
         private static void SetAutoUpdateMarker()
         {
             try
             {
-                using (var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(GlobalConfig.RegSubKey))
+                var appDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                // 현재 버전 디렉토리의 부모 (Squirrel 루트) 아래에서 새 버전 디렉토리를 찾아야 하지만,
+                // UpdateApp() 후 RestartApp()이 새 exe를 실행하므로,
+                // 새 exe의 디렉토리에 마커가 있어야 함.
+                // → Squirrel 루트에 마커 생성 (모든 버전에서 접근 가능)
+                var squirrelRoot = Directory.GetParent(appDir)?.FullName;
+                if (squirrelRoot != null)
                 {
-                    key?.SetValue("auto_update", "1");
+                    File.WriteAllText(Path.Combine(squirrelRoot, ".auto_update"), "1");
                 }
             }
             catch { }
