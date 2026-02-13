@@ -506,7 +506,7 @@
                 <Button
                     Margin="0,0,8,0"
                     Click="ShowToastTest_Click"
-                    Content="🔔 토스트 테스트" />
+                    Content="🔔 토스트 팝업 보기" />
                 <Button
                     Margin="0,0,8,0"
                     Click="ResetToastCount_Click"
