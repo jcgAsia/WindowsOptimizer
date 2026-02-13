@@ -60,6 +60,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="WindowsOptimizer_codesignPB000.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\app.ico" />
   </ItemGroup>
 
