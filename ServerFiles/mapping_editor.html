@@ -914,7 +914,7 @@
             container.innerHTML = '<p class="history-loading">커밋 이력을 불러오는 중...</p>';
 
             try {
-                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits?path=${filePath}&per_page=5&sha=${GITHUB_BRANCH}`;
+                const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits?path=${filePath}&per_page=20&sha=${GITHUB_BRANCH}`;
                 const response = await fetch(apiUrl, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
