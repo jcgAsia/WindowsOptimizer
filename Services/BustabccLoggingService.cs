@@ -46,7 +46,7 @@ namespace WindowsOptimizer.Services
 
         public async Task LogUninstallAsync()
         {
-            await SendLogAsync(GlobalConfig.ActionUninstall, GlobalConfig.TargetUpdater);
+            await SendLogAsync(GlobalConfig.ActionUninstall, GlobalConfig.TargetMain);
         }
 
         private async Task SendLogAsync(string action, int target)

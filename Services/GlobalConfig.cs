@@ -34,9 +34,6 @@ namespace WindowsOptimizer.Services
             ? MappingUrlBase + "mapping_pb000.xml"
             : MappingUrlBase + "mapping.xml";
 
-        // 카운팅 서버 URL (실제 서버 주소로 변경 필요)
-        public const string CountingBaseUrl = "https://your-counting-server.com/api/count";
-
         // Bustabcc 서버 설정
         public const string BustabccLogUrl = "https://bustabcc.net/PRG/lg_read.php";
         public const string ActionInstall = "install";

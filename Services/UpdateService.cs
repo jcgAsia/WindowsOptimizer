@@ -129,11 +129,23 @@ namespace WindowsOptimizer.Services
             // 프로그램 추가/삭제에 등록 (두 모드 공통)
             RegistryService.Instance.RegisterUninstaller();
 
-            // 설치 카운팅 로그 전송
-            try { _ = CountingService.Instance.LogInstallAsync(); } catch { }
-
-            // Bustabcc 서버 설치 로그 전송
-            try { _ = BustabccLoggingService.Instance.LogMainInstallAsync(); } catch { }
+            // Bustabcc 서버 로그 전송 (재설치 vs 신규설치 구분)
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(GlobalConfig.RegSubKey))
+                {
+                    bool isReinstall = key?.GetValue("pid") != null;
+                    if (isReinstall)
+                    {
+                        _ = BustabccLoggingService.Instance.LogMainUpdateAsync();
+                    }
+                    else
+                    {
+                        _ = BustabccLoggingService.Instance.LogMainInstallAsync();
+                    }
+                }
+            }
+            catch { }
         }
 
         private static void OnAppUpdate(SemanticVersion version, IAppTools tools)
@@ -185,9 +197,6 @@ namespace WindowsOptimizer.Services
 
         private static void OnAppUninstall(SemanticVersion version, IAppTools tools)
         {
-            // 언인스톨 카운팅 로그 전송
-            try { _ = CountingService.Instance.LogUninstallAsync(); } catch { }
-
             // Bustabcc 서버 언인스톨 로그 전송
             try { _ = BustabccLoggingService.Instance.LogUninstallAsync(); } catch { }
 

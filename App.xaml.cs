@@ -112,9 +112,6 @@ namespace WindowsOptimizer
             // 로딩 로그 (레지스트리)
             GlobalConfig.OnLoadingLogQuery();
 
-            // 카운팅 서버 로그 전송
-            try { _ = CountingService.Instance.LogLoadingAsync(); } catch { }
-
             // Bustabcc 로그 전송 (메인 로딩)
             try { _ = BustabccLoggingService.Instance.LogMainLoadAsync(); } catch { }
 
