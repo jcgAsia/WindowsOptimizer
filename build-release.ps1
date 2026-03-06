@@ -36,6 +36,7 @@ $csprojContent = $csprojContent -replace '<Version>.*?</Version>', "<Version>$Ve
 Set-Content $appProj $csprojContent
 
 # 2) dotnet publish
+# dotnet publish E:\dev\jcg\WindowsOptimizer\WindowsOptimizer.csproj -c Release -r win-x64 -o E:\dev\jcg\WindowsOptimizer\publish --self-contained false
 Write-Host "[2/4] dotnet publish ($build_type)..." -ForegroundColor Yellow
 dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
 if ($LASTEXITCODE -ne 0) { throw "빌드 실패" }
