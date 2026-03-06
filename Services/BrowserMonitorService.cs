@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -280,7 +281,8 @@ namespace WindowsOptimizer.Services
 
         /// <summary>
         /// 기존 브라우저에 새 탭으로 URL 열기 (AutoTab 전용)
-        /// 히든 처리/창 감지/자동 닫기 없이 일반 탭으로 열림
+        /// 브라우저 exe를 직접 지정하여 기본 프로필 쿠키 공유 보장
+        /// --new-window 없이 URL만 전달하여 기존 창에 새 탭으로 열림
         /// </summary>
         private void OpenTabInBackground(string targetUrl)
         {
@@ -293,19 +295,70 @@ namespace WindowsOptimizer.Services
                     url = "https://" + targetUrl;
                 }
 
-                // 기본 브라우저로 URL 열기 (이미 실행 중인 브라우저가 있으면 새 탭으로 열림)
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
+                // 현재 감지된 브라우저 경로 탐색
+                var browserPath = FindBrowserPath(_browserType);
 
-                LogService.Instance.Log($"[AutoTab] ✓ 새 탭 열기: {url}");
+                // 못 찾으면 다른 브라우저도 시도
+                if (browserPath == null)
+                {
+                    var altType = _browserType == 0 ? 1 : 0;
+                    browserPath = FindBrowserPath(altType);
+                    if (browserPath != null)
+                        LogService.Instance.Log($"[AutoTab] 대체 브라우저 사용: {browserPath}");
+                }
+
+                if (browserPath != null)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = browserPath,
+                        Arguments = $"\"{url}\"",  // --new-window 없이 → 기존 창에 새 탭 + 기본 프로필 쿠키 공유
+                        UseShellExecute = true
+                    });
+                    LogService.Instance.Log($"[AutoTab] ✓ 새 탭 열기: {url}");
+                }
+                else
+                {
+                    // 브라우저를 전혀 찾지 못한 경우 OS 기본 브라우저로 폴백
+                    Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
+                    LogService.Instance.Log($"[AutoTab] ⚠ 기본 브라우저로 폴백 (쿠키 공유 미보장): {url}");
+                }
             }
             catch (Exception ex)
             {
                 LogService.Instance.Log($"[AutoTab] ✗ 탭 열기 오류: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// 브라우저 실행 파일의 절대 경로를 반환. 찾지 못하면 null.
+        /// </summary>
+        private string FindBrowserPath(int browserType)
+        {
+            string[] paths;
+            if (browserType == 0) // Chrome
+            {
+                paths = new[]
+                {
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Google\Chrome\Application\chrome.exe"),
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Google\Chrome\Application\chrome.exe"),
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\Application\chrome.exe")
+                };
+            }
+            else // Edge
+            {
+                paths = new[]
+                {
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Microsoft\Edge\Application\msedge.exe"),
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Microsoft\Edge\Application\msedge.exe")
+                };
+            }
+
+            foreach (var p in paths)
+            {
+                if (File.Exists(p)) return p;
+            }
+            return null;
         }
 
         /// <summary>

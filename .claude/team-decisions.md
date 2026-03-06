@@ -156,5 +156,64 @@
 - SUGGESTION: 3건 (선택적)
 - **최종 판단: 다음 단계 진행 가능**
 
+## 쿠키 공유 영향도 분석 (배포 전 체크)
+
+### 분석 결과
+- **일반적인 상황**: 차이 없음 (두 방식 모두 기본 프로필 쿠키 공유)
+- **리스크 시나리오**:
+  1. 사용자가 시크릿 모드로 브라우징 중 → 제휴 링크도 시크릿 탭으로 열림 → 쿠키 격리 → 실적 미반영
+  2. 사용자가 별도 프로필 사용 중 → 해당 프로필로 열림 → 추적 ID 불일치 가능
+
+### 기존(--new-window) vs 수정(UseShellExecute=true)
+| 항목 | 기존 (--new-window) | 수정 (UseShellExecute) |
+|------|---------------------|------------------------|
+| 쿠키 공유 | 기본 프로필 강제 | 현재 실행 중인 프로필 |
+| 시크릿 모드 | 무관 (별도 프로세스) | 영향받음 (시크릿 탭) |
+| 다른 프로필 | 무관 (기본 프로필) | 영향받음 (해당 프로필) |
+
+### 수정 필요 여부: ⚠️ YES
+- 현재 UseShellExecute=true 방식은 시크릿/다른 프로필에서 쿠키 격리 위험
+- 수정안: 브라우저 exe 직접 지정 + --new-window 없이 URL만 전달
+  → `Process.Start(browserExe, $"\"{url}\"")`
+  → 기본 프로필 강제 + 기존 창에 탭으로 열림
+
+## 3차 수정: 쿠키 공유 보장 방식으로 OpenTabInBackground() 변경
+- _browserType으로 chrome/msedge 직접 지정 + --new-window 없이 URL만 전달
+- exe 실행 실패 시 UseShellExecute=true 폴백 추가
+
+## 3차 검토 결과
+### CRITICAL
+1. chrome/msedge를 FileName에 지정하지만 시스템 PATH에 없으면 실행 실패 → 폴백(UseShellExecute) → 쿠키 공유 불가
+   - 수정안: Chrome/Edge 절대 경로 탐색 로직 추가
+2. 폴백에서 targetUrl 재정규화 불필요 (이미 url 변수에 정규화됨)
+   - 수정안: url 변수 직접 사용
+
+### WARNING
+1. _browserType 타이밍 이슈 (이전 검토와 동일, 범위 밖)
+2. ConfigService 중복 Trigger GroupBy().First() (이전 검토와 동일, 경미)
+3. OpenHiddenWindow()도 같은 PATH 의존 문제 (기존 코드, 이번 범위 밖)
+
+## 4차 수정: CRITICAL 이슈 해결
+1. UseShellExecute = false → true (Chrome/Edge IPC 통신 보장)
+2. 대체 브라우저 시도 로직 추가 (Chrome 못 찾으면 Edge, Edge 못 찾으면 Chrome)
+3. 폴백 로그에 쿠키 미보장 경고 표시
+
+## 최종 OpenTabInBackground() 동작 흐름
+1. URL 정규화 (http/https 접두사)
+2. FindBrowserPath(_browserType)로 현재 브라우저 절대 경로 탐색
+3. 못 찾으면 대체 브라우저(Chrome↔Edge) 절대 경로 탐색
+4. 절대 경로 발견: UseShellExecute=true + 절대 경로 + URL만 전달 → 기본 프로필 쿠키 공유 + 새 탭
+5. 절대 경로 없음: OS 기본 브라우저 폴백 (쿠키 미보장 경고 로그)
+
+## 최종 변경 파일
+- `Services/BrowserMonitorService.cs`:
+  - using System.IO 추가
+  - OpenTabInBackground() 메서드 (신규) - 절대 경로 + 대체 브라우저 + 폴백
+  - FindBrowserPath() 메서드 (신규) - Chrome/Edge 경로 탐색
+  - ProcessAutoTab()에서 OpenHiddenWindow() → OpenTabInBackground() 호출 교체
+- `Services/ConfigService.cs`:
+  - using System.Linq 추가
+  - LoadMappingConfigAsync() 런타임 카운터 Dictionary 기반 복구
+
 ## 남은 작업
 - 없음 (완료)
