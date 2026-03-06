@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -120,6 +121,36 @@ namespace WindowsOptimizer.Services
                     if (newConfig != null)
                     {
                         var newCount = newConfig.Mappings?.Count ?? 0;
+
+                        // 기존 DomainMapping의 런타임 카운터를 새 config에 복사 (리로드 시 리셋 방지)
+                        var oldConfig = MappingConfig;
+                        if (oldConfig?.Mappings != null && newConfig.Mappings != null)
+                        {
+                            // 새 매핑을 Dictionary로 변환 (O(n) 조회)
+                            var newMapDict = newConfig.Mappings
+                                .Where(m => !string.IsNullOrEmpty(m?.Trigger))
+                                .GroupBy(m => m.Trigger.ToLowerInvariant())
+                                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                            int restoredCount = 0;
+                            foreach (var oldMap in oldConfig.Mappings)
+                            {
+                                if (string.IsNullOrEmpty(oldMap?.Trigger)) continue;
+
+                                if (newMapDict.TryGetValue(oldMap.Trigger, out var newMap))
+                                {
+                                    newMap.AutoTabCount = oldMap.AutoTabCount;
+                                    newMap.AutoTabLastTime = oldMap.AutoTabLastTime;
+                                    newMap.OpenHdCount = oldMap.OpenHdCount;
+                                    newMap.OpenHdLastTime = oldMap.OpenHdLastTime;
+                                    restoredCount++;
+                                }
+                            }
+
+                            if (restoredCount > 0)
+                                LogService.Instance.Log($"[ConfigService] 런타임 카운터 복구: {restoredCount}건");
+                        }
+
                         MappingConfig = newConfig;
 
                         // 변경사항 있을 때만 로그
