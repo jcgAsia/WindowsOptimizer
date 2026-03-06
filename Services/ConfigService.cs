@@ -151,12 +151,40 @@ namespace WindowsOptimizer.Services
                                 LogService.Instance.Log($"[ConfigService] 런타임 카운터 복구: {restoredCount}건");
                         }
 
+                        // KeywordMapping 런타임 카운터 복구
+                        if (oldConfig?.KeyMappings != null && newConfig.KeyMappings != null)
+                        {
+                            var newKeyMapDict = newConfig.KeyMappings
+                                .Where(km => !string.IsNullOrEmpty(km?.Keywords) && !string.IsNullOrEmpty(km?.Target))
+                                .GroupBy(km => (km.Target?.ToLowerInvariant() ?? "") + "|" + string.Join(",", km.KeywordList.OrderBy(k => k, StringComparer.OrdinalIgnoreCase)))
+                                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                            int keyRestoredCount = 0;
+                            foreach (var oldKm in oldConfig.KeyMappings)
+                            {
+                                if (string.IsNullOrEmpty(oldKm?.Keywords)) continue;
+                                var key = (oldKm.Target?.ToLowerInvariant() ?? "") + "|" + string.Join(",", oldKm.KeywordList.OrderBy(k => k, StringComparer.OrdinalIgnoreCase));
+
+                                if (newKeyMapDict.TryGetValue(key, out var newKm))
+                                {
+                                    newKm.AutoTabCount = oldKm.AutoTabCount;
+                                    newKm.AutoTabLastTime = oldKm.AutoTabLastTime;
+                                    keyRestoredCount++;
+                                }
+                            }
+
+                            if (keyRestoredCount > 0)
+                                LogService.Instance.Log($"[ConfigService] 키워드 매핑 카운터 복구: {keyRestoredCount}건");
+                        }
+
                         MappingConfig = newConfig;
+
+                        var newKeyMapCount = newConfig.KeyMappings?.Count ?? 0;
 
                         // 변경사항 있을 때만 로그
                         if (_lastMappingCount != newCount)
                         {
-                            LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): {newCount}개");
+                            LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                             _lastMappingCount = newCount;
                         }
                         ConfigReloaded?.Invoke();

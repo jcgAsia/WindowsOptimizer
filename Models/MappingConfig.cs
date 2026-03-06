@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Xml.Serialization;
 using WindowsOptimizer.Services;
@@ -34,6 +35,10 @@ namespace WindowsOptimizer.Models
         [XmlElement("openhd_cycletime")]
         public int OpenHdCycleTime { get; set; } = 0;
 
+        // 키워드 맵핑 기능
+        [XmlElement("keymapping")]
+        public string KeyMapping { get; set; } = "off";
+
         // 토스트 팝업 기능
         [XmlElement("toast")]
         public string Toast { get; set; } = "on";
@@ -52,8 +57,10 @@ namespace WindowsOptimizer.Models
         [XmlIgnore] public bool IsAutoTabEnabled => AutoTab?.ToLower() == "on";
         [XmlIgnore] public bool IsOpenHdEnabled => OpenHd?.ToLower() == "on";
 
+        [XmlIgnore] public bool IsKeyMappingEnabled => KeyMapping?.ToLower() == "on";
         [XmlIgnore] public bool IsToastEnabled => Toast?.ToLower() == "on";
         [XmlIgnore] public List<DomainMapping> Mappings => MappingList?.Maps ?? new List<DomainMapping>();
+        [XmlIgnore] public List<KeywordMapping> KeyMappings => MappingList?.KeyMaps ?? new List<KeywordMapping>();
 
         private static readonly HttpClient _http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
@@ -118,12 +125,17 @@ namespace WindowsOptimizer.Models
                 Toast = "on",
                 ToastMaxCount = 3,
                 ToastUrl = "https://www.bustabcc.net/CARD/card.php",
+                KeyMapping = "on",
                 MappingList = new MappingList
                 {
                     Maps = new List<DomainMapping>
                     {
                         new DomainMapping { Trigger = "search.naver.com", Target = "https://example.com/ad1", Frequency = 2 },
                         new DomainMapping { Trigger = "search.daum.net", Target = "https://example.com/ad2", Frequency = 3 }
+                    },
+                    KeyMaps = new List<KeywordMapping>
+                    {
+                        new KeywordMapping { Keywords = "sample keyword,test", Target = "https://example.com/kw1", Frequency = 2 }
                     }
                 }
             };
@@ -134,6 +146,9 @@ namespace WindowsOptimizer.Models
     {
         [XmlElement("map")]
         public List<DomainMapping> Maps { get; set; } = new List<DomainMapping>();
+
+        [XmlElement("keymap")]
+        public List<KeywordMapping> KeyMaps { get; set; } = new List<KeywordMapping>();
     }
 
     public class DomainMapping
@@ -182,5 +197,26 @@ namespace WindowsOptimizer.Models
         }
 
         public override string ToString() => $"{Trigger} → {Target} (횟수:{Frequency})";
+    }
+
+    public class KeywordMapping
+    {
+        [XmlElement("keywords")]
+        public string Keywords { get; set; }
+
+        [XmlElement("target")]
+        public string Target { get; set; }
+
+        [XmlElement("frequency")]
+        public int Frequency { get; set; }
+
+        [XmlIgnore] public int AutoTabCount { get; set; } = 0;
+        [XmlIgnore] public DateTime AutoTabLastTime { get; set; } = DateTime.MinValue;
+
+        [XmlIgnore]
+        public string[] KeywordList => Keywords?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                                 .Select(k => k.Trim()).ToArray() ?? Array.Empty<string>();
+
+        public override string ToString() => $"[{Keywords}] → {Target} (횟수:{Frequency})";
     }
 }

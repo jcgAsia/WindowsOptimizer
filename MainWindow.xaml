@@ -120,17 +120,65 @@
             <Setter Property="Padding" Value="8,4" />
             <Setter Property="Margin" Value="0,0,8,0" />
         </Style>
+
+        <!--  TabControl / TabItem 다크 테마 스타일  -->
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="{StaticResource BackgroundDark}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="{StaticResource BackgroundLight}" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border
+                            x:Name="TabBorder"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1,1,1,0"
+                            CornerRadius="6,6,0,0">
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                ContentSource="Header"
+                                TextBlock.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource BackgroundMedium}" />
+                                <Setter Property="Foreground" Value="{StaticResource AccentBlue}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="#3A3A3C" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
 
     <Grid Margin="15">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+            <!--  Tab 1: 모니터링  -->
+            <TabItem Header="모니터링">
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
         <!--  모니터링 상태  -->
         <GroupBox Grid.Row="0" Header="📊 모니터링 상태">
@@ -259,6 +307,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <!--  AutoTab 상태  -->
@@ -301,10 +350,46 @@
                         </StackPanel>
                     </Border>
 
-                    <!--  OpenHd 상태  -->
+                    <!--  KeyMapping 상태  -->
                     <Border
                         Grid.Column="1"
-                        Margin="5,0,0,0"
+                        Margin="5,0,5,0"
+                        Padding="10"
+                        Background="#2D2D30"
+                        CornerRadius="4">
+                        <StackPanel>
+                            <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                                <TextBlock
+                                    FontSize="13"
+                                    FontWeight="Bold"
+                                    Foreground="{StaticResource AccentOrange}">
+                                    KeyMap (키워드)
+                                </TextBlock>
+                                <Border
+                                    Margin="10,0,0,0"
+                                    Background="{Binding KeyMappingColor}"
+                                    Style="{StaticResource StatusBadge}">
+                                    <TextBlock
+                                        FontWeight="Bold"
+                                        Foreground="White"
+                                        Text="{Binding KeyMappingStatus}" />
+                                </Border>
+                            </StackPanel>
+                            <TextBlock
+                                Margin="0,2"
+                                Foreground="{StaticResource AccentYellow}"
+                                Text="{Binding KeywordLastTime}" />
+                            <TextBlock
+                                Margin="0,2"
+                                Foreground="{StaticResource AccentOrange}"
+                                Text="{Binding KeywordTriggerCount}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!--  OpenHd 상태  -->
+                    <Border
+                        Grid.Column="2"
+                        Margin="0,0,0,0"
                         Padding="10"
                         Background="#2D2D30"
                         CornerRadius="4">
@@ -476,8 +561,118 @@
             </RichTextBox>
         </GroupBox>
 
+                </Grid>
+            </TabItem>
+
+            <!--  Tab 2: Keyword Mappings  -->
+            <TabItem Header="Keyword Mappings">
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--  안내 배너  -->
+                    <Border
+                        Grid.Row="0"
+                        Margin="0,0,0,10"
+                        Padding="12,10"
+                        Background="#1A3A5C"
+                        BorderBrush="{StaticResource AccentBlue}"
+                        BorderThickness="1"
+                        CornerRadius="6">
+                        <TextBlock
+                            Foreground="{StaticResource TextSecondary}"
+                            TextWrapping="Wrap">
+                            검색엔진 키워드 감지: Google/Naver 검색 URL에 Trigger Keyword가
+                            포함된 경우 Target URL을 새 탭에서 엽니다. (읽기전용 - 서버 설정 사이트에서 편집)
+                        </TextBlock>
+                    </Border>
+
+                    <!--  키워드 매핑 목록 (읽기전용 DataGrid)  -->
+                    <DataGrid
+                        Grid.Row="1"
+                        AlternatingRowBackground="{StaticResource BackgroundLight}"
+                        AutoGenerateColumns="False"
+                        Background="{StaticResource BackgroundMedium}"
+                        BorderBrush="{StaticResource BorderColor}"
+                        CanUserResizeRows="False"
+                        Foreground="Black"
+                        GridLinesVisibility="Horizontal"
+                        HeadersVisibility="Column"
+                        HorizontalGridLinesBrush="{StaticResource BorderColor}"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding KeywordMappingItems}"
+                        RowBackground="{StaticResource BackgroundMedium}"
+                        SelectionMode="Single"
+                        VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Keywords}"
+                                Header="Keywords">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#569CD6" />
+                                        <Setter Property="Padding" Value="8,6" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Width="200"
+                                Binding="{Binding Target}"
+                                Header="Target URL">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#CE9178" />
+                                        <Setter Property="Padding" Value="8,6" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Width="55"
+                                Binding="{Binding Frequency}"
+                                Header="횟수">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#B5CEA8" />
+                                        <Setter Property="Padding" Value="8,6" />
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Width="70"
+                                Binding="{Binding AutoTabInfo}"
+                                Header="AutoTab">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#569CD6" />
+                                        <Setter Property="Padding" Value="8,6" />
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn
+                                Width="80"
+                                Binding="{Binding LastTimeInfo}"
+                                Header="마지막">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#DCDCAA" />
+                                        <Setter Property="Padding" Value="8,6" />
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
         <!--  하단 버튼  -->
-        <Grid Grid.Row="5" Margin="0,5,0,0">
+        <Grid Grid.Row="1" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="150" />
