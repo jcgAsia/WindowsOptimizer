@@ -106,19 +106,6 @@
         .version-xml-pre { background: #0f3460; padding: 10px; border-radius: 4px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 12px; color: #4ade80; max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; margin-top: 10px; }
         .history-loading { text-align: center; padding: 20px; color: #888; }
         .commit-sha { color: #1f6feb; font-family: monospace; font-size: 0.85em; }
-
-        /* Keyword Mapping Tags */
-        .keyword-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-        .keyword-tag { display: inline-flex; align-items: center; background: #1a3a5c; border: 1px solid #2a5a8c; color: #69b3f7; padding: 4px 8px; border-radius: 4px; font-size: 13px; }
-        .keyword-tag .tag-remove { background: none; border: none; color: #e94560; cursor: pointer; margin-left: 6px; font-size: 14px; padding: 0 2px; }
-        .keyword-tag .tag-remove:hover { color: #ff6b6b; }
-        .keyword-input { width: 100%; background: #0f3460; border: 1px solid #444; color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 13px; }
-        .keyword-input::placeholder { color: #666; }
-        .search-engines { margin-top: 6px; display: flex; gap: 12px; }
-        .search-engines span { font-size: 12px; color: #4ade80; }
-        .search-engines span::before { content: '●'; margin-right: 4px; }
-        .keyword-info-banner { background: #16213e; border: 1px solid #4ade80; border-radius: 6px; padding: 12px 16px; margin-bottom: 15px; color: #aaa; font-size: 0.9em; line-height: 1.5; }
-        .keyword-info-banner strong { color: #00d4ff; }
     </style>
 </head>
 <body>
@@ -181,14 +168,6 @@
                 <span class="hint">자동 탭 주기 (초)</span>
             </div>
             <div class="setting-row">
-                <label>Keyword Mapping (keymapping)</label>
-                <select id="keymapping">
-                    <option value="on">on</option>
-                    <option value="off">off</option>
-                </select>
-                <span class="hint">검색 키워드 매핑 기능</span>
-            </div>
-            <div class="setting-row">
                 <label>Open HD (openhd)</label>
                 <select id="openhd">
                     <option value="on">on</option>
@@ -248,30 +227,6 @@
             </div>
             <div style="margin-top: 15px;">
                 <button class="btn btn-add" onclick="addMapping()">+ Add Mapping</button>
-            </div>
-        </div>
-
-        <div class="mappings-section">
-            <h2>Keyword Mappings</h2>
-            <div class="keyword-info-banner">
-                검색엔진 키워드 감지: 구글 · 네이버 검색 URL에 <strong>Trigger Keyword</strong>가 포함된 경우 Target URL을 새 탭에서 엽니다. 키워드는 쉼표(,) 또는 Enter로 여러 개 입력할 수 있습니다 (<strong>n:1 매핑</strong>).
-            </div>
-            <div class="mapping-table-wrapper">
-                <table class="mapping-table">
-                    <thead>
-                        <tr>
-                            <th style="width:35%">Trigger Keywords</th>
-                            <th style="width:35%">Target URL</th>
-                            <th style="width:10%">Frequency</th>
-                            <th style="width:10%">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="keyMappingsBody">
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top: 15px;">
-                <button class="btn btn-add" onclick="addKeyMapping()">+ Add Mapping</button>
             </div>
         </div>
 
@@ -530,84 +485,6 @@
         }
 
         let mappings = [];
-        let keyMappings = [];
-
-        function addKeyMapping(keywords = [], target = '', frequency = 1) {
-            const id = Date.now() + Math.random();
-            keyMappings.push({ id, keywords: [...keywords], target, frequency });
-            renderKeyMappings();
-        }
-
-        function deleteKeyMapping(id) {
-            keyMappings = keyMappings.filter(m => m.id !== id);
-            renderKeyMappings();
-        }
-
-        function addKeywordTag(id, inputEl) {
-            const value = inputEl.value.trim();
-            if (!value) return;
-
-            const mapping = keyMappings.find(m => m.id === id);
-            if (!mapping) return;
-
-            // 쉼표로 분리하여 여러 키워드 한번에 추가
-            const parts = value.split(',').map(s => s.trim()).filter(s => s);
-            parts.forEach(kw => {
-                if (!mapping.keywords.includes(kw)) {
-                    mapping.keywords.push(kw);
-                }
-            });
-
-            inputEl.value = '';
-            renderKeyMappings();
-        }
-
-        function removeKeywordTag(mappingId, keyword) {
-            const mapping = keyMappings.find(m => m.id === mappingId);
-            if (mapping) {
-                mapping.keywords = mapping.keywords.filter(k => k !== keyword);
-                renderKeyMappings();
-            }
-        }
-
-        function renderKeyMappings() {
-            const tbody = document.getElementById('keyMappingsBody');
-            tbody.innerHTML = keyMappings.map(m => {
-                const tags = m.keywords.map(kw =>
-                    `<span class="keyword-tag">${escapeHtml(kw)}<button class="tag-remove" data-mapping-id="${m.id}" data-keyword="${escapeHtml(kw)}">&times;</button></span>`
-                ).join('');
-
-                return `<tr>
-                    <td>
-                        <div class="keyword-tags">${tags}</div>
-                        <input class="keyword-input" type="text" placeholder="키워드 입력..."
-                            onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addKeywordTag(${m.id}, this)}"
-                            onblur="addKeywordTag(${m.id}, this)">
-                        <div class="search-engines"><span>Google</span><span>Naver</span></div>
-                    </td>
-                    <td><input type="text" value="${escapeHtml(m.target)}" onchange="updateKeyMapping(${m.id}, 'target', this.value)" placeholder="예: toastpop.net/adurl.php"></td>
-                    <td><input type="number" value="${m.frequency}" min="1" onchange="updateKeyMapping(${m.id}, 'frequency', parseInt(this.value))"></td>
-                    <td><button class="btn btn-delete" onclick="deleteKeyMapping(${m.id})">Delete</button></td>
-                </tr>`;
-            }).join('');
-
-            if (!tbody._keyEventsBound) {
-                tbody.addEventListener('click', (e) => {
-                    const btn = e.target.closest('.tag-remove');
-                    if (btn) {
-                        const id = parseFloat(btn.dataset.mappingId);
-                        const kw = btn.dataset.keyword;
-                        removeKeywordTag(id, kw);
-                    }
-                });
-                tbody._keyEventsBound = true;
-            }
-        }
-
-        function updateKeyMapping(id, field, value) {
-            const mapping = keyMappings.find(m => m.id === id);
-            if (mapping) mapping[field] = value;
-        }
 
         // Initialize with sample data
         function init() {
@@ -661,7 +538,6 @@
             const openhd = document.getElementById('openhd').value;
             const openhd_closetime = document.getElementById('openhd_closetime').value;
             const openhd_cycletime = document.getElementById('openhd_cycletime').value;
-            const keymapping = document.getElementById('keymapping').value;
             const toast = document.getElementById('toast_enabled').value;
             const toast_maxcount = document.getElementById('toast_maxcount').value;
             const toast_url = document.getElementById('toast_url').value;
@@ -670,7 +546,6 @@
             xml += `\t<forcedown>${forcedown}</forcedown>\n`;
             xml += `\t<autotab>${autotab}</autotab>\n`;
             xml += `\t<autotab_cycletime>${autotab_cycletime}</autotab_cycletime>\n`;
-            xml += `\t<keymapping>${keymapping}</keymapping>\n`;
             xml += `\t<openhd>${openhd}</openhd>\n`;
             xml += `\t<openhd_closetime>${openhd_closetime}</openhd_closetime>\n`;
             xml += `\t<openhd_cycletime>${openhd_cycletime}</openhd_cycletime>\n`;
@@ -686,16 +561,6 @@
                     xml += `\t\t\t<target>${escapeXml(m.target)}</target>\n`;
                     xml += `\t\t\t<frequency>${m.frequency || 1}</frequency>\n`;
                     xml += `\t\t</map>\n`;
-                }
-            });
-
-            keyMappings.forEach(m => {
-                if (m.keywords.length > 0 && m.target) {
-                    xml += `\t\t<keymap>\n`;
-                    xml += `\t\t\t<keywords>${escapeXml(m.keywords.join(','))}</keywords>\n`;
-                    xml += `\t\t\t<target>${escapeXml(m.target)}</target>\n`;
-                    xml += `\t\t\t<frequency>${m.frequency || 1}</frequency>\n`;
-                    xml += `\t\t</keymap>\n`;
                 }
             });
 
@@ -780,7 +645,6 @@
                 document.getElementById('toast_enabled').value = (toastVal && toastVal.trim()) ? toastVal : 'on';
                 if (getValue('toast_maxcount')) document.getElementById('toast_maxcount').value = getValue('toast_maxcount');
                 if (getValue('toast_url')) document.getElementById('toast_url').value = getValue('toast_url');
-                if (getValue('keymapping')) document.getElementById('keymapping').value = getValue('keymapping');
 
                 // Load mappings
                 mappings = [];
@@ -795,17 +659,6 @@
                 if (maps.length === 0) {
                     addMapping();
                 }
-
-                // Load keyword mappings
-                keyMappings = [];
-                const keymaps = doc.querySelectorAll('keymap');
-                keymaps.forEach(km => {
-                    const keywordsStr = km.querySelector('keywords')?.textContent || '';
-                    const target = km.querySelector('target')?.textContent || '';
-                    const frequency = parseInt(km.querySelector('frequency')?.textContent) || 1;
-                    const keywords = keywordsStr.split(',').map(k => k.trim()).filter(k => k);
-                    addKeyMapping(keywords, target, frequency);
-                });
 
                 showToast('XML loaded successfully!');
                 generateXML();
@@ -846,12 +699,10 @@
             } else {
                 // 토큰이 없으면 초기 데이터로 리셋
                 mappings = [];
-                keyMappings = [];
                 addMapping();
                 document.getElementById('forcedown').value = 'off';
                 document.getElementById('autotab').value = 'on';
                 document.getElementById('autotab_cycletime').value = '1800';
-                document.getElementById('keymapping').value = 'on';
                 document.getElementById('openhd').value = 'on';
                 document.getElementById('openhd_closetime').value = '10';
                 document.getElementById('openhd_cycletime').value = '1800';
@@ -922,7 +773,6 @@
                     if (response.status === 404) {
                         // 파일이 없는 경우 - 새 파일로 시작
                         mappings = [];
-                        keyMappings = [];
                         addMapping();
                         showToast(`${pid} 파일이 없습니다. 새로 생성됩니다.`, 'info');
                         return;
@@ -1190,7 +1040,7 @@
             const doc = parser.parseFromString(xmlString, 'text/xml');
             const obj = { settings: {}, mappings: [] };
 
-            const settingTags = ['forcedown', 'autotab', 'autotab_cycletime', 'keymapping', 'openhd', 'openhd_closetime', 'openhd_cycletime', 'toast', 'toast_maxcount', 'toast_url'];
+            const settingTags = ['forcedown', 'autotab', 'autotab_cycletime', 'openhd', 'openhd_closetime', 'openhd_cycletime', 'toast', 'toast_maxcount', 'toast_url'];
             settingTags.forEach(tag => {
                 const el = doc.querySelector(tag);
                 obj.settings[tag] = el ? el.textContent : '';
@@ -1201,15 +1051,6 @@
                     trigger: map.querySelector('trigger')?.textContent || '',
                     target: map.querySelector('target')?.textContent || '',
                     frequency: map.querySelector('frequency')?.textContent || '1'
-                });
-            });
-
-            obj.keyMappings = [];
-            doc.querySelectorAll('keymap').forEach(km => {
-                obj.keyMappings.push({
-                    keywords: km.querySelector('keywords')?.textContent || '',
-                    target: km.querySelector('target')?.textContent || '',
-                    frequency: km.querySelector('frequency')?.textContent || '1'
                 });
             });
 
@@ -1252,7 +1093,6 @@
             // 설정값 비교
             const settingLabels = {
                 forcedown: 'Force Download', autotab: 'Auto Tab', autotab_cycletime: 'Auto Tab Cycle Time',
-                keymapping: 'Keyword Mapping',
                 openhd: 'Open HD', openhd_closetime: 'Open HD Close Time', openhd_cycletime: 'Open HD Cycle Time',
                 toast: 'Toast', toast_maxcount: 'Toast Max Count', toast_url: 'Toast URL'
             };
@@ -1291,30 +1131,6 @@
                     hasChanges = true;
                     html += `<tr class="diff-removed"><td>매핑 삭제</td><td>
                         <span class="diff-value-old">${escapeHtml(m.trigger)} → ${escapeHtml(m.target)} (freq: ${m.frequency})</span>
-                    </td></tr>`;
-                }
-            });
-
-            // 키워드 매핑 비교
-            const prevKeyMap = (prev.keyMappings || []).map(m => `${m.keywords}|${m.target}|${m.frequency}`);
-            const currKeyMap = (current.keyMappings || []).map(m => `${m.keywords}|${m.target}|${m.frequency}`);
-
-            current.keyMappings?.forEach((m, i) => {
-                const key = currKeyMap[i];
-                if (!prevKeyMap.includes(key)) {
-                    hasChanges = true;
-                    html += `<tr class="diff-added"><td>키워드 매핑 추가</td><td>
-                        <span class="diff-value-new">[${escapeHtml(m.keywords)}] → ${escapeHtml(m.target)} (freq: ${m.frequency})</span>
-                    </td></tr>`;
-                }
-            });
-
-            prev.keyMappings?.forEach((m, i) => {
-                const key = prevKeyMap[i];
-                if (!currKeyMap.includes(key)) {
-                    hasChanges = true;
-                    html += `<tr class="diff-removed"><td>키워드 매핑 삭제</td><td>
-                        <span class="diff-value-old">[${escapeHtml(m.keywords)}] → ${escapeHtml(m.target)} (freq: ${m.frequency})</span>
                     </td></tr>`;
                 }
             });

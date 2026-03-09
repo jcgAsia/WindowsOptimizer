@@ -70,8 +70,7 @@
       "Bash(git reset:*)",
       "Bash(git log:*)",
       "Bash(git rm:*)",
-      "Bash(test:*)",
-      "Bash(dotnet restore:*)"
+      "Bash(test:*)"
     ]
   }
 }

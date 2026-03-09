@@ -6,214 +6,77 @@
 ---
 
 ## 프로젝트
-- 경로: E:\dev\jcg\WindowsOptimizer
+- 경로: D:\dev\WindowsOptimizer
 - 유형: C# WPF .NET (MVVM, Squirrel 배포)
 - 규칙: CLAUDE.md 참조, 불변성/TDD/작은함수 원칙
 
 ## 미션
-- 원본 요청: 탭브라우저(AutoTab) 기능 점검 및 보완 - 2가지 버그
-  1. URL 맵핑 후 탭브라우저 작동 시 Target URL이 새창으로 열리는 문제 (탭으로 열려야 함)
-  2. AutoTab cycle 시간 설정(10800초/180분)에 관계없이 반복적으로 뜨는 문제
-- 환경: pb000 아이디, AutoTab ON, HiddenWindow OFF, CycleTime 10800초(180분)
-- 로그 힌트: [09:52:22] → 스킵 (최대 횟수 도달), [OpenHd] 기능: OFF ✗ → 스킵 (기능 비활성화)
-- 참고 문서: E:\dev\jcg\WindowsOptimizer\Document\PlanB_기능명세서_V2.1(키워드 맵핑 제외).docx.md
-- 시작 시각: 2026-03-06
+- 원본 요청: 재설치 시 install 카운팅 중복 방지. pid.txt 체크 방식처럼 이미 설치된 상태에서 재설치하면 LogMainUpdateAsync로 전송하도록 수정. CountingBaseUrl과 BustabccLogUrl 중 안 쓰는 것 정리.
+- 작업 2개:
+  1. OnAppInstall에서 재설치 감지 → install 대신 update 로그 전송
+  2. 사용하지 않는 URL 상수 정리
 
 ## 작업 분석
-- 작업 유형: 버그 수정
-- 복잡도: 보통~복잡
-- 버그 2건:
-  1. AutoTab에서 Target URL이 탭이 아닌 새창으로 열리는 문제
-  2. CycleTime 설정(180분)에 관계없이 반복적으로 창이 뜨는 문제
-- 구성 팀원: 탐색가 3명 → 설계자 1명 → 개발자 1~2명 → 검토자 1명
+- 작업 유형: 버그 수정 + 리팩토링
+- 복잡도: 보통
+- 구성 팀원: 탐색가(explorer) → 개발자(general-purpose) → 검토자(critic)
+- 핵심 파일: Services/UpdateService.cs, Services/CountingService.cs, Services/BustabccLoggingService.cs, GlobalConfig 관련 파일
 
-## 탐색 결과
-
-### 버그 1: Target URL이 새창으로 열리는 문제
-- **근본 원인**: BrowserMonitorService.cs:328에서 `--new-window` 플래그 하드코딩
-- ProcessAutoTab() (라인 181-228)이 OpenHiddenWindow()를 호출
-- OpenHiddenWindow() (라인 284-355)에서 `Arguments = $"--new-window \"{targetUrl}\""` 사용
-- AutoTab은 "탭으로 열기"가 의도인데, 실제 구현은 히든 윈도우와 동일하게 새 창으로 열고 있음
-- **명세서 기준**: autotab = on → 새 탭에서 Target URL을 백그라운드 탭으로 열기 (포커스 유지)
-
-### 버그 2: CycleTime 무시하고 반복 실행되는 문제
-- **근본 원인**: ConfigService가 mapping.xml을 1분 주기로 reload할 때 새 MappingConfig 인스턴스 생성
-- DomainMapping.AutoTabLastTime은 `[XmlIgnore]`로 메모리에만 존재 (MappingConfig.cs:152)
-- reload될 때마다 AutoTabLastTime = DateTime.MinValue, AutoTabCount = 0으로 리셋
-- → CycleTime 체크가 항상 통과되어 반복 실행됨
-
-### 핵심 파일 목록
-1. **BrowserMonitorService.cs** - 핵심 로직
-   - MonitoringLoop() (102-130): URL 모니터링 메인 루프
-   - ProcessAutoTab() (181-228): AutoTab 실행 로직 ★
-   - ProcessOpenHd() (230-279): OpenHd 실행 로직
-   - OpenHiddenWindow() (284-355): 새 창 열기 (`--new-window` 사용) ★
-   - HideNewWindowAsync() (379-413): 새 창 감지 및 숨김
-2. **MappingConfig.cs** - 설정 모델
-   - DomainMapping (139-185): 실행 추적 (XmlIgnore, 메모리 전용) ★
-   - CanTriggerAutoTab / CanTriggerOpenHd: 실행 가능 여부
-   - MarkAutoTabTriggered / MarkOpenHdTriggered: 실행 기록
-3. **ConfigService.cs** - 설정 로딩 (1분 주기 reload) ★
-4. **MainViewModel.cs** - UI 바인딩
-5. **MainWindow.xaml** - UI 정의
-
-### AutoTab vs OpenHd 차이
-- AutoTab: DelayTime 없음, CloseTime만 사용 → 탭으로 열어야 함
-- OpenHd: DelayTime + CycleTime + CloseTime → 히든 새 창으로 열어야 함
-- 현재 둘 다 동일한 OpenHiddenWindow() 호출 → AutoTab이 새 창으로 열리는 원인
-
-### 추가 발견
-- 중복 실행 방지 로직이 주석 처리됨 (BrowserMonitorService.cs:288-296)
-- 히든 창 감지 500ms 제한 → 실패 시 사용자에게 창 노출 가능
+## 탐색 결과 핵심
+- **OnAppInstall()**: 신규설치 + 재설치 모두 호출됨. 현재 재설치 판단 로직 없음.
+- **재설치 판단법**: 레지스트리 `HKCU\SOFTWARE\WindowsOptimizer\pid` 존재 여부로 판단 (방법 A 채택)
+  - PID 있음 → 재설치 → LogMainUpdateAsync
+  - PID 없음 → 신규설치 → LogMainInstallAsync
+- **CountingBaseUrl**: 값이 `"https://your-counting-server.com/api/count"` (플레이스홀더). 실제 동작 안 함. **데드 코드**.
+- **BustabccLogUrl**: 값이 `"https://bustabcc.net/PRG/lg_read.php"` (실제 운영 서버). 모든 이벤트 커버.
+- **CountingService**: LogUpdateAsync도 없고, URL도 플레이스홀더. **제거 대상**.
+- **BustabccLoggingService**: LogMainUpdateAsync() 이미 존재. 바로 사용 가능.
 
 ## 설계 결정
 
-### 버그 1 수정: Target URL이 새창으로 열리는 문제
-- **방법**: OpenTabInBackground(string url) 신규 메서드 생성
-- **파일**: BrowserMonitorService.cs
-  - 신규 메서드 OpenTabInBackground() 추가 (라인 280 근처)
-    - `--new-window` 플래그 제거, URL만 전달 → 기존 창에 탭으로 열림
-    - 히든 처리/창 감지/추적 로직 불필요 (일반 탭이므로)
-    - 간단한 Process.Start()만 사용
-  - ProcessAutoTab() (라인 227) 수정: OpenHiddenWindow() → OpenTabInBackground() 호출로 교체
-- **영향**: OpenHd는 기존 OpenHiddenWindow() 유지, 영향 없음
+### 작업 1: 재설치 시 update 로그 전송
+- `OnAppInstall()` 내부에서 레지스트리 PID 존재 여부 확인
+- PID 있으면(재설치): `BustabccLoggingService.LogMainUpdateAsync()` 호출
+- PID 없으면(신규): `BustabccLoggingService.LogMainInstallAsync()` 호출
 
-### 버그 2 수정: CycleTime 무시하고 반복 실행
-- **방법**: ConfigService에 RuntimeState Dictionary 추가 (옵션 B 채택)
-- **파일 3개 변경**:
-  1. ConfigService.cs:
-     - RuntimeState 클래스 추가 (AutoTabCount/LastTime, OpenHdCount/LastTime)
-     - Dictionary<string, RuntimeState> _runtimeStates 추가
-     - GetOrCreateRuntimeState(trigger), UpdateRuntimeState() 메서드 추가
-  2. BrowserMonitorService.cs:
-     - ProcessAutoTab/ProcessOpenHd에서 mapping 직접 접근 → ConfigService.RuntimeState 사용으로 변경
-  3. MappingConfig.cs:
-     - DomainMapping에서 XmlIgnore 속성 4개 및 Mark* 메서드 제거 (RuntimeState로 이전)
-- **키**: trigger 도메인을 소문자 정규화하여 Dictionary 키로 사용
-- **앱 재시작 시**: RuntimeState 초기화됨 (의도된 동작, 세션 단위)
-
-### 수정 순서
-1. 버그 1: BrowserMonitorService.cs (OpenTabInBackground 추가 + ProcessAutoTab 수정)
-2. 버그 2: ConfigService.cs (RuntimeState 인프라) → BrowserMonitorService.cs (RuntimeState 사용) → MappingConfig.cs (정리)
+### 작업 2: CountingService + CountingBaseUrl 제거
+- `GlobalConfig.cs`에서 `CountingBaseUrl` 상수 제거
+- `Services/CountingService.cs` 파일 전체 삭제
+- 호출 제거: `UpdateService.cs:133` (install), `UpdateService.cs:189` (uninstall), `App.xaml.cs:116` (loading)
 
 ## 완료된 작업
-1. 버그 1 수정 완료: BrowserMonitorService.cs
-   - OpenTabInBackground(string targetUrl) 신규 메서드 추가 (라인 281-314)
-   - ProcessAutoTab()에서 OpenHiddenWindow() → OpenTabInBackground() 호출로 교체
-   - `--new-window` 플래그 없이 URL만 전달 → 기존 창에 새 탭으로 열림
-2. 버그 2 수정 완료: ConfigService.cs
-   - LoadMappingConfigAsync()에서 reload 시 기존 DomainMapping의 런타임 카운터를 새 인스턴스로 복사
-   - Trigger 기준 매칭 (대소문자 무시)
-   - 복사 대상: AutoTabCount, AutoTabLastTime, OpenHdCount, OpenHdLastTime
-   - using System.Linq 추가
-   - null 체크 및 로그 출력 포함
+1. OnAppInstall()에서 레지스트리 pid 존재 여부로 재설치 판단 로직 추가
+   - pid 있음 → LogMainUpdateAsync() (재설치)
+   - pid 없음 → LogMainInstallAsync() (신규설치)
+2. CountingService.cs 파일 전체 삭제
+3. GlobalConfig.cs에서 CountingBaseUrl 상수 제거
+4. UpdateService.cs에서 CountingService 호출 2건 제거 (install, uninstall)
+5. App.xaml.cs에서 CountingService 호출 1건 제거 (loading)
+6. 전체 코드베이스에서 CountingService/CountingBaseUrl 참조 0건 확인
 
 ## 변경된 파일
-- `Services/BrowserMonitorService.cs`: OpenTabInBackground() 신규 메서드 추가 + ProcessAutoTab() 호출 변경
-- `Services/ConfigService.cs`: LoadMappingConfigAsync()에 런타임 카운터 복구 로직 추가 + using System.Linq 추가
+- `Services/UpdateService.cs`: OnAppInstall() 재설치 감지 로직 추가, CountingService 호출 제거
+- `Services/GlobalConfig.cs`: CountingBaseUrl 상수 제거
+- `Services/CountingService.cs`: 파일 삭제
+- `App.xaml.cs`: CountingService.LogLoadingAsync() 호출 제거
 
-## 발견된 이슈 (1차 검토)
+## 발견된 이슈
+### CRITICAL (수정 대상)
+1. LogUninstallAsync()가 TargetUpdater(0)로 전송 → TargetMain(1)이어야 함 (이번 작업 범위, 수정)
+2. OnAppUninstall() fire-and-forget → 프로세스 종료 전에 HTTP 완료 안 될 수 있음 (기존 이슈, 범위 밖)
 
-### CRITICAL
-1. **[BrowserMonitorService] _browserType 감지 실패 시 잘못된 브라우저 실행**
-   - URL 감지 실패 시 _browserType이 기본값 0(Chrome)으로 유지되어 Edge 사용자에게 Chrome이 열릴 수 있음
-   - 수정안: OpenTabInBackground에서 포그라운드 브라우저 직접 감지 또는 기본 브라우저로 열기
-2. **[BrowserMonitorService] Process.Start(browserExe, url)로는 새 탭 보장 불가**
-   - Chrome/Edge는 --new-window 없이 URL 전달해도 설정에 따라 새 창으로 열릴 수 있음
-   - 실제로는 기존 브라우저 프로세스가 실행 중이면 대부분 새 탭으로 열림 (Chrome/Edge 기본 동작)
-   - 하지만 100% 보장은 안 됨
-   - 수정안: 기본 브라우저로 URL을 여는 방식 (FileName=url, UseShellExecute=true)
-3. **[ConfigService] 런타임 카운터 복사 시 null 안전성 부족**
-   - newMap.Trigger가 null일 때 대비 추가 필요
+### WARNING (참고)
+1. 언인스톨 후 재설치 = pid 없으므로 신규설치로 감지 → 의도된 동작 (덮어쓰기 재설치만 감지 대상)
+2. _isChecking 경쟁 조건 - 기존 이슈, 이번 범위 밖
+3. OnFirstRun() 데드 코드 - 기존 이슈, 이번 범위 밖
+4. OnAppInstall 시점에 GlobalConfig.Pid 기본값 - 기존 이슈, 이번 범위 밖
 
-### WARNING
-1. _browserType 타이밍 이슈 (Chrome→Edge 전환 미감지)
-2. 런타임 카운터 복구 로그 정보 부족 (복구 건수 미표시)
-3. 스레드 안전성 미보장 (MappingConfig 교체 시 경쟁 조건)
-4. OpenHiddenWindow도 _browserType 의존
+### 수정 결정
+- CRITICAL 1만 수정 (LogUninstallAsync TargetUpdater → TargetMain)
+- 나머지는 기존 이슈로 별도 작업 필요
 
-### SUGGESTION
-1. OpenTabInBackground에 async/await 패턴
-2. Timer 콜백 예외 처리
-3. LINQ FirstOrDefault O(n²) → Dictionary O(n) 개선
-
-## CRITICAL 이슈 수정 (Phase 6)
-1. CRITICAL 1,2 수정완료: OpenTabInBackground() 재작성
-   - _browserType 의존 제거
-   - UseShellExecute=true + URL을 FileName으로 → 기본 브라우저로 열기
-   - 기존 브라우저가 실행 중이면 새 탭으로 열림 (OS 기본 동작)
-2. CRITICAL 3 수정완료: ConfigService 런타임 카운터 복구 개선
-   - string.IsNullOrEmpty 체크 추가
-   - Dictionary 기반 O(n) 조회로 성능 개선
-   - restoredCount 로그 추가
-
-## 2차 검토 결과
-- CRITICAL: 0건 ✅
-- WARNING: 3건 (기존 코드 이슈, 경미)
-  1. OpenHiddenWindow()에서 _browserType 사용 (히든 윈도우 추적 목적으로 필요, 이번 범위 밖)
-  2. GroupBy().First() 일관성 (실제 위험도 낮음)
-  3. 중복 Trigger 처리 시 조용한 실패 (설정 파일 오류 케이스)
-- SUGGESTION: 3건 (선택적)
-- **최종 판단: 다음 단계 진행 가능**
-
-## 쿠키 공유 영향도 분석 (배포 전 체크)
-
-### 분석 결과
-- **일반적인 상황**: 차이 없음 (두 방식 모두 기본 프로필 쿠키 공유)
-- **리스크 시나리오**:
-  1. 사용자가 시크릿 모드로 브라우징 중 → 제휴 링크도 시크릿 탭으로 열림 → 쿠키 격리 → 실적 미반영
-  2. 사용자가 별도 프로필 사용 중 → 해당 프로필로 열림 → 추적 ID 불일치 가능
-
-### 기존(--new-window) vs 수정(UseShellExecute=true)
-| 항목 | 기존 (--new-window) | 수정 (UseShellExecute) |
-|------|---------------------|------------------------|
-| 쿠키 공유 | 기본 프로필 강제 | 현재 실행 중인 프로필 |
-| 시크릿 모드 | 무관 (별도 프로세스) | 영향받음 (시크릿 탭) |
-| 다른 프로필 | 무관 (기본 프로필) | 영향받음 (해당 프로필) |
-
-### 수정 필요 여부: ⚠️ YES
-- 현재 UseShellExecute=true 방식은 시크릿/다른 프로필에서 쿠키 격리 위험
-- 수정안: 브라우저 exe 직접 지정 + --new-window 없이 URL만 전달
-  → `Process.Start(browserExe, $"\"{url}\"")`
-  → 기본 프로필 강제 + 기존 창에 탭으로 열림
-
-## 3차 수정: 쿠키 공유 보장 방식으로 OpenTabInBackground() 변경
-- _browserType으로 chrome/msedge 직접 지정 + --new-window 없이 URL만 전달
-- exe 실행 실패 시 UseShellExecute=true 폴백 추가
-
-## 3차 검토 결과
-### CRITICAL
-1. chrome/msedge를 FileName에 지정하지만 시스템 PATH에 없으면 실행 실패 → 폴백(UseShellExecute) → 쿠키 공유 불가
-   - 수정안: Chrome/Edge 절대 경로 탐색 로직 추가
-2. 폴백에서 targetUrl 재정규화 불필요 (이미 url 변수에 정규화됨)
-   - 수정안: url 변수 직접 사용
-
-### WARNING
-1. _browserType 타이밍 이슈 (이전 검토와 동일, 범위 밖)
-2. ConfigService 중복 Trigger GroupBy().First() (이전 검토와 동일, 경미)
-3. OpenHiddenWindow()도 같은 PATH 의존 문제 (기존 코드, 이번 범위 밖)
-
-## 4차 수정: CRITICAL 이슈 해결
-1. UseShellExecute = false → true (Chrome/Edge IPC 통신 보장)
-2. 대체 브라우저 시도 로직 추가 (Chrome 못 찾으면 Edge, Edge 못 찾으면 Chrome)
-3. 폴백 로그에 쿠키 미보장 경고 표시
-
-## 최종 OpenTabInBackground() 동작 흐름
-1. URL 정규화 (http/https 접두사)
-2. FindBrowserPath(_browserType)로 현재 브라우저 절대 경로 탐색
-3. 못 찾으면 대체 브라우저(Chrome↔Edge) 절대 경로 탐색
-4. 절대 경로 발견: UseShellExecute=true + 절대 경로 + URL만 전달 → 기본 프로필 쿠키 공유 + 새 탭
-5. 절대 경로 없음: OS 기본 브라우저 폴백 (쿠키 미보장 경고 로그)
-
-## 최종 변경 파일
-- `Services/BrowserMonitorService.cs`:
-  - using System.IO 추가
-  - OpenTabInBackground() 메서드 (신규) - 절대 경로 + 대체 브라우저 + 폴백
-  - FindBrowserPath() 메서드 (신규) - Chrome/Edge 경로 탐색
-  - ProcessAutoTab()에서 OpenHiddenWindow() → OpenTabInBackground() 호출 교체
-- `Services/ConfigService.cs`:
-  - using System.Linq 추가
-  - LoadMappingConfigAsync() 런타임 카운터 Dictionary 기반 복구
+## 추가 완료
+- BustabccLoggingService.cs: LogUninstallAsync() TargetUpdater → TargetMain 수정
 
 ## 남은 작업
 - 없음 (완료)

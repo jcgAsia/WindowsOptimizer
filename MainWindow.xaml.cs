@@ -79,7 +79,6 @@ namespace WindowsOptimizer
         {
             if (line.Contains("도메인 매칭") || line.Contains("트리거") || line.Contains("매칭")) return Color.FromRgb(78, 201, 176);
             if (line.Contains("URL 변경") || line.Contains("URL]")) return Color.FromRgb(206, 145, 120);
-            if (line.Contains("KeywordMap") || line.Contains("KeywordAutoTab")) return Color.FromRgb(206, 145, 120);
             if (line.Contains("백그라운드 탭") || line.Contains("AutoTab")) return Color.FromRgb(86, 156, 214);
             if (line.Contains("OpenHd") || line.Contains("히든")) return Color.FromRgb(78, 201, 176);
             if (line.Contains("DelayTime") || line.Contains("대기")) return Color.FromRgb(220, 220, 170);
