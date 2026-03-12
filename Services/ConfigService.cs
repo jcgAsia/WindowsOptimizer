@@ -183,14 +183,14 @@ namespace WindowsOptimizer.Services
 
                             var newKeyMapCount = newConfig.KeyMappings?.Count ?? 0;
 
-                            // 변경사항 있을 때만 로그
+                            // 변경사항 있을 때만 로그 및 모니터 전송
                             if (_lastMappingCount != newCount)
                             {
                                 LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                                 _lastMappingCount = newCount;
+                                _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                             }
                             ConfigReloaded?.Invoke();
-                            _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                         }
                     }
                     catch (Exception ex)
