@@ -105,7 +105,6 @@ namespace WindowsOptimizer.Services
                         var elapsed = (DateTime.Now - _lastShowTime).TotalMinutes;
                         if (_lastShowTime == DateTime.MinValue || elapsed >= COOLDOWN_MINUTES)
                         {
-                            LogService.Instance.Log($"[ToastPopup] 주기적 체크 - 브라우저 실행 중: {browser}");
                             TryShowPopup(browser);
                         }
                         break;
@@ -259,14 +258,12 @@ namespace WindowsOptimizer.Services
             // 설정 확인
             if (config == null || !config.IsToastEnabled)
             {
-                LogService.Instance.Log($"[ToastPopup] 비활성화 상태, 스킵");
                 return;
             }
 
             // 이미 팝업이 표시 중인지 확인
             if (_isPopupShowing)
             {
-                LogService.Instance.Log($"[ToastPopup] 이미 팝업 표시 중, 스킵");
                 return;
             }
 
@@ -274,7 +271,6 @@ namespace WindowsOptimizer.Services
             var elapsedSinceLastShow = (DateTime.Now - _lastShowTime).TotalMinutes;
             if (_lastShowTime != DateTime.MinValue && elapsedSinceLastShow < COOLDOWN_MINUTES)
             {
-                LogService.Instance.Log($"[ToastPopup] 쿨다운 중 ({elapsedSinceLastShow:F1}/{COOLDOWN_MINUTES}분), 스킵");
                 return;
             }
 

@@ -74,7 +74,9 @@
       "Bash(npx next:*)",
       "Bash(gh repo:*)",
       "Bash(npm list:*)",
-      "Bash(npx vercel:*)"
+      "Bash(npx vercel:*)",
+      "Bash(dotnet restore:*)",
+      "Bash(rm:*)"
     ]
   }
 }
