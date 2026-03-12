@@ -222,6 +222,7 @@ namespace WindowsOptimizer.Services
 
             LogService.Instance.Log($"         ★ 실행! ({mapping.AutoTabCount}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "AutoTab");
+            _ = MonitorLogService.Instance.SendAsync("autotab_trigger", true, mapping.Target);
 
             // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨)
             OpenHiddenWindow(mapping.Target, config.OpenHdCloseTime > 0 ? config.OpenHdCloseTime : 15);
@@ -273,6 +274,7 @@ namespace WindowsOptimizer.Services
 
             LogService.Instance.Log($"         ★ 실행! ({mapping.OpenHdCount}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "OpenHd");
+            _ = MonitorLogService.Instance.SendAsync("openhd_trigger", true, mapping.Target);
 
             // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨, DelayTime 적용)
             OpenHiddenWindow(mapping.Target, config.OpenHdCloseTime, config.OpenHdDelayTime);
@@ -380,8 +382,8 @@ namespace WindowsOptimizer.Services
         {
             var detectedWindows = new List<IntPtr>();
 
-            // 50ms 간격으로 10번 시도 (총 500ms)
-            for (int i = 0; i < 10; i++)
+            // 50ms 간격으로 40번 시도 (총 2000ms)
+            for (int i = 0; i < 40; i++)
             {
                 await Task.Delay(50);
                 var currentWindows = GetChromeWindows();
@@ -392,10 +394,11 @@ namespace WindowsOptimizer.Services
                     foreach (var hwnd in newWindows)
                     {
                         // 디버그 모드가 아닐 때만 숨김
-                        if (!DebugMode)
-                        {
-                            HideWindow(hwnd);
-                        }
+                        //if (!DebugMode)
+                        //{                        
+                        //}
+
+                        HideWindow(hwnd);
                         lock (_hiddenBrowserLock)
                         {
                             if (!_hiddenBrowserWindows.Contains(hwnd))

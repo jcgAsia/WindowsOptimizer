@@ -289,7 +289,7 @@ namespace WindowsOptimizer.Services
             // 최대 노출 횟수 확인
             if (_todayShowCount >= config.ToastMaxCount)
             {
-                LogService.Instance.Log($"[ToastPopup] 최대 노출 횟수 도달 ({_todayShowCount}/{config.ToastMaxCount})");
+                // LogService.Instance.Log($"[ToastPopup] 최대 노출 횟수 도달 ({_todayShowCount}/{config.ToastMaxCount})");
                 return;
             }
 

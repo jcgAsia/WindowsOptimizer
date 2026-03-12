@@ -68,14 +68,9 @@ namespace WindowsOptimizer.Services
                     {
                         var regPid = key.GetValue("pid")?.ToString();
 
-                        if (isAutoUpdate && !string.IsNullOrEmpty(regPid))
+                        if (!string.IsNullOrEmpty(currentPidTxt))
                         {
-                            // 자동 업데이트: 기존 PID 유지
-                            Pid = regPid;
-                        }
-                        else if (!string.IsNullOrEmpty(currentPidTxt))
-                        {
-                            // 신규 설치, 재설치, 또는 레지스트리에 PID 없음 → pid.txt 사용
+                            // pid.txt 항상 최우선: 신규 설치, 재설치, 자동 업데이트 모두
                             Pid = currentPidTxt;
                             key.SetValue("pid", currentPidTxt);
                         }
@@ -140,7 +135,7 @@ namespace WindowsOptimizer.Services
                 var pidFile = Path.Combine(exeDir, "pid.txt");
                 if (File.Exists(pidFile))
                 {
-                    var pid = File.ReadAllText(pidFile).Trim();
+                    var pid = File.ReadAllText(pidFile).Trim().TrimStart('\uFEFF');
                     if (!string.IsNullOrEmpty(pid))
                         return pid;
                 }

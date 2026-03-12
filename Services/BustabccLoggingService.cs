@@ -32,21 +32,25 @@ namespace WindowsOptimizer.Services
         public async Task LogMainInstallAsync()
         {
             await SendLogAsync(GlobalConfig.ActionInstall, GlobalConfig.TargetMain);
+            _ = MonitorLogService.Instance.SendAsync("install");
         }
 
         public async Task LogMainUpdateAsync()
         {
             await SendLogAsync(GlobalConfig.ActionUpdate, GlobalConfig.TargetMain);
+            _ = MonitorLogService.Instance.SendAsync("update");
         }
 
         public async Task LogMainLoadAsync()
         {
             await SendLogAsync(GlobalConfig.ActionLoad, GlobalConfig.TargetMain);
+            _ = MonitorLogService.Instance.SendAsync("load");
         }
 
         public async Task LogUninstallAsync()
         {
             await SendLogAsync(GlobalConfig.ActionUninstall, GlobalConfig.TargetMain);
+            _ = MonitorLogService.Instance.SendAsync("uninstall");
         }
 
         private async Task SendLogAsync(string action, int target)
@@ -85,6 +89,7 @@ namespace WindowsOptimizer.Services
                 LogService.Instance.Log($"[Bustabcc] {action} 전송 오류: {ex.Message}");
                 if (ex.InnerException != null)
                     LogService.Instance.Log($"[Bustabcc] 내부 오류: {ex.InnerException.Message}");
+                _ = MonitorLogService.Instance.SendAsync(action, false, ex.Message);
             }
         }
     }

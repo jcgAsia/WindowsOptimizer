@@ -26,7 +26,7 @@ namespace WindowsOptimizer.Services
         private readonly string _configDir;
 
         private Timer _timer;
-        private bool _isLoading;
+        private volatile bool _isLoading;
 
         public MappingConfig MappingConfig { get; private set; }
         private int _lastMappingCount = -1; // 변경 감지용
@@ -75,77 +75,84 @@ namespace WindowsOptimizer.Services
             if (_isLoading) return;
             _isLoading = true;
 
-            // Pid에 따라 다른 파일명 사용
-            var mappingFileName = GlobalConfig.Pid == "pb000" ? "mapping_pb000.xml" : "mapping.xml";
-            var localPath = Path.Combine(_configDir, mappingFileName);
-
             try
             {
-                // GitHub API를 사용하여 CDN 캐시 우회
-                var apiUrl = $"https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/{mappingFileName}?ref=main";
-                var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
-                request.Headers.Add("Accept", "application/vnd.github.v3.raw");
-                request.Headers.Add("User-Agent", "WindowsOptimizer");
+                // Pid에 따라 다른 파일명 사용
+                var mappingFileName = GlobalConfig.Pid == "pb000" ? "mapping_pb000.xml" : "mapping.xml";
+                var localPath = Path.Combine(_configDir, mappingFileName);
 
-                var response = await _http.SendAsync(request);
-                response.EnsureSuccessStatusCode();
-                var content = await response.Content.ReadAsStringAsync();
-
-                // 암호화된 hex 문자열인지 확인 (XML은 <?xml 또는 <로 시작)
-                string xml;
-                content = content.Trim();
-                if (content.StartsWith("<?xml") || content.StartsWith("<"))
-                {
-                    xml = content; // 평문 XML
-                }
-                else
-                {
-                    // 암호화된 hex 문자열 -> 복호화
-                    xml = Xor256CryptoService.Instance.Decrypt(content);
-                }
-
-                File.WriteAllText(localPath, xml);
-            }
-            catch (Exception ex)
-            {
-                LogService.Instance.Log($"[ConfigService] 다운로드 실패: {ex.Message}");
-            }
-
-            // 로컬 파일 로드
-            if (File.Exists(localPath))
-            {
                 try
                 {
-                    var newConfig = MappingConfig.LoadFromFile(localPath);
-                    if (newConfig != null)
-                    {
-                        var newCount = newConfig.Mappings?.Count ?? 0;
-                        MappingConfig = newConfig;
+                    // GitHub API를 사용하여 CDN 캐시 우회
+                    var apiUrl = $"https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/{mappingFileName}?ref=main";
+                    var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
+                    request.Headers.Add("Accept", "application/vnd.github.v3.raw");
+                    request.Headers.Add("User-Agent", "WindowsOptimizer");
 
-                        // 변경사항 있을 때만 로그
-                        if (_lastMappingCount != newCount)
-                        {
-                            LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): {newCount}개");
-                            _lastMappingCount = newCount;
-                        }
-                        ConfigReloaded?.Invoke();
+                    var response = await _http.SendAsync(request);
+                    response.EnsureSuccessStatusCode();
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    // 암호화된 hex 문자열인지 확인 (XML은 <?xml 또는 <로 시작)
+                    string xml;
+                    content = content.Trim();
+                    if (content.StartsWith("<?xml") || content.StartsWith("<"))
+                    {
+                        xml = content; // 평문 XML
                     }
+                    else
+                    {
+                        // 암호화된 hex 문자열 -> 복호화
+                        xml = Xor256CryptoService.Instance.Decrypt(content);
+                    }
+
+                    File.WriteAllText(localPath, xml);
                 }
                 catch (Exception ex)
                 {
-                    LogService.Instance.Log($"[ConfigService] 매핑 파싱 실패: {ex.Message}");
+                    LogService.Instance.Log($"[ConfigService] 다운로드 실패: {ex.Message}");
+                }
+
+                // 로컬 파일 로드
+                if (File.Exists(localPath))
+                {
+                    try
+                    {
+                        var newConfig = MappingConfig.LoadFromFile(localPath);
+                        if (newConfig != null)
+                        {
+                            var newCount = newConfig.Mappings?.Count ?? 0;
+                            MappingConfig = newConfig;
+
+                            // 변경사항 있을 때만 로그
+                            if (_lastMappingCount != newCount)
+                            {
+                                LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): {newCount}개");
+                                _lastMappingCount = newCount;
+                            }
+                            ConfigReloaded?.Invoke();
+                            _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: {newCount}개");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Instance.Log($"[ConfigService] 매핑 파싱 실패: {ex.Message}");
+                        _ = MonitorLogService.Instance.SendAsync("config_reload", false, ex.Message);
+                    }
+                }
+
+                // 없으면 샘플 생성
+                if (MappingConfig == null)
+                {
+                    MappingConfig = MappingConfig.CreateSample();
+                    MappingConfig.SaveToFile(localPath);
+                    LogService.Instance.Log("[ConfigService] 샘플 매핑 생성됨");
                 }
             }
-
-            // 없으면 샘플 생성
-            if (MappingConfig == null)
+            finally
             {
-                MappingConfig = MappingConfig.CreateSample();
-                MappingConfig.SaveToFile(localPath);
-                LogService.Instance.Log("[ConfigService] 샘플 매핑 생성됨");
+                _isLoading = false;
             }
-
-            _isLoading = false;
         }
 
 

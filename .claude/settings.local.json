@@ -70,7 +70,11 @@
       "Bash(git reset:*)",
       "Bash(git log:*)",
       "Bash(git rm:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npx next:*)",
+      "Bash(gh repo:*)",
+      "Bash(npm list:*)",
+      "Bash(npx vercel:*)"
     ]
   }
 }

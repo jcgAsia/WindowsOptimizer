@@ -50,6 +50,9 @@ namespace WindowsOptimizer
             // 전역 설정 초기화 (Mutex 체크 전에 실행하여 InstallMode 로드)
             GlobalConfig.Initialize();
 
+            // 모니터링 서버에 앱 시작 로그 전송
+            _ = MonitorLogService.Instance.SendAsync("app_start");
+
             // 바탕화면 바로가기는 항상 삭제 (설치 모드와 무관)
             RemoveDesktopShortcutsOnly();
 
