@@ -28,6 +28,7 @@
     <PackageReference Include="Clowd.Squirrel" Version="2.11.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
+    <PackageReference Include="System.Text.Json" Version="10.0.4" />
   </ItemGroup>
 
   <ItemGroup>

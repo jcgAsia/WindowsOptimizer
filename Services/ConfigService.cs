@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -122,16 +123,74 @@ namespace WindowsOptimizer.Services
                         if (newConfig != null)
                         {
                             var newCount = newConfig.Mappings?.Count ?? 0;
+
+                            // 기존 DomainMapping의 런타임 카운터를 새 config에 복사 (리로드 시 리셋 방지)
+                            var oldConfig = MappingConfig;
+                            if (oldConfig?.Mappings != null && newConfig.Mappings != null)
+                            {
+                                // 새 매핑을 Dictionary로 변환 (O(n) 조회)
+                                var newMapDict = newConfig.Mappings
+                                    .Where(m => !string.IsNullOrEmpty(m?.Trigger))
+                                    .GroupBy(m => m.Trigger.ToLowerInvariant())
+                                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                                int restoredCount = 0;
+                                foreach (var oldMap in oldConfig.Mappings)
+                                {
+                                    if (string.IsNullOrEmpty(oldMap?.Trigger)) continue;
+
+                                    if (newMapDict.TryGetValue(oldMap.Trigger, out var newMap))
+                                    {
+                                        newMap.AutoTabCount = oldMap.AutoTabCount;
+                                        newMap.AutoTabLastTime = oldMap.AutoTabLastTime;
+                                        newMap.OpenHdCount = oldMap.OpenHdCount;
+                                        newMap.OpenHdLastTime = oldMap.OpenHdLastTime;
+                                        restoredCount++;
+                                    }
+                                }
+
+                                if (restoredCount > 0)
+                                    LogService.Instance.Log($"[ConfigService] 런타임 카운터 복구: {restoredCount}건");
+                            }
+
+                            // KeywordMapping 런타임 카운터 복구
+                            if (oldConfig?.KeyMappings != null && newConfig.KeyMappings != null)
+                            {
+                                var newKeyMapDict = newConfig.KeyMappings
+                                    .Where(km => !string.IsNullOrEmpty(km?.Keywords) && !string.IsNullOrEmpty(km?.Target))
+                                    .GroupBy(km => (km.Target?.ToLowerInvariant() ?? "") + "|" + string.Join(",", km.KeywordList.OrderBy(k => k, StringComparer.OrdinalIgnoreCase)))
+                                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                                int keyRestoredCount = 0;
+                                foreach (var oldKm in oldConfig.KeyMappings)
+                                {
+                                    if (string.IsNullOrEmpty(oldKm?.Keywords)) continue;
+                                    var key = (oldKm.Target?.ToLowerInvariant() ?? "") + "|" + string.Join(",", oldKm.KeywordList.OrderBy(k => k, StringComparer.OrdinalIgnoreCase));
+
+                                    if (newKeyMapDict.TryGetValue(key, out var newKm))
+                                    {
+                                        newKm.AutoTabCount = oldKm.AutoTabCount;
+                                        newKm.AutoTabLastTime = oldKm.AutoTabLastTime;
+                                        keyRestoredCount++;
+                                    }
+                                }
+
+                                if (keyRestoredCount > 0)
+                                    LogService.Instance.Log($"[ConfigService] 키워드 매핑 카운터 복구: {keyRestoredCount}건");
+                            }
+
                             MappingConfig = newConfig;
+
+                            var newKeyMapCount = newConfig.KeyMappings?.Count ?? 0;
 
                             // 변경사항 있을 때만 로그
                             if (_lastMappingCount != newCount)
                             {
-                                LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): {newCount}개");
+                                LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                                 _lastMappingCount = newCount;
                             }
                             ConfigReloaded?.Invoke();
-                            _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: {newCount}개");
+                            _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                         }
                     }
                     catch (Exception ex)

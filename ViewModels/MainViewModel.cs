@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
@@ -42,6 +43,12 @@ namespace WindowsOptimizer.ViewModels
         [ObservableProperty] private string openHdLastTime = "마지막 실행: -";
         [ObservableProperty] private string openHdCount = "실행 횟수: 0회";
 
+        // KeyMapping 상태
+        [ObservableProperty] private string keyMappingStatus = "OFF";
+        [ObservableProperty] private Brush keyMappingColor = Brushes.Gray;
+        [ObservableProperty] private string keywordTriggerCount = "실행 횟수: 0회";
+        [ObservableProperty] private string keywordLastTime = "마지막: -";
+
         // PID 정보
         [ObservableProperty] private string pidInfo = "PID: -";
 
@@ -49,6 +56,7 @@ namespace WindowsOptimizer.ViewModels
         public string MappingFileName => GlobalConfig.Pid == "pb000" ? "mapping_pb000.xml" : "mapping.xml";
 
         public ObservableCollection<MappingItemViewModel> MappingItems { get; } = new();
+        public ObservableCollection<KeywordMappingItemViewModel> KeywordMappingItems { get; } = new();
         public event Action ClearLogRequested;
 
         public MainViewModel()
@@ -66,6 +74,13 @@ namespace WindowsOptimizer.ViewModels
                 LastKeyword = $"[{type}] {m.Trigger}";
                 UpdateMappingItems();
             });
+            svc.KeywordTriggered += (keywords, km) => SafeInvoke(() =>
+            {
+                UpdateTriggerInfo();
+                UpdateFunctionStatus();
+                LastKeyword = $"[Keyword] {keywords}";
+                UpdateKeywordMappingItems();
+            });
 
             ConfigService.Instance.ConfigReloaded += () => SafeInvoke(() =>
             {
@@ -73,6 +88,7 @@ namespace WindowsOptimizer.ViewModels
                 UpdateConfigStatus();
                 UpdateFunctionStatus();
                 UpdateMappingItems();
+                UpdateKeywordMappingItems();
             });
         }
 
@@ -140,6 +156,18 @@ namespace WindowsOptimizer.ViewModels
                 ? $"CycleTime: {config.AutoTabCycleTime}초 ({config.AutoTabCycleTime / 60}분)"
                 : "CycleTime: 0 (횟수만 체크)";
 
+            // KeyMapping 상태
+            if (config.IsKeyMappingEnabled)
+            {
+                KeyMappingStatus = "ON";
+                KeyMappingColor = new SolidColorBrush(Color.FromRgb(78, 201, 176));
+            }
+            else
+            {
+                KeyMappingStatus = "OFF";
+                KeyMappingColor = Brushes.Gray;
+            }
+
             // OpenHd 상태
             if (config.IsOpenHdEnabled)
             {
@@ -170,6 +198,12 @@ namespace WindowsOptimizer.ViewModels
                 ? $"마지막: {svc.AutoTabLastTriggerTime:HH:mm:ss}"
                 : "마지막: -";
 
+            // Keyword 실행 정보
+            KeywordTriggerCount = $"실행 횟수: {svc.KeywordTriggerCount}회";
+            KeywordLastTime = svc.KeywordLastTriggerTime != DateTime.MinValue
+                ? $"마지막: {svc.KeywordLastTriggerTime:HH:mm:ss}"
+                : "마지막: -";
+
             // OpenHd 실행 정보
             OpenHdCount = $"실행 횟수: {svc.OpenHdTriggerCount}회";
             OpenHdLastTime = svc.OpenHdLastTriggerTime != DateTime.MinValue
@@ -180,7 +214,7 @@ namespace WindowsOptimizer.ViewModels
         private void UpdateTriggerInfo()
         {
             var svc = BrowserMonitorService.Instance;
-            TriggerInfo = $"AutoTab:{svc.AutoTabTriggerCount} / OpenHd:{svc.OpenHdTriggerCount}";
+            TriggerInfo = $"AutoTab:{svc.AutoTabTriggerCount} / Keyword:{svc.KeywordTriggerCount} / OpenHd:{svc.OpenHdTriggerCount}";
             if (svc.LastTriggerTime != DateTime.MinValue)
                 TriggerInfo += $" (마지막: {svc.LastTriggerTime:HH:mm:ss})";
         }
@@ -202,6 +236,25 @@ namespace WindowsOptimizer.ViewModels
                     AutoTabInfo = $"{m.AutoTabCount}/{m.Frequency}",
                     OpenHdInfo = $"{m.OpenHdCount}/{m.Frequency}",
                     LastTimeInfo = lastTime != DateTime.MinValue ? lastTime.ToString("HH:mm:ss") : "-"
+                });
+            }
+        }
+
+        private void UpdateKeywordMappingItems()
+        {
+            KeywordMappingItems.Clear();
+            var config = BrowserMonitorService.Instance.MappingConfig;
+            if (config?.KeyMappings == null) return;
+
+            foreach (var km in config.KeyMappings)
+            {
+                KeywordMappingItems.Add(new KeywordMappingItemViewModel
+                {
+                    Keywords = km.Keywords,
+                    Target = km.Target,
+                    Frequency = km.Frequency,
+                    AutoTabInfo = $"{km.AutoTabCount}/{km.Frequency}",
+                    LastTimeInfo = km.AutoTabLastTime != DateTime.MinValue ? km.AutoTabLastTime.ToString("HH:mm:ss") : "-"
                 });
             }
         }
@@ -244,4 +297,14 @@ namespace WindowsOptimizer.ViewModels
         public string OpenHdInfo { get; set; }
         public string LastTimeInfo { get; set; }
     }
+
+    public class KeywordMappingItemViewModel
+    {
+        public string Keywords { get; set; }
+        public string Target { get; set; }
+        public int Frequency { get; set; }
+        public string AutoTabInfo { get; set; }
+        public string LastTimeInfo { get; set; }
+    }
+
 }
