@@ -850,6 +850,11 @@
                     addKeyMapping(keywords, target, frequency);
                 });
 
+                // keymap이 없으면 빈 목록 렌더링 (이전 DOM 잔류 방지)
+                if (keymaps.length === 0) {
+                    renderKeyMappings();
+                }
+
                 showToast('XML loaded successfully!');
                 generateXML();
             } catch (err) {
