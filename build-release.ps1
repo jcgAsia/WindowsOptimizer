@@ -35,9 +35,11 @@ $csprojContent = Get-Content $appProj -Raw
 $csprojContent = $csprojContent -replace '<Version>.*?</Version>', "<Version>$Version</Version>"
 Set-Content $appProj $csprojContent
 
-# 2) dotnet publish
-Write-Host "[2/4] dotnet publish ($build_type)..." -ForegroundColor Yellow
-dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false
+# 2) dotnet restore + publish
+Write-Host "[2/4] dotnet restore & publish ($build_type)..." -ForegroundColor Yellow
+dotnet restore $appProj -r win-x64
+if ($LASTEXITCODE -ne 0) { throw "복원 실패" }
+dotnet publish $appProj -c Release -r win-x64 -o $publishDir --self-contained false --no-restore
 if ($LASTEXITCODE -ne 0) { throw "빌드 실패" }
 
 # pid.txt 주입 (빌드 후 publish 폴더에 생성)
