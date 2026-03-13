@@ -1,7 +1,6 @@
 using System;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Reflection;
 
@@ -32,20 +31,17 @@ namespace WindowsOptimizer.Services
         {
             try
             {
-                var payload = new
-                {
-                    pid = GlobalConfig.Pid ?? "",
-                    action = action ?? "",
-                    mac_address = GlobalConfig.MacAddress ?? "",
-                    version = CurrentVersion,
-                    success,
-                    detail = detail ?? ""
-                };
-                var json = JsonSerializer.Serialize(payload);
+                var json = $"{{\"pid\":\"{Escape(GlobalConfig.Pid)}\",\"action\":\"{Escape(action)}\",\"mac_address\":\"{Escape(GlobalConfig.MacAddress)}\",\"version\":\"{Escape(CurrentVersion)}\",\"success\":{(success ? "true" : "false")},\"detail\":\"{Escape(detail)}\"}}";
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 await _http.PostAsync(MonitorUrl, content);
             }
             catch { } // 모니터링 실패는 앱 동작에 영향 없음
+        }
+
+        private static string Escape(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            return s.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r").Replace("\t", "\\t");
         }
     }
 }

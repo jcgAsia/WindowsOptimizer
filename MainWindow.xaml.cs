@@ -41,38 +41,42 @@ namespace WindowsOptimizer
 
             ConfigService.Instance.ConfigReloaded -= OnConfigFirstLoaded;
 
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (DataContext is MainViewModel vm)
                 {
                     vm.ToggleMonitoringCommand.Execute(vm);
                 }
-            });
+            }));
         }
 
         private void ClearLog() => LogRichTextBox.Document.Blocks.Clear();
 
         private void OnLogAdded(string line)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                var paragraph = LogRichTextBox.Document.Blocks.FirstBlock as Paragraph;
-                if (paragraph == null)
+                try
                 {
-                    paragraph = new Paragraph();
-                    LogRichTextBox.Document.Blocks.Add(paragraph);
-                }
+                    var paragraph = LogRichTextBox.Document.Blocks.FirstBlock as Paragraph;
+                    if (paragraph == null)
+                    {
+                        paragraph = new Paragraph();
+                        LogRichTextBox.Document.Blocks.Add(paragraph);
+                    }
 
-                var color = GetLogColor(line);
-                paragraph.Inlines.Add(new Run(line + Environment.NewLine) { Foreground = new SolidColorBrush(color) });
-                LogRichTextBox.ScrollToEnd();
+                    var color = GetLogColor(line);
+                    paragraph.Inlines.Add(new Run(line + Environment.NewLine) { Foreground = new SolidColorBrush(color) });
+                    LogRichTextBox.ScrollToEnd();
 
-                if (paragraph.Inlines.Count > 500)
-                {
-                    for (int i = 0; i < 50; i++)
-                        paragraph.Inlines.Remove(paragraph.Inlines.FirstInline);
+                    if (paragraph.Inlines.Count > 500)
+                    {
+                        for (int i = 0; i < 50; i++)
+                            paragraph.Inlines.Remove(paragraph.Inlines.FirstInline);
+                    }
                 }
-            });
+                catch { }
+            }));
         }
 
         private Color GetLogColor(string line)

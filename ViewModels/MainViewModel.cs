@@ -92,7 +92,16 @@ namespace WindowsOptimizer.ViewModels
             });
         }
 
-        private void SafeInvoke(Action action) => Application.Current?.Dispatcher?.Invoke(action);
+        private void SafeInvoke(Action action)
+        {
+            try
+            {
+                var dispatcher = Application.Current?.Dispatcher;
+                if (dispatcher == null || dispatcher.HasShutdownStarted) return;
+                dispatcher.BeginInvoke(action);
+            }
+            catch { }
+        }
 
         private void UpdateStatus()
         {

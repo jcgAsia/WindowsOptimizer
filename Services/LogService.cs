@@ -52,7 +52,7 @@ namespace WindowsOptimizer.Services
             }
 
             Console.WriteLine(line);
-            LogAdded?.Invoke(line);
+            try { LogAdded?.Invoke(line); } catch { }
         }
 
         /// <summary>

@@ -81,33 +81,37 @@ namespace WindowsOptimizer
 
         private void WebView_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            if (_isNavigationCompleted) return;
-            _isNavigationCompleted = true;
-
-            if (!e.IsSuccess)
+            try
             {
-                LogService.Instance.Log($"[ToastPopup] 페이지 로드 실패: {e.WebErrorStatus}");
-                Close();
-                return;
+                if (_isNavigationCompleted) return;
+                _isNavigationCompleted = true;
+
+                if (!e.IsSuccess)
+                {
+                    LogService.Instance.Log($"[ToastPopup] 페이지 로드 실패: {e.WebErrorStatus}");
+                    Close();
+                    return;
+                }
+
+                // 페이지 로드 완료 후 팝업 표시
+                Opacity = 1;
+                AnimateIn();
+
+                // 30초 후 자동 닫기
+                _autoCloseTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(30)
+                };
+                _autoCloseTimer.Tick += (s, args) =>
+                {
+                    _autoCloseTimer.Stop();
+                    CloseWithAnimation();
+                };
+                _autoCloseTimer.Start();
+
+                LogService.Instance.Log($"[ToastPopup] 팝업 표시됨: {_contentUrl}");
             }
-
-            // 페이지 로드 완료 후 팝업 표시
-            Opacity = 1;
-            AnimateIn();
-
-            // 30초 후 자동 닫기
-            _autoCloseTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(30)
-            };
-            _autoCloseTimer.Tick += (s, args) =>
-            {
-                _autoCloseTimer.Stop();
-                CloseWithAnimation();
-            };
-            _autoCloseTimer.Start();
-
-            LogService.Instance.Log($"[ToastPopup] 팝업 표시됨: {_contentUrl}");
+            catch { }
         }
 
         private void AnimateIn()
@@ -169,7 +173,7 @@ namespace WindowsOptimizer
             // 타이틀 바 영역에서 드래그
             if (e.GetPosition(this).Y < 30)
             {
-                DragMove();
+                try { DragMove(); } catch { }
             }
         }
 

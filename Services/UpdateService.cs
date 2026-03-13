@@ -13,7 +13,7 @@ namespace WindowsOptimizer.Services
         public static UpdateService Instance => _instance.Value;
 
         private Timer _timer;
-        private bool _isChecking;
+        private volatile bool _isChecking;
 
         public string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0";
         public int CheckIntervalMs { get; set; } = 60000; // 1분
@@ -25,7 +25,7 @@ namespace WindowsOptimizer.Services
         /// </summary>
         public void StartPeriodicCheck()
         {
-            _timer = new Timer(async _ => await CheckAndUpdateAsync(), null, 0, CheckIntervalMs);
+            _timer = new Timer(_ => { try { _ = CheckAndUpdateAsync(); } catch { } }, null, 5000, CheckIntervalMs);
             LogService.Instance.Log($"[UpdateService] 주기적 업데이트 체크 시작 ({CheckIntervalMs / 1000}초)");
         }
 

@@ -55,7 +55,7 @@ namespace WindowsOptimizer.Services
         public void StartPeriodicReload(bool skipInitialLoad = false)
         {
             var initialDelay = skipInitialLoad ? ReloadIntervalMs : 0;
-            _timer = new Timer(async _ => await LoadMappingConfigAsync(), null, initialDelay, ReloadIntervalMs);
+            _timer = new Timer(_ => { try { _ = LoadMappingConfigAsync(); } catch { } }, null, initialDelay, ReloadIntervalMs);
             LogService.Instance.Log($"[ConfigService] 주기적 설정 리로드 시작 ({ReloadIntervalMs / 1000}초)");
         }
 
@@ -190,7 +190,7 @@ namespace WindowsOptimizer.Services
                                 _lastMappingCount = newCount;
                                 _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                             }
-                            ConfigReloaded?.Invoke();
+                            try { ConfigReloaded?.Invoke(); } catch (Exception ex) { try { LogService.Instance.Log($"[ERROR] ConfigReloaded handler: {ex.Message}"); } catch { } }
                         }
                     }
                     catch (Exception ex)

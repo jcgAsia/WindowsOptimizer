@@ -35,28 +35,39 @@ namespace WindowsOptimizer
 
         private async void InitializeConfigAsync()
         {
-            // 먼저 설정 로드 완료 대기
-            await ConfigService.Instance.LoadMappingConfigAsync();
-
-            // 그 후 주기적 리로드 시작 (다음 주기부터)
-            ConfigService.Instance.StartPeriodicReload(skipInitialLoad: true);
+            try
+            {
+                await ConfigService.Instance.LoadMappingConfigAsync();
+                ConfigService.Instance.StartPeriodicReload(skipInitialLoad: true);
+            }
+            catch (Exception ex)
+            {
+                try { LogService.Instance.Log($"[ERROR] InitializeConfigAsync: {ex.Message}"); } catch { }
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            // Squirrel 이벤트 처리 (설치/업데이트/제거)
-            UpdateService.HandleSquirrelEvents();
+            // Global crash prevention (last resort)
+            AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+            {
+                try { LogService.Instance.Log($"[FATAL] UnhandledException: {args.ExceptionObject}"); } catch { }
+            };
+            TaskScheduler.UnobservedTaskException += (s, args) =>
+            {
+                args.SetObserved();
+                try { LogService.Instance.Log($"[WARN] UnobservedTaskException: {args.Exception?.GetBaseException().Message}"); } catch { }
+            };
 
-            // 전역 설정 초기화 (Mutex 체크 전에 실행하여 InstallMode 로드)
+            // Phase 1: Critical bootstrap
+            UpdateService.HandleSquirrelEvents();
             GlobalConfig.Initialize();
 
-            // 모니터링 서버에 앱 시작 로그 전송
-            _ = MonitorLogService.Instance.SendAsync("app_start");
+            // Phase 2: Non-critical telemetry (isolated)
+            try { _ = MonitorLogService.Instance.SendAsync("app_start"); } catch { }
+            try { RemoveDesktopShortcutsOnly(); } catch { }
 
-            // 바탕화면 바로가기는 항상 삭제 (설치 모드와 무관)
-            RemoveDesktopShortcutsOnly();
-
-            // 커맨드라인 인자 처리
+            // Phase 3: Args processing (safe, no external deps)
             var args = Environment.GetCommandLineArgs();
 
             // -ui 또는 --ui 로 UI 강제 표시
@@ -87,7 +98,7 @@ namespace WindowsOptimizer
                 LogService.Instance.Log($"런처에서 실행됨 (Launcher Version: {GlobalConfig.LauncherVersion ?? "unknown"})");
             }
 
-            // 단일 인스턴스 체크
+            // Phase 4: Mutex check (critical)
             _mutex = new Mutex(true, GlobalConfig.MutexName, out bool isNew);
             _mutexOwned = isNew;
             if (!isNew)
@@ -103,43 +114,46 @@ namespace WindowsOptimizer
 
             base.OnStartup(e);
 
-            // 시작프로그램 등록
-            RegistryService.Instance.RegisterStartup();
+            // Phase 5: Self-healing update (after mutex, single instance only)
+            UpdateService.Instance.StartPeriodicCheck();
+
+            // Phase 6: Non-critical services (isolated)
+            try { RegistryService.Instance.RegisterStartup(); } catch { }
 
             // UI 모드일 때만 트레이 아이콘 설정
             if (GlobalConfig.ShouldShowUI)
             {
-                SetupTrayIcon();
+                try { SetupTrayIcon(); } catch { }
             }
 
-            // 로딩 로그 (레지스트리)
-            GlobalConfig.OnLoadingLogQuery();
-
-            // Bustabcc 로그 전송 (메인 로딩)
+            try { GlobalConfig.OnLoadingLogQuery(); } catch { }
             try { _ = BustabccLoggingService.Instance.LogMainLoadAsync(); } catch { }
 
-            // 주기적 업데이트 체크 시작 (1분)
-            UpdateService.Instance.StartPeriodicCheck();
-
-            // 설정 먼저 로드 후 주기적 리로드 시작
+            // Phase 7: Core services
             InitializeConfigAsync();
 
             LogService.Instance.Log($"애플리케이션 시작 (Mode: {GlobalConfig.InstallMode}, ShowUI: {GlobalConfig.ShouldShowUI})");
 
-            // MainWindow 수동 생성 (StartupUri 제거됨)
-            MainWindow = new MainWindow();
-
-            // UI 표시 여부에 따라 MainWindow 처리
-            if (GlobalConfig.ShouldShowUI)
+            // Phase 8: UI
+            try
             {
-                MainWindow.Show();
+                MainWindow = new MainWindow();
+
+                // UI 표시 여부에 따라 MainWindow 처리
+                if (GlobalConfig.ShouldShowUI)
+                {
+                    MainWindow.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Instance.Log($"MainWindow 생성 실패: {ex.Message}");
+                Shutdown(1);
+                return;
             }
 
-            // 글로벌 핫키 등록 (MainWindow 생성 후)
-            RegisterGlobalHotkey();
-
-            // 토스트 팝업 서비스 시작 (브라우저 실행 감지)
-            ToastPopupService.Instance.StartMonitoring();
+            try { RegisterGlobalHotkey(); } catch { }
+            try { ToastPopupService.Instance.StartMonitoring(); } catch { }
         }
 
         private void SetupTrayIcon()
@@ -235,7 +249,7 @@ namespace WindowsOptimizer
                 // 트레이 아이콘이 없으면 생성
                 if (_trayIcon == null)
                 {
-                    SetupTrayIcon();
+                    try { SetupTrayIcon(); } catch { }
                 }
 
                 MainWindow.Show();
@@ -254,7 +268,7 @@ namespace WindowsOptimizer
             // 트레이 아이콘이 없으면 생성
             if (_trayIcon == null)
             {
-                SetupTrayIcon();
+                try { SetupTrayIcon(); } catch { }
             }
 
             // MainWindow 표시
@@ -306,11 +320,11 @@ namespace WindowsOptimizer
         protected override void OnExit(ExitEventArgs e)
         {
             // 주기적 체크 중지
-            UpdateService.Instance.StopPeriodicCheck();
-            ConfigService.Instance.StopPeriodicReload();
+            try { UpdateService.Instance.StopPeriodicCheck(); } catch { }
+            try { ConfigService.Instance.StopPeriodicReload(); } catch { }
 
             // 토스트 팝업 서비스 중지
-            ToastPopupService.Instance.StopMonitoring();
+            try { ToastPopupService.Instance.StopMonitoring(); } catch { }
 
             // 글로벌 핫키 해제
             try
@@ -325,13 +339,17 @@ namespace WindowsOptimizer
             }
             catch { }
 
-            BrowserMonitorService.Instance.StopMonitoring();
-            _trayIcon?.Dispose();
-            if (_mutexOwned && _mutex != null)
+            try { BrowserMonitorService.Instance.StopMonitoring(); } catch { }
+            try { _trayIcon?.Dispose(); } catch { }
+            try
             {
-                _mutex.ReleaseMutex();
+                if (_mutexOwned && _mutex != null)
+                {
+                    _mutex.ReleaseMutex();
+                }
             }
-            LogService.Instance.Log("애플리케이션 종료");
+            catch { }
+            try { LogService.Instance.Log("애플리케이션 종료"); } catch { }
             base.OnExit(e);
         }
     }

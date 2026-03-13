@@ -82,7 +82,7 @@ namespace WindowsOptimizer.Services
         private void StartPeriodicCheck()
         {
             _periodicCheckTimer = new System.Threading.Timer(
-                callback: _ => PeriodicBrowserCheck(),
+                callback: _ => { try { PeriodicBrowserCheck(); } catch { } },
                 state: null,
                 dueTime: TimeSpan.FromSeconds(PERIODIC_CHECK_SECONDS),
                 period: TimeSpan.FromSeconds(PERIODIC_CHECK_SECONDS)
