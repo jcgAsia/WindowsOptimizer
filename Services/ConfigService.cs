@@ -149,8 +149,8 @@ namespace WindowsOptimizer.Services
                                     }
                                 }
 
-                                if (restoredCount > 0)
-                                    LogService.Instance.Log($"[ConfigService] 런타임 카운터 복구: {restoredCount}건");
+                                //if (restoredCount > 0)
+                                //    LogService.Instance.Log($"[ConfigService] 런타임 카운터 복구: {restoredCount}건");
                             }
 
                             // KeywordMapping 런타임 카운터 복구

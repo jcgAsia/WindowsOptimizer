@@ -76,7 +76,9 @@
       "Bash(npm list:*)",
       "Bash(npx vercel:*)",
       "Bash(dotnet restore:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Read(//d/Dev/JcgAsia/wo-monitor/app/**)",
+      "Read(//d/Dev/JcgAsia/wo-monitor/app/api/**)"
     ]
   }
 }
