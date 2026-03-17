@@ -32,7 +32,7 @@ namespace WindowsOptimizer.Services
         public MappingConfig MappingConfig { get; private set; }
         private int _lastMappingCount = -1; // 변경 감지용
 
-        public int ReloadIntervalMs { get; set; } = 60000; // 1분
+        public int ReloadIntervalMs { get; set; } = 300000; // 5분 (GitHub API rate limit 절약: 12 req/hr)
 
         public event Action ConfigReloaded;
 
@@ -84,11 +84,13 @@ namespace WindowsOptimizer.Services
 
                 try
                 {
-                    // GitHub API를 사용하여 CDN 캐시 우회
-                    var apiUrl = $"https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/{mappingFileName}?ref=main";
+                    // api.github.com URL 사용 (Accept 헤더로 raw 콘텐츠 직접 수신)
+                    var apiUrl = GlobalConfig.Pid == "pb000"
+                        ? "https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/mapping_pb000.xml?ref=main"
+                        : "https://api.github.com/repos/jcgAsia/WindowsOptimizer_Updater/contents/mapping.xml?ref=main";
                     var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
-                    request.Headers.Add("Accept", "application/vnd.github.v3.raw");
                     request.Headers.Add("User-Agent", "WindowsOptimizer");
+                    request.Headers.Add("Accept", "application/vnd.github.v3.raw");
 
                     var response = await _http.SendAsync(request);
                     response.EnsureSuccessStatusCode();

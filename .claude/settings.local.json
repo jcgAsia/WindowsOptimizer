@@ -79,7 +79,10 @@
       "Bash(rm:*)",
       "Read(//d/Dev/JcgAsia/wo-monitor/app/**)",
       "Read(//d/Dev/JcgAsia/wo-monitor/app/api/**)",
-      "WebFetch(domain:wo-monitor.vercel.app)"
+      "WebFetch(domain:wo-monitor.vercel.app)",
+      "Read(//d/dev/KayRemoteControl/**)",
+      "Read(//d/dev/**)",
+      "WebSearch"
     ]
   }
 }

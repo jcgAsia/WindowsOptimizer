@@ -13,6 +13,71 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# ==== Code Signing Settings ==========================
+$certThumbprint = "f382a7a6ddfd342f44ae9e0010a328bd487cede5"
+$timestampUrl   = "http://ts.ssl.com"
+
+# Find signtool.exe from Windows SDK, fallback to PATH
+$signtoolExe = Get-ChildItem "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue |
+    Sort-Object FullName -Descending |
+    Select-Object -First 1
+if ($signtoolExe) {
+    $signtoolPath = $signtoolExe.FullName
+    Write-Host "    Found signtool: $signtoolPath" -ForegroundColor Gray
+} else {
+    $signtoolPath = "signtool"  # Fallback: rely on PATH
+    Write-Host "    signtool not found in Windows SDK, using PATH fallback" -ForegroundColor Yellow
+}
+
+# Build signParams for Squirrel --signParams option
+$signParams = "/tr $timestampUrl /td sha256 /fd sha256 /sha1 $certThumbprint"
+
+# Helper function: sign a single file with error handling (non-fatal)
+function Invoke-CodeSign {
+    param([string]$FilePath)
+
+    if (-not (Test-Path $FilePath)) {
+        Write-Host "    [Sign] File not found, skipping: $FilePath" -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host "    [Sign] Signing: $(Split-Path $FilePath -Leaf)" -ForegroundColor Gray
+    try {
+        $signOutput = & $signtoolPath sign /tr $timestampUrl /td sha256 /fd sha256 /sha1 $certThumbprint $FilePath 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "    [Sign] WARNING: Signing failed for $(Split-Path $FilePath -Leaf) (exit code $LASTEXITCODE)" -ForegroundColor Yellow
+            Write-Host "    [Sign] signtool output: $signOutput" -ForegroundColor Yellow
+            Write-Host "    [Sign] Build will continue without signing. Ensure SafeNet token is connected for production builds." -ForegroundColor Yellow
+            return $false
+        }
+        Write-Host "    [Sign] Signed successfully: $(Split-Path $FilePath -Leaf)" -ForegroundColor Green
+        return $true
+    }
+    catch {
+        Write-Host "    [Sign] WARNING: Signing failed - $_" -ForegroundColor Yellow
+        Write-Host "    [Sign] Build will continue without signing. Ensure SafeNet token is connected for production builds." -ForegroundColor Yellow
+        return $false
+    }
+}
+
+# Test signtool availability (non-fatal check)
+if ($signtoolPath -ne "signtool") {
+    $codeSigningAvailable = Test-Path $signtoolPath
+} else {
+    $codeSigningAvailable = $null -ne (Get-Command signtool -ErrorAction SilentlyContinue)
+}
+
+if ($codeSigningAvailable) {
+    Write-Host "    Code signing: ENABLED (signtool available)" -ForegroundColor Green
+} else {
+    Write-Host "    Code signing: DISABLED (signtool not found)" -ForegroundColor Yellow
+}
+# ==========================================
+
+# Git 설정
+$gitRemote = "origin"
+$gitBranch = "main"
+
 # 경로 설정
 $solutionRoot = $PSScriptRoot
 $appProj      = Join-Path $solutionRoot "WindowsOptimizer.csproj"
@@ -55,16 +120,35 @@ if (-not (Test-Path $releasesDir)) {
     New-Item -ItemType Directory -Path $releasesDir | Out-Null
 }
 
-& $squirrelExe pack `
-    --packId "WindowsOptimizer" `
-    --packVersion $Version `
-    --packAuthors "JCG" `
-    --packDirectory $publishDir `
-    --releaseDir $releasesDir `
-    --icon $iconPath `
-    --allowUnaware
+$squirrelArgs = @(
+    "pack"
+    "--packId", "WindowsOptimizer"
+    "--packVersion", $Version
+    "--packAuthors", "JCG"
+    "--packDirectory", $publishDir
+    "--releaseDir", $releasesDir
+    "--icon", $iconPath
+    "--allowUnaware"
+)
+
+# Add code signing to Squirrel pack (signs exe/dll inside the package)
+if ($codeSigningAvailable) {
+    $squirrelArgs += "--signParams", $signParams
+    Write-Host "    -> Code signing enabled for Squirrel pack" -ForegroundColor Gray
+}
+
+& $squirrelExe @squirrelArgs
 
 if ($LASTEXITCODE -ne 0) { throw "Squirrel pack 실패" }
+
+# Sign Setup.exe separately (Squirrel may not sign the Setup installer)
+if ($codeSigningAvailable) {
+    Write-Host "    [Post] Signing Setup.exe files..." -ForegroundColor Gray
+    $setupFiles = Get-ChildItem $releasesDir -Filter "*Setup*.exe" -ErrorAction SilentlyContinue
+    foreach ($setup in $setupFiles) {
+        Invoke-CodeSign -FilePath $setup.FullName
+    }
+}
 
 # 이전 버전 정리 (최근 2개 버전만 유지)
 Write-Host "[3.5/4] 이전 버전 정리 (최근 2개 유지)..." -ForegroundColor Yellow
@@ -116,7 +200,7 @@ if ([string]::IsNullOrWhiteSpace($changes)) {
 }
 else {
     # 릴리즈 파일만 add (mapping.xml은 mapping_editor에서만 관리)
-    git add RELEASES *.nupkg WindowsOptimizerSetup.exe
+    git add RELEASES *.nupkg *Setup*.exe
 
     git commit -m "Release $Version" | Out-Null
 

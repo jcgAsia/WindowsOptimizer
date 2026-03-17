@@ -1,7 +1,6 @@
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
-using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +12,6 @@ namespace WindowsOptimizer.Services
         private static readonly Lazy<ToastPopupService> _instance = new Lazy<ToastPopupService>(() => new ToastPopupService());
         public static ToastPopupService Instance => _instance.Value;
 
-        private ManagementEventWatcher _processWatcher;
         private System.Threading.Timer _periodicCheckTimer;
         private volatile bool _isMonitoring;
         private volatile bool _isPopupShowing;
@@ -52,22 +50,8 @@ namespace WindowsOptimizer.Services
             _isMonitoring = true;
             _startTime = DateTime.Now;
 
-            try
-            {
-                // WMI를 통한 프로세스 시작 감지
-                var query = new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace");
-                _processWatcher = new ManagementEventWatcher(query);
-                _processWatcher.EventArrived += OnProcessStarted;
-                _processWatcher.Start();
-
-                LogService.Instance.Log("[ToastPopup] 브라우저 실행 감지 시작");
-            }
-            catch (Exception ex)
-            {
-                LogService.Instance.Log($"[ToastPopup] WMI 감지 시작 실패, 폴링 방식 사용: {ex.Message}");
-                // WMI 실패 시 폴링 방식 fallback
-                StartPollingMonitor();
-            }
+            StartPollingMonitor();
+            LogService.Instance.Log("[ToastPopup] 브라우저 실행 감지 시작 (폴링)");
 
             // 초기화 대기 후 이미 실행 중인 브라우저 체크
             CheckBrowserAfterStartupDelay();
@@ -99,7 +83,10 @@ namespace WindowsOptimizer.Services
                 foreach (var browser in _browserProcesses)
                 {
                     var processes = Process.GetProcessesByName(browser);
-                    if (processes.Length > 0)
+                    bool isRunning = processes.Length > 0;
+                    foreach (var p in processes) p.Dispose();
+
+                    if (isRunning)
                     {
                         // 쿨다운 체크 후 팝업 표시 시도
                         var elapsed = (DateTime.Now - _lastShowTime).TotalMinutes;
@@ -133,7 +120,10 @@ namespace WindowsOptimizer.Services
                 foreach (var browser in _browserProcesses)
                 {
                     var processes = Process.GetProcessesByName(browser);
-                    if (processes.Length > 0)
+                    bool isRunning = processes.Length > 0;
+                    foreach (var p in processes) p.Dispose();
+
+                    if (isRunning)
                     {
                         LogService.Instance.Log($"[ToastPopup] 초기화 완료, 실행 중인 브라우저 감지: {browser}");
                         TryShowPopup(browser);
@@ -144,7 +134,7 @@ namespace WindowsOptimizer.Services
         }
 
         /// <summary>
-        /// 폴링 방식 모니터링 (WMI 실패 시 fallback)
+        /// 폴링 방식 브라우저 실행 감지
         /// </summary>
         private void StartPollingMonitor()
         {
@@ -157,6 +147,7 @@ namespace WindowsOptimizer.Services
                 {
                     var processes = Process.GetProcessesByName(_browserProcesses[i]);
                     browserRunning[i] = processes.Length > 0;
+                    foreach (var p in processes) p.Dispose();
                 }
 
                 while (_isMonitoring)
@@ -167,6 +158,7 @@ namespace WindowsOptimizer.Services
                         {
                             var processes = Process.GetProcessesByName(_browserProcesses[i]);
                             bool isRunning = processes.Length > 0;
+                            foreach (var p in processes) p.Dispose();
 
                             // 실행되지 않았다가 실행된 경우
                             if (!browserRunning[i] && isRunning)
@@ -196,43 +188,12 @@ namespace WindowsOptimizer.Services
 
             try
             {
-                _processWatcher?.Stop();
-                _processWatcher?.Dispose();
-                _processWatcher = null;
-            }
-            catch { }
-
-            try
-            {
                 _periodicCheckTimer?.Dispose();
                 _periodicCheckTimer = null;
             }
             catch { }
 
             LogService.Instance.Log("[ToastPopup] 브라우저 실행 감지 중지");
-        }
-
-        private void OnProcessStarted(object sender, EventArrivedEventArgs e)
-        {
-            try
-            {
-                var processName = e.NewEvent.Properties["ProcessName"].Value?.ToString()?.ToLower();
-                if (string.IsNullOrEmpty(processName)) return;
-
-                // 브라우저 프로세스인지 확인
-                foreach (var browser in _browserProcesses)
-                {
-                    if (processName.Contains(browser))
-                    {
-                        OnBrowserStarted(browser);
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Instance.Log($"[ToastPopup] 프로세스 이벤트 처리 오류: {ex.Message}");
-            }
         }
 
         private void OnBrowserStarted(string browserName)
