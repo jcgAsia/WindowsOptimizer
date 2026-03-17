@@ -12,7 +12,7 @@ namespace WindowsOptimizer.Services
         public static MonitorLogService Instance => _instance.Value;
 
         private readonly HttpClient _http;
-        private const string MonitorUrl = "https://wo-monitor.vercel.app/api/logs";
+        private const string MonitorUrl = "https://wo-monitor-production.up.railway.app/api/logs";
         private const string ApiKey = "wo-monitor-2026-jcgasia";
 
         private MonitorLogService()

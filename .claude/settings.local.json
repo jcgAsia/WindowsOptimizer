@@ -78,7 +78,8 @@
       "Bash(dotnet restore:*)",
       "Bash(rm:*)",
       "Read(//d/Dev/JcgAsia/wo-monitor/app/**)",
-      "Read(//d/Dev/JcgAsia/wo-monitor/app/api/**)"
+      "Read(//d/Dev/JcgAsia/wo-monitor/app/api/**)",
+      "WebFetch(domain:wo-monitor.vercel.app)"
     ]
   }
 }
