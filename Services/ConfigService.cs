@@ -190,7 +190,7 @@ namespace WindowsOptimizer.Services
                             {
                                 LogService.Instance.Log($"[ConfigService] 매핑 로드 ({mappingFileName}): 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
                                 _lastMappingCount = newCount;
-                                _ = MonitorLogService.Instance.SendAsync("config_reload", true, $"{mappingFileName}: 도메인 {newCount}개, 키워드 {newKeyMapCount}개");
+
                             }
                             try { ConfigReloaded?.Invoke(); } catch (Exception ex) { try { LogService.Instance.Log($"[ERROR] ConfigReloaded handler: {ex.Message}"); } catch { } }
                         }
@@ -198,7 +198,7 @@ namespace WindowsOptimizer.Services
                     catch (Exception ex)
                     {
                         LogService.Instance.Log($"[ConfigService] 매핑 파싱 실패: {ex.Message}");
-                        _ = MonitorLogService.Instance.SendAsync("config_reload", false, ex.Message);
+
                     }
                 }
 

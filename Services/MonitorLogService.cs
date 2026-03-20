@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,11 @@ namespace WindowsOptimizer.Services
         private readonly HttpClient _http;
         private const string MonitorUrl = "https://wo-monitor-production.up.railway.app/api/logs";
         private const string ApiKey = "wo-monitor-2026-jcgasia";
+
+        // Rate limiting: 동일 action에 대해 최소 60초 간격으로만 전송
+        private readonly Dictionary<string, DateTime> _lastSentTimes = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
+        private static readonly HashSet<string> _noLimitActions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "install", "uninstall", "update" };
+        private const int RateLimitSeconds = 60;
 
         private MonitorLogService()
         {
@@ -31,6 +37,20 @@ namespace WindowsOptimizer.Services
         {
             try
             {
+                // Rate limiting: 제외 대상이 아니면 60초 간격 체크
+                if (!_noLimitActions.Contains(action))
+                {
+                    var now = DateTime.UtcNow;
+                    lock (_lastSentTimes)
+                    {
+                        if (_lastSentTimes.TryGetValue(action, out var lastSent) &&
+                            (now - lastSent).TotalSeconds < RateLimitSeconds)
+                        {
+                            return;
+                        }
+                        _lastSentTimes[action] = now;
+                    }
+                }
                 var json = $"{{\"pid\":\"{Escape(GlobalConfig.Pid)}\",\"action\":\"{Escape(action)}\",\"mac_address\":\"{Escape(GlobalConfig.MacAddress)}\",\"version\":\"{Escape(CurrentVersion)}\",\"success\":{(success ? "true" : "false")},\"detail\":\"{Escape(detail)}\"}}";
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 await _http.PostAsync(MonitorUrl, content);
