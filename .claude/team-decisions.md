@@ -4,7 +4,7 @@
 
 ---
 
-## 세션: 2026-03-17 이전 수정(WMI, Raw URL) 검증
+## 세션: 2026-03-20 빌드 실패 해결 (NETSDK1047)
 
 ## 프로젝트
 - 경로: D:\dev\WindowsOptimizer
@@ -12,72 +12,47 @@
 - 규칙: CLAUDE.md 참조
 
 ## 미션
-- 원본 요청: 이전 세션에서 수행한 WMI 제거, Raw URL 전환이 충분히 검토되었는지 재검증. 특히 mapping_editor.html에서 설정 저장 후 ConfigService가 raw.githubusercontent.com에서 로드할 때 CDN 캐시 지연 문제가 없는지 확인.
-- 핵심 우려: raw.githubusercontent.com은 CDN 캐시(~5분)가 있어서 mapping_editor에서 설정 변경 즉시 반영이 안 될 수 있음
-- 시작 시각: 2026-03-17
-
-## 이전 세션 변경 내용
-1. ToastPopupService.cs: WMI 코드 전체 제거, 폴링 직접 호출로 대체
-2. ConfigService.cs: api.github.com → GlobalConfig.MappingUrl (raw.githubusercontent.com) 전환
-3. WindowsOptimizer.csproj: System.Management 참조 제거
+- 원본 요청: build-release.ps1 -Version "1.2.7" 빌드 실패 해결
+- 에러: NETSDK1047 - project.assets.json에 'net48/win-x64' 대상 없음
+- 에러 메시지: TargetFrameworks에 'net48' 포함 확인, RuntimeIdentifiers에 'win-x64' 포함 필요할 수 있음
+- 시작 시각: 2026-03-20 19:33
 
 ## 작업 분석
-- 유형: 코드 리뷰 / 검증
+- 유형: 버그 수정 (빌드 실패)
 - 복잡도: 보통
-- 팀 구성: 탐색가 3명(병렬) → 필요시 설계자 + 구현자 + 검토자
+- 원인 추정: csproj 파일에서 TargetFramework/RuntimeIdentifier 설정과 restore 결과 불일치
+- 팀 구성: 탐색가 2명(병렬) → 개발자 1명 → 검토자 1명
 
 ## 탐색 결과
-
-### WMI 제거: 완전 검증됨 (문제 없음)
-- 전체 프로젝트에서 System.Management, WMI 관련 참조 0건
-- ToastPopupService.cs: 폴링 직접 호출, Process Dispose 처리 완료
-- csproj: System.Management 참조 제거 완료
-- 빌드 오류 위험 없음
-
-### Raw URL 전환: 기능적으로 정상이나 CDN 캐시 문제 발견!
-- 응답 형식: api.github.com과 raw.githubusercontent.com 모두 동일한 파일 원문 반환 → 파싱 로직 호환
-- 암호화: C#과 JS 양쪽 Xor256 완전 호환
-- **핵심 문제: CDN 캐시 지연**
-  - raw.githubusercontent.com은 Fastly CDN 사용, Cache-Control: max-age=300 (5분), 최대 수 시간
-  - ConfigService의 no-cache 요청 헤더는 CDN 서버 캐시에 효과 없음
-  - mapping_editor에서 저장 → GitHub 커밋 즉시 → raw URL 반영 5분~수 시간 지연
-  - 이전 api.github.com은 즉시 최신 데이터 반환했음
-
-### 최적 해결 방안 분석
-- 원래 문제: api.github.com 60 req/hr 제한 (1분 폴링 = 60 req/hr → 한도 도달)
-- **폴링 주기를 5분으로 늘리면**: 12 req/hr → 한도 대비 20%만 사용
-- api.github.com으로 복원 + 폴링 5분 = CDN 캐시 문제 없이 rate limit도 안전
+- **근본 원인**: `net48`(.NET Framework 4.8)은 `-r win-x64` RID를 지원하지 않음
+- csproj:4 → `<TargetFramework>net48</TargetFramework>` (RID 설정 없음)
+- build-release.ps1:105 → `dotnet restore $appProj -r win-x64` (문제)
+- build-release.ps1:107 → `dotnet publish ... -r win-x64` (문제)
+- restore는 성공처럼 보이지만 project.assets.json에 net48/win-x64 타겟이 생성 안 됨
+- net48 앱은 RID 없이도 Windows 전용으로 동작, Squirrel이 배포 담당
 
 ## 설계 결정
-- ConfigService.cs 단독 수정
-- ReloadIntervalMs: 60000 → 300000 (5분, 12 req/hr)
-- URL: GlobalConfig.MappingUrl → api.github.com 직접 조립 (Pid 분기)
-- Accept 헤더 복원: application/vnd.github.v3.raw
-- GlobalConfig.cs의 MappingUrl은 건드리지 않음
+- **선택지 A (채택)**: build-release.ps1에서 `-r win-x64` 제거 (최소 변경)
+  - 105줄: `dotnet restore $appProj -r win-x64` → `dotnet restore $appProj`
+  - 107줄: `dotnet publish ... -r win-x64 ...` → `-r win-x64` 제거
+  - `--self-contained false`도 net48에서 무의미하므로 제거
+- 선택지 B (기각): net8.0-windows 마이그레이션 → 대규모 변경, 위험 높음
 
 ## 완료된 작업
-1. ConfigService.cs: ReloadIntervalMs 60초 → 300초 (5분)
-2. ConfigService.cs: raw.githubusercontent.com → api.github.com URL 복원 + Accept 헤더 복원
+1. build-release.ps1:105 → `dotnet restore`에서 `-r win-x64` 제거
+2. build-release.ps1:107 → `dotnet publish`에서 `-r win-x64`와 `--self-contained false` 제거
 
 ## 변경된 파일
-- `Services/ConfigService.cs`: ReloadIntervalMs 변경, URL 복원, Accept 헤더 복원
+- `build-release.ps1`: 105줄, 107줄 수정
 
 ## 발견된 이슈
-
-### CRITICAL
-- 없음
-
-### WARNING
-1. _isLoading volatile check-then-act 경쟁 조건 → 기존 코드 이슈, 이번 범위 밖
-2. HttpRequestMessage/response IDisposable 미해제 → 기존 코드 이슈, 이번 범위 밖
-3. ReloadIntervalMs public set인데 Timer에 반영 안 됨 → 기존 코드 이슈
-
-### SUGGESTION
-1. ?ref=main 파라미터 추가 권장 → 방어적 코딩으로 추가할 가치 있음
-2. GlobalConfig.MappingUrl과 ConfigService URL 이중 관리 → 향후 정리
-
-### 수정 결정
-- SUGGESTION 1만 수정 (?ref=main 추가) — 기본 브랜치 변경 대비
+### CRITICAL: 없음
+### WARNING:
+1. restore/publish 분리 패턴 — 기능상 문제 없음, 개선 가능하나 불필요
+2. 단계 번호 불일치 ([4/4] 완료 후 [3/3] Git) — 로그 혼동, 기능 무관
+### SUGGESTION:
+1. git add 글로브 패턴 PowerShell 호환성 — 현재 작동 중, 개선 가능
+2. Squirrel 버전 하드코딩 — 향후 업데이트 시 주의
 
 ## 남은 작업
-- SUGGESTION 1 수정 후 완료
+- 빌드 재실행: `.\build-release.ps1 -Version "1.2.7"` 로 검증 필요
