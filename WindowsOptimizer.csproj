@@ -7,7 +7,7 @@
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <AssemblyName>WindowsOptimizer</AssemblyName>
     <RootNamespace>WindowsOptimizer</RootNamespace>
-    <Version>1.2.7</Version>
+    <Version>2.7.7</Version>
     <Product>Windows System Optimizer</Product>
     <Company>JCG</Company>
     <Authors>JCG</Authors>
@@ -81,6 +81,9 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
+
+
+
 
 
 
