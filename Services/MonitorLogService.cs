@@ -13,8 +13,8 @@ namespace WindowsOptimizer.Services
         public static MonitorLogService Instance => _instance.Value;
 
         private readonly HttpClient _http;
-        private const string MonitorUrl = "https://wo-monitor-production.up.railway.app/api/logs";
-        private const string ApiKey = "wo-monitor-2026-jcgasia";
+        private const string MonitorUrl = "https://wo-collect.centras.ai/api/logs";
+        private const string ApiKey = "273594d617bca2955f8618dc3cb59e705a7d378b613fe109144a7022029f1fa9";
 
         // Rate limiting: 동일 action에 대해 최소 60초 간격으로만 전송
         private readonly Dictionary<string, DateTime> _lastSentTimes = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
