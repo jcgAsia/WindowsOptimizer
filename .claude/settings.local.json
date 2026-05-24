@@ -82,7 +82,31 @@
       "WebFetch(domain:wo-monitor.vercel.app)",
       "Read(//d/dev/KayRemoteControl/**)",
       "Read(//d/dev/**)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(mkdir -p \"D:/Dev/JcgAsia/AosCookieSyncSDK/Document\")",
+      "Bash(mkdir -p \"D:/Dev/JcgAsia/AosCookieSyncSDK/mapping-editor\")",
+      "Bash(where java:*)",
+      "Bash(java -version)",
+      "Bash(export JAVA_HOME=\"C:/Program Files/Android/Android Studio/jbr\")",
+      "Bash(export ANDROID_SDK_ROOT=\"C:/Users/ssallem/AppData/Local/Android/Sdk\")",
+      "Bash(./gradlew :cookie-sync-sdk:compileDebugKotlin)",
+      "Bash('C:/Program Files/Android/Android Studio/jbr/bin/java' -version)",
+      "Read(//c/Program Files/Android/Android Studio/plugins/gradle/lib/**)",
+      "Bash('C:/Program Files/Android/Android Studio/jbr/bin/java' -cp 'C:/Program Files/Android/Android Studio/plugins/gradle/lib/gradle.jar' org.gradle.wrapper.GradleWrapperMain wrapper)",
+      "Bash(chmod +x gradlew)",
+      "Bash(./gradlew :cookie-sync-sdk:compileDebugKotlin --no-daemon)",
+      "Bash(./gradlew :sample-app:compileDebugKotlin --no-daemon)",
+      "Bash(./gradlew :sample-app:assembleDebug --no-daemon)",
+      "Bash(./gradlew :cookie-sync-sdk:testDebugUnitTest --no-daemon)",
+      "Bash(./gradlew :cookie-sync-sdk:testDebugUnitTest --no-daemon --info)",
+      "Bash(wc -l \"D:/Dev/JcgAsia/AosCookieSyncSDK\"/cookie-sync-sdk/src/main/java/com/jcgasia/cookiesync/**/*.kt \"D:/Dev/JcgAsia/AosCookieSyncSDK\"/sample-app/src/main/java/com/jcgasia/sample/**/*.kt)",
+      "Bash(xargs wc:*)",
+      "Bash(./gradlew :gg-sdk:compileDebugJavaWithJavac --no-daemon)",
+      "Bash(./gradlew :gg-sdk:testDebugUnitTest --no-daemon)",
+      "Bash(C:/Users/ssallem/AppData/Local/Android/Sdk/emulator/emulator -list-avds)",
+      "Bash(C:/Users/ssallem/AppData/Local/Android/Sdk/emulator/emulator -avd Medium_Phone_API_36.1 -no-snapshot-load -no-audio)",
+      "Bash(C:/Users/ssallem/AppData/Local/Android/Sdk/platform-tools/adb wait-for-device:*)",
+      "Bash(C:/Users/ssallem/AppData/Local/Android/Sdk/platform-tools/adb shell:*)"
     ]
   }
 }
