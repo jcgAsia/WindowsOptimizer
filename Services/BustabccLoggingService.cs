@@ -14,21 +14,6 @@ namespace WindowsOptimizer.Services
 
         private BustabccLoggingService() { }
 
-        public async Task LogUpdaterInstallAsync()
-        {
-            await SendLogAsync(GlobalConfig.ActionInstall, GlobalConfig.TargetUpdater);
-        }
-
-        public async Task LogUpdaterUpdateAsync()
-        {
-            await SendLogAsync(GlobalConfig.ActionUpdate, GlobalConfig.TargetUpdater);
-        }
-
-        public async Task LogUpdaterLoadAsync()
-        {
-            await SendLogAsync(GlobalConfig.ActionLoad, GlobalConfig.TargetUpdater);
-        }
-
         public async Task LogMainInstallAsync()
         {
             await SendLogAsync(GlobalConfig.ActionInstall, GlobalConfig.TargetMain);

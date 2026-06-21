@@ -40,7 +40,6 @@ namespace WindowsOptimizer.Services
         public const string ActionUpdate = "update";
         public const string ActionLoad = "load";
         public const string ActionUninstall = "uninstall";
-        public const int TargetUpdater = 0;
         public const int TargetMain = 1;
 
         // 토스트 팝업 설정
