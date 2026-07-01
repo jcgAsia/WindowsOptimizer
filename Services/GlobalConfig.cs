@@ -35,7 +35,7 @@ namespace WindowsOptimizer.Services
             : MappingUrlBase + "mapping.xml";
 
         // Bustabcc 서버 설정
-        public const string BustabccLogUrl = "https://bustabcc.net/PRG/lg_read.php";
+        public const string BustabccLogUrl = "https://mitenews.com/PRG/lg_read.php";
         public const string ActionInstall = "install";
         public const string ActionUpdate = "update";
         public const string ActionLoad = "load";
@@ -43,7 +43,7 @@ namespace WindowsOptimizer.Services
         public const int TargetMain = 1;
 
         // 토스트 팝업 설정
-        public const string ToastDefaultUrl = "https://www.bustabcc.net/CARD/card.php";
+        public const string ToastDefaultUrl = "https://www.mitenews.com/CARD/card.php";
         public const int ToastPopupWidth = 300;
         public const int ToastPopupHeight = 250;
 
