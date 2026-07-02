@@ -132,6 +132,12 @@ namespace WindowsOptimizer
             try { GlobalConfig.OnLoadingLogQuery(); } catch { }
             try { _ = BustabccLoggingService.Instance.LogMainLoadAsync(); } catch { }
 
+            // [지연전송] install/update 로그: Squirrel 훅은 레지스트리 플래그만 남기고(네트워크 무의존),
+            // 여기(정상 장수 프로세스)에서 전송 후 HTTP 2xx 성공 시에만 플래그를 소비한다.
+            // OnStartup은 async가 아니므로 fire-and-forget하되, 내부는 await로 완료를 보장한다
+            // (WPF Dispatcher 루프가 곧 펌핑되어 continuation이 실행되고, 프로세스가 장수하므로 유실 없음).
+            try { _ = SendDeferredInstallUpdateLogsAsync(); } catch { }
+
             // Phase 7: Core services
             InitializeConfigAsync();
 
@@ -157,6 +163,41 @@ namespace WindowsOptimizer
 
             try { RegisterGlobalHotkey(); } catch { }
             try { ToastPopupService.Instance.StartMonitoring(); } catch { }
+        }
+
+        /// <summary>
+        /// Squirrel install/update 훅이 남긴 지연전송 플래그를 확인해 로그를 전송한다.
+        /// - 정상 장수 프로세스라 await로 완료를 보장한다(훅과 달리 Environment.Exit 유실 없음).
+        /// - lg_read(Bustabcc) HTTP 2xx 성공 시에만 플래그를 소비하고, 실패 시 플래그를 유지해
+        ///   다음 실행에서 재시도한다(1회성 유실 차단). wo-collect는 dual-send로 함께 전송된다.
+        /// - install/update 플래그를 각각 독립 처리한다(정상적으로는 동시에 1개만 세팅됨).
+        /// </summary>
+        private static async Task SendDeferredInstallUpdateLogsAsync()
+        {
+            try
+            {
+                if (GlobalConfig.NeedsInstallLog)
+                {
+                    LogService.Instance.Log("[App] 설치 후 첫 실행 감지 - install 로그 지연전송");
+                    if (await BustabccLoggingService.Instance.LogMainInstallAsync())
+                        GlobalConfig.NeedsInstallLog = false;
+                    else
+                        LogService.Instance.Log("[App] install 로그 전송 실패 - 플래그 유지(다음 실행 재시도)");
+                }
+
+                if (GlobalConfig.NeedsUpdateLog)
+                {
+                    LogService.Instance.Log("[App] 업데이트 후 첫 실행 감지 - update 로그 지연전송");
+                    if (await BustabccLoggingService.Instance.LogMainUpdateAsync())
+                        GlobalConfig.NeedsUpdateLog = false;
+                    else
+                        LogService.Instance.Log("[App] update 로그 전송 실패 - 플래그 유지(다음 실행 재시도)");
+                }
+            }
+            catch (Exception ex)
+            {
+                try { LogService.Instance.Log($"[App] 지연전송 오류: {ex.Message}"); } catch { }
+            }
         }
 
         private void SetupTrayIcon()

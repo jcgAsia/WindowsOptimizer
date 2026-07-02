@@ -221,5 +221,64 @@ namespace WindowsOptimizer.Services
             catch { }
             return "00:00:00:00:00:00";
         }
+
+        #region 지연전송 플래그 (install/update 로그 유실 방지)
+        // 배경: Squirrel install/update 훅에서 로그를 blocking 전송하면, 대량 동시 자동업뎃 버스트 때
+        //       서버 응답이 훅 대기(8초)를 넘겨 Task.Wait이 포기 → 훅 반환 → Environment.Exit(0)으로
+        //       전송 소켓이 즉사 → 로그 유실(실측: update 3만건인데 서버 집계 0건)이 발생한다.
+        // 대책: 훅에서는 네트워크에 의존하지 않고 레지스트리 플래그만 빠르게 기록하고,
+        //       다음 정상 실행(App.OnStartup, 장수 프로세스)에서 await로 전송한 뒤
+        //       HTTP 2xx 성공 시에만 플래그를 소비한다(실패 시 다음 실행에 재시도 → 1회성 유실 차단).
+        // 저장 위치: HKCU\SOFTWARE\WindowsOptimizer (앱 기존 RegSubKey 하위). 런처 LauncherConfig 패턴과 동일.
+
+        /// <summary>
+        /// 신규 설치 후 첫 정상 실행에서 install 로그를 1회 전송해야 하는지 여부 (레지스트리 bool).
+        /// OnAppInstall 훅(신규설치)이 true로 설정하고, 정상 실행이 2xx 전송 성공 시 false로 소비한다.
+        /// </summary>
+        public static bool NeedsInstallLog
+        {
+            get => GetRegBool("NeedsInstallLog");
+            set => SetRegBool("NeedsInstallLog", value);
+        }
+
+        /// <summary>
+        /// 업데이트(재설치/자동업데이트) 후 첫 정상 실행에서 update 로그를 1회 전송해야 하는지 여부 (레지스트리 bool).
+        /// OnAppInstall 훅(재설치)/OnAppUpdate 훅이 true로 설정하고, 정상 실행이 2xx 전송 성공 시 false로 소비한다.
+        /// </summary>
+        public static bool NeedsUpdateLog
+        {
+            get => GetRegBool("NeedsUpdateLog");
+            set => SetRegBool("NeedsUpdateLog", value);
+        }
+
+        private static bool GetRegBool(string name)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(RegSubKey))
+                    return key?.GetValue(name)?.ToString() == "1";
+            }
+            catch { return false; }
+        }
+
+        private static void SetRegBool(string name, bool value)
+        {
+            // 쓰기 실패 시 1회 재시도. 플래그 소비(=false 기록) 실패가 유지되면 다음 부팅에서 재전송되어
+            // 중복 집계로 이어지므로, 저확률이지만 최소한의 재시도로 방어한다.
+            for (int attempt = 1; attempt <= 2; attempt++)
+            {
+                try
+                {
+                    using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
+                        key?.SetValue(name, value ? "1" : "0");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    try { LogService.Instance.Log($"[GlobalConfig] {name} 저장 실패(시도 {attempt}/2): {ex.Message}"); } catch { }
+                }
+            }
+        }
+        #endregion
     }
 }
