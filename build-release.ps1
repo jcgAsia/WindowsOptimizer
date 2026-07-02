@@ -153,7 +153,10 @@ if ($codeSigningAvailable) {
 # 이전 버전 정리 (최근 2개 버전만 유지)
 Write-Host "[3.5/4] 이전 버전 정리 (최근 2개 유지)..." -ForegroundColor Yellow
 
-$allFullPkgs = Get-ChildItem $releasesDir -Filter "*-full.nupkg" | Sort-Object Name -Descending
+# 시맨틱 버전 숫자로 정렬 (파일명 문자열 정렬 금지: "2.7.10" < "2.7.9" 오판정 방지)
+$allFullPkgs = Get-ChildItem $releasesDir -Filter "*-full.nupkg" | Sort-Object {
+    if ($_.Name -match '-(\d+\.\d+\.\d+(?:\.\d+)?)-full\.nupkg$') { [version]$matches[1] } else { [version]'0.0.0' }
+} -Descending
 if ($allFullPkgs.Count -gt 2) {
     $versionsToDelete = $allFullPkgs | Select-Object -Skip 2
     foreach ($pkg in $versionsToDelete) {
