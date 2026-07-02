@@ -129,23 +129,18 @@ namespace WindowsOptimizer.Services
             // 프로그램 추가/삭제에 등록 (두 모드 공통)
             RegistryService.Instance.RegisterUninstaller();
 
-            // Bustabcc 서버 로그 전송 (재설치 vs 신규설치 구분)
-            try
+            // Bustabcc 서버 로그 전송 (재설치 vs 신규설치 구분), 전송 완료까지 blocking 대기
+            // 재설치 판별: 초기화 순서상 GlobalConfig.Initialize()가 이 훅보다 먼저 pid를 레지스트리에
+            // 기록하므로, 레지스트리를 다시 읽으면 신규설치도 재설치로 오판된다.
+            // → Initialize가 기록 전에 포착한 GlobalConfig.HadExistingRegistryPid를 사용한다.
+            if (GlobalConfig.HadExistingRegistryPid)
             {
-                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(GlobalConfig.RegSubKey))
-                {
-                    bool isReinstall = key?.GetValue("pid") != null;
-                    if (isReinstall)
-                    {
-                        _ = BustabccLoggingService.Instance.LogMainUpdateAsync();
-                    }
-                    else
-                    {
-                        _ = BustabccLoggingService.Instance.LogMainInstallAsync();
-                    }
-                }
+                SendLogBlocking(() => BustabccLoggingService.Instance.LogMainUpdateAsync());
             }
-            catch { }
+            else
+            {
+                SendLogBlocking(() => BustabccLoggingService.Instance.LogMainInstallAsync());
+            }
         }
 
         private static void OnAppUpdate(SemanticVersion version, IAppTools tools)
@@ -172,8 +167,8 @@ namespace WindowsOptimizer.Services
                 tools.CreateShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             }
 
-            // Bustabcc 서버 업데이트 로그 전송
-            try { _ = BustabccLoggingService.Instance.LogMainUpdateAsync(); } catch { }
+            // Bustabcc 서버 업데이트 로그 전송, 전송 완료까지 blocking 대기
+            SendLogBlocking(() => BustabccLoggingService.Instance.LogMainUpdateAsync());
         }
 
         /// <summary>
@@ -197,8 +192,9 @@ namespace WindowsOptimizer.Services
 
         private static void OnAppUninstall(SemanticVersion version, IAppTools tools)
         {
-            // Bustabcc 서버 언인스톨 로그 전송
-            try { _ = BustabccLoggingService.Instance.LogUninstallAsync(); } catch { }
+            // Bustabcc 서버 언인스톨 로그 전송, 전송 완료까지 blocking 대기
+            // uninstall은 "다음 실행"이 없으므로 지연전송 불가 → 반드시 이 자리에서 완료를 기다린다.
+            SendLogBlocking(() => BustabccLoggingService.Instance.LogUninstallAsync());
 
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             RegistryService.Instance.UnregisterStartup();
@@ -206,6 +202,20 @@ namespace WindowsOptimizer.Services
 
             // 앱 레지스트리 키 전체 삭제 (pid, InstallMode 등)
             try { Microsoft.Win32.Registry.CurrentUser.DeleteSubKeyTree(GlobalConfig.RegSubKey, false); } catch { }
+        }
+
+        /// <summary>
+        /// Squirrel 훅(install/update/uninstall)에서 로그 전송을 완료까지 blocking 대기한다.
+        /// - fire-and-forget이면 Squirrel이 훅 반환 직후 Environment.Exit(0)로 프로세스를 죽여
+        ///   네트워크 왕복 완료 전에 유실되므로, 여기서 완료를 기다려야 한다.
+        /// - Task.Run으로 감싸 UI 스레드의 SynchronizationContext에서 발생하는
+        ///   sync-over-async 데드락(OnStartup 시점엔 Dispatcher 루프가 아직 펌핑되지 않음)을 회피한다.
+        /// - 최대 8초(Squirrel 훅 15초 제한 내)만 대기하여 서버 지연 시에도 훅이 멈추지 않게 한다.
+        /// </summary>
+        private static void SendLogBlocking(Func<Task> sendLog)
+        {
+            try { Task.Run(sendLog).Wait(TimeSpan.FromSeconds(8)); }
+            catch { }
         }
 
         private static void OnFirstRun()

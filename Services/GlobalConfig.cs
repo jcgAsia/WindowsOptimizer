@@ -11,6 +11,12 @@ namespace WindowsOptimizer.Services
         public static string Pid { get; private set; } = "pb001"; // 기본값: 배포용
         public static string MacAddress { get; private set; }
 
+        // Initialize()가 레지스트리에 pid를 기록하기 "직전"에 포착한, 기존 pid 존재 여부.
+        // 초기화 순서상 Initialize()가 Squirrel 훅보다 먼저 실행되어 pid.txt를 레지스트리에 기록하므로,
+        // OnAppInstall 훅에서 레지스트리 pid를 다시 읽으면 신규설치도 pid가 존재해 재설치로 오판된다.
+        // → 훅은 이 플래그로 신규설치(false) vs 재설치(true)를 판별한다.
+        public static bool HadExistingRegistryPid { get; private set; }
+
         // 설치 모드: "Mockup" (UI 있음) / "Execute" (UI 없음, 기본값)
         public const string InstallModeMockup = "Mockup";
         public const string InstallModeExecute = "Execute";
@@ -66,6 +72,9 @@ namespace WindowsOptimizer.Services
                     if (key != null)
                     {
                         var regPid = key.GetValue("pid")?.ToString();
+
+                        // pid.txt 기록으로 값이 덮이기 전, 기존 pid 존재 여부를 포착(재설치 판별용)
+                        HadExistingRegistryPid = !string.IsNullOrEmpty(regPid);
 
                         if (!string.IsNullOrEmpty(currentPidTxt))
                         {

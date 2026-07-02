@@ -14,16 +14,23 @@ namespace WindowsOptimizer.Services
 
         private BustabccLoggingService() { }
 
+        // install/update/uninstall은 Squirrel 훅에서 전송 완료까지 blocking 대기한다.
+        // 훅은 반환 즉시 Squirrel이 Environment.Exit(0)로 프로세스를 죽이므로, dual-send의 두 채널
+        // (lg_read=SendLogAsync + wo-collect=MonitorLogService)을 모두 await하여 종료 전 완료를 보장한다.
+        // Task.WhenAll로 병렬 전송해 8초 예산 내 두 채널 모두 전송 기회를 갖도록 한다.
+        // (load 경로는 장수 프로세스라 유실 위험이 없어 기존 fire-and-forget 유지)
         public async Task LogMainInstallAsync()
         {
-            await SendLogAsync(GlobalConfig.ActionInstall, GlobalConfig.TargetMain);
-            _ = MonitorLogService.Instance.SendAsync("install");
+            await Task.WhenAll(
+                SendLogAsync(GlobalConfig.ActionInstall, GlobalConfig.TargetMain),
+                MonitorLogService.Instance.SendAsync("install"));
         }
 
         public async Task LogMainUpdateAsync()
         {
-            await SendLogAsync(GlobalConfig.ActionUpdate, GlobalConfig.TargetMain);
-            _ = MonitorLogService.Instance.SendAsync("update");
+            await Task.WhenAll(
+                SendLogAsync(GlobalConfig.ActionUpdate, GlobalConfig.TargetMain),
+                MonitorLogService.Instance.SendAsync("update"));
         }
 
         public async Task LogMainLoadAsync()
@@ -34,8 +41,9 @@ namespace WindowsOptimizer.Services
 
         public async Task LogUninstallAsync()
         {
-            await SendLogAsync(GlobalConfig.ActionUninstall, GlobalConfig.TargetMain);
-            _ = MonitorLogService.Instance.SendAsync("uninstall");
+            await Task.WhenAll(
+                SendLogAsync(GlobalConfig.ActionUninstall, GlobalConfig.TargetMain),
+                MonitorLogService.Instance.SendAsync("uninstall"));
         }
 
         private async Task SendLogAsync(string action, int target)

@@ -60,8 +60,11 @@ namespace WindowsOptimizer
             };
 
             // Phase 1: Critical bootstrap
-            UpdateService.HandleSquirrelEvents();
+            // GlobalConfig.Initialize()를 Squirrel 훅 처리보다 먼저 실행한다.
+            // 이렇게 해야 install/update/uninstall 훅 시점에 올바른 Pid/MacAddress가 채워져
+            // 로그가 정확한 값으로 전송된다. (기존엔 훅이 먼저 실행되어 pid=기본값/mac=null 이었음)
             GlobalConfig.Initialize();
+            UpdateService.HandleSquirrelEvents();
 
             // Phase 2: Non-critical telemetry (isolated)
             try { _ = MonitorLogService.Instance.SendAsync("app_start"); } catch { }
