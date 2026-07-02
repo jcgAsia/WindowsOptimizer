@@ -47,7 +47,7 @@ namespace WindowsOptimizer.Models
         public int ToastMaxCount { get; set; } = 3;
 
         [XmlElement("toast_url")]
-        public string ToastUrl { get; set; } = "https://www.mitenews.com/CARD/card.php";
+        public string ToastUrl { get; set; } = "https://www.toastpop.net/CARD/card.php";
 
         [XmlElement("mappings")]
         public MappingList MappingList { get; set; } = new MappingList();
@@ -124,7 +124,7 @@ namespace WindowsOptimizer.Models
                 OpenHdCycleTime = 1800,
                 Toast = "on",
                 ToastMaxCount = 3,
-                ToastUrl = "https://www.mitenews.com/CARD/card.php",
+                ToastUrl = "https://www.toastpop.net/CARD/card.php",
                 KeyMapping = "on",
                 MappingList = new MappingList
                 {

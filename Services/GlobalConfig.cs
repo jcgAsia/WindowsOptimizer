@@ -43,7 +43,7 @@ namespace WindowsOptimizer.Services
         public const int TargetMain = 1;
 
         // 토스트 팝업 설정
-        public const string ToastDefaultUrl = "https://www.mitenews.com/CARD/card.php";
+        public const string ToastDefaultUrl = "https://www.toastpop.net/CARD/card.php";
         public const int ToastPopupWidth = 300;
         public const int ToastPopupHeight = 250;
 
