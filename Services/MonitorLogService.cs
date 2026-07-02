@@ -32,8 +32,9 @@ namespace WindowsOptimizer.Services
 
         /// <summary>
         /// 모니터링 서버에 로그 전송 (fire-and-forget)
+        /// eventId: outbox/uninstall 경로가 부여하는 상관관계 ID — 있을 때만 payload에 "event_id" 필드로 실린다.
         /// </summary>
-        public async Task SendAsync(string action, bool success = true, string detail = null)
+        public async Task SendAsync(string action, bool success = true, string detail = null, string eventId = null)
         {
             try
             {
@@ -51,7 +52,8 @@ namespace WindowsOptimizer.Services
                         _lastSentTimes[action] = now;
                     }
                 }
-                var json = $"{{\"pid\":\"{Escape(GlobalConfig.Pid)}\",\"action\":\"{Escape(action)}\",\"mac_address\":\"{Escape(GlobalConfig.MacAddress)}\",\"version\":\"{Escape(CurrentVersion)}\",\"success\":{(success ? "true" : "false")},\"detail\":\"{Escape(detail)}\"}}";
+                var eventIdField = string.IsNullOrEmpty(eventId) ? "" : $",\"event_id\":\"{Escape(eventId)}\"";
+                var json = $"{{\"pid\":\"{Escape(GlobalConfig.Pid)}\",\"action\":\"{Escape(action)}\",\"mac_address\":\"{Escape(GlobalConfig.MacAddress)}\",\"version\":\"{Escape(CurrentVersion)}\",\"success\":{(success ? "true" : "false")},\"detail\":\"{Escape(detail)}\"{eventIdField}}}";
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 await _http.PostAsync(MonitorUrl, content);
             }

@@ -135,6 +135,12 @@ namespace WindowsOptimizer
             // Phase 5: Self-healing update (after mutex, single instance only)
             UpdateService.Instance.StartPeriodicCheck();
 
+            // Phase 5.5: 백그라운드 로그 sender 시작(단일 인스턴스 확정 후, 1회).
+            // 시작 즉시 첫 iteration이 돌아 (a) 이전 세션이 남긴 outbox 잔존분(load 실패분)과
+            // (b) install/update 보류분(LastLoggedVersion/FreshInstall 버전비교)을 재전송한다.
+            // install/update 전송 경로는 이 sender 루프 하나로 단일화됐다(직접 호출 제거 → 동시 이중발사 없음).
+            try { LogSenderService.Instance.Start(); } catch { }
+
             // Phase 6: Non-critical services (isolated)
             try { RegistryService.Instance.RegisterStartup(); } catch { }
 
@@ -144,24 +150,31 @@ namespace WindowsOptimizer
                 try { SetupTrayIcon(); } catch { }
             }
 
-            // [자동업뎃 load 스킵] 자동업뎃(RestartApp) 재시작 세션(skipLoad=true)에서는 load 로그를 보내지 않는다.
+            // [자동업뎃 load 스킵] 자동업뎃(RestartApp) 재시작 세션(skipLoad=true)에서는 load 이벤트를
+            // enqueue 자체를 하지 않는다(스킵 세션은 outbox에 안 들어가므로 재시도 대상도 아님).
             // 콜드부팅/런처발(watchdog) 재실행은 skipLoad=false라 load가 정상 전송된다.
-            // update 로그(SendInstallUpdateLogByVersionAsync)는 이 블록 밖이라 이 스킵과 무관하게 무조건 전송된다.
+            // update 로그(LogSenderService의 버전비교)는 이 블록과 무관하게 무조건 전송된다.
+            //
+            // [load outbox 전환] 직접 전송(LogMainLoadAsync fire-and-forget) 대신 레지스트리 outbox에
+            // 기록만 하고 sender를 깨운다. 전송은 sender가 전담한다:
+            //   2xx → 엔트리 소비 + wo-collect(eventId) 1회 발사 / 실패 → 세션 내 백오프 재시도,
+            //   프로세스 사망 시에도 엔트리가 남아 다음 부팅 시작 스캔에서 재전송(영구유실 제거).
             if (!skipLoad)
             {
                 try { GlobalConfig.OnLoadingLogQuery(); } catch { }
-                try { _ = BustabccLoggingService.Instance.LogMainLoadAsync(); } catch { }
+                try
+                {
+                    var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.0.0";
+                    GlobalConfig.EnqueueEvent(GlobalConfig.ActionLoad, version);
+                }
+                catch { }
             }
             else
             {
                 LogService.Instance.Log("[App] 자동업뎃 재시작 세션 - load 로그 1회 스킵");
             }
-
-            // [버전비교] install/update 로그: Squirrel 훅에 의존하지 않고, 정상 장수 프로세스인 여기서
-            // 레지스트리 LastLoggedVersion과 현재 어셈블리 버전을 비교해 install/update를 판별·전송한다.
-            // OnStartup은 async가 아니므로 fire-and-forget하되, 내부는 await로 완료를 보장한다
-            // (WPF Dispatcher 루프가 곧 펌핑되어 continuation이 실행되고, 프로세스가 장수하므로 유실 없음).
-            try { _ = SendInstallUpdateLogByVersionAsync(); } catch { }
+            // 대기 중인 sender를 즉시 깨운다(방금 enqueue한 load + install/update 보류분 처리).
+            try { LogSenderService.Instance.Wake(); } catch { }
 
             // Phase 7: Core services
             InitializeConfigAsync();
@@ -190,77 +203,9 @@ namespace WindowsOptimizer
             try { ToastPopupService.Instance.StartMonitoring(); } catch { }
         }
 
-        /// <summary>
-        /// 버전 비교 기반 install/update 로그 전송 (Squirrel 훅 무의존).
-        /// - 레지스트리 LastLoggedVersion과 현재 어셈블리 버전을 비교한다. 정상 장수 프로세스에서 실행되므로
-        ///   await로 완료를 보장한다(훅과 달리 Environment.Exit 유실 없음).
-        /// - 기록 없음(첫 실행) → install, 기록 &lt; 현재 → update, 같음/다운그레이드 → 무전송.
-        /// - lg_read(Bustabcc) HTTP 2xx 성공 시에만 LastLoggedVersion을 현재로 갱신한다
-        ///   (실패 시 미갱신 → 다음 실행 재시도, 1회성 유실 차단). wo-collect는 LogMain*Async 내부에서
-        ///   lg_read 성공 시에만 뒤이어 1회 발사되어 중복이 없다.
-        /// </summary>
-        private static async Task SendInstallUpdateLogByVersionAsync()
-        {
-            try
-            {
-                var current = Assembly.GetExecutingAssembly().GetName().Version;
-                if (current == null) return;
-
-                var storedRaw = GlobalConfig.LastLoggedVersion;
-
-                if (string.IsNullOrEmpty(storedRaw))
-                {
-                    // 기록 없음: 진짜 신규설치인지, 첫 매니페스트 자동업뎃으로 넘어온 기존 설치인지 마커로 구분한다.
-                    //   FreshInstall == true  → OnAppInstall이 남긴 마커 = 진짜 신규설치 → install
-                    //   FreshInstall == false → 마커 없음(OnAppInstall 미실행) = 자동업뎃으로 넘어온 기존 설치 → update
-                    if (GlobalConfig.FreshInstall)
-                    {
-                        LogService.Instance.Log($"[App] LastLoggedVersion 없음 + FreshInstall 마커 - install 로그 전송 (v{current})");
-                        if (await BustabccLoggingService.Instance.LogMainInstallAsync())
-                        {
-                            GlobalConfig.LastLoggedVersion = current.ToString();
-                            GlobalConfig.FreshInstall = false; // lg_read 2xx 성공 시 마커 소비(재전송 방지)
-                        }
-                        else
-                            LogService.Instance.Log("[App] install 로그 전송 실패 - LastLoggedVersion/마커 미갱신(다음 실행 재시도)");
-                    }
-                    else
-                    {
-                        LogService.Instance.Log($"[App] LastLoggedVersion 없음 + FreshInstall 마커 없음 - update 로그 전송 (v{current})");
-                        if (await BustabccLoggingService.Instance.LogMainUpdateAsync())
-                            GlobalConfig.LastLoggedVersion = current.ToString();
-                        else
-                            LogService.Instance.Log("[App] update 로그 전송 실패 - LastLoggedVersion 미갱신(다음 실행 재시도)");
-                    }
-                    return;
-                }
-
-                if (!Version.TryParse(storedRaw, out var stored))
-                {
-                    // 기록이 손상되어 파싱 불가 → 이벤트 발사 없이 현재 버전으로 self-heal(중복/오카운팅 방지)
-                    LogService.Instance.Log($"[App] LastLoggedVersion 파싱 실패('{storedRaw}') - 무전송, 현재 버전으로 복구 (v{current})");
-                    GlobalConfig.LastLoggedVersion = current.ToString();
-                    return;
-                }
-
-                if (current > stored)
-                {
-                    // 기록 < 현재 → update
-                    LogService.Instance.Log($"[App] 버전 상승 감지 ({stored} → {current}) - update 로그 전송");
-                    if (await BustabccLoggingService.Instance.LogMainUpdateAsync())
-                        GlobalConfig.LastLoggedVersion = current.ToString();
-                    else
-                        LogService.Instance.Log("[App] update 로그 전송 실패 - LastLoggedVersion 미갱신(다음 실행 재시도)");
-                    return;
-                }
-
-                // current == stored(재부팅) 또는 current < stored(다운그레이드) → 무전송
-            }
-            catch (Exception ex)
-            {
-                try { LogService.Instance.Log($"[App] 버전비교 전송 오류: {ex.Message}"); } catch { }
-            }
-        }
+        // [이관] SendInstallUpdateLogByVersionAsync(버전 비교 기반 install/update 로그)는
+        // Services\LogSenderService.cs로 옮겨졌다(판별·소비 로직 불변). sender 루프가 부팅 직후 +
+        // 실패 시 백오프로 주기 재호출하며, 호출 경로가 하나라 동시 이중발사가 없다.
 
         private void SetupTrayIcon()
         {
@@ -428,6 +373,9 @@ namespace WindowsOptimizer
             // 주기적 체크 중지
             try { UpdateService.Instance.StopPeriodicCheck(); } catch { }
             try { ConfigService.Instance.StopPeriodicReload(); } catch { }
+
+            // 로그 sender 루프 종료(미전송 outbox 엔트리는 레지스트리에 남아 다음 부팅에서 재전송됨)
+            try { LogSenderService.Instance.Stop(); } catch { }
 
             // 토스트 팝업 서비스 중지
             try { ToastPopupService.Instance.StopMonitoring(); } catch { }

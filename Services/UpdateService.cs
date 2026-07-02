@@ -119,7 +119,7 @@ namespace WindowsOptimizer.Services
         private static void OnAppInstall(SemanticVersion version, IAppTools tools)
         {
             // 진짜 신규설치 마커를 로컬 레지스트리에 남긴다(네트워크 호출 없음 → 훅 버스트-exit 유실 위험 없음).
-            // 로그 전송은 여기서 하지 않는다. App.OnStartup의 버전 비교(SendInstallUpdateLogByVersionAsync)가
+            // 로그 전송은 여기서 하지 않는다. LogSenderService의 버전 비교(SendInstallUpdateLogByVersionAsync)가
             // 이 마커를 읽어 신규설치(install) vs 자동업뎃으로 넘어온 기존 설치(update)를 구분해 전송한다.
             // 맨 앞에서 찍어 이후 바로가기 처리 등이 예외로 중단돼도 마커가 남도록 한다.
             GlobalConfig.FreshInstall = true;
@@ -158,7 +158,7 @@ namespace WindowsOptimizer.Services
             RegistryService.Instance.RegisterUninstaller();
 
             // install/update 로그 전송은 더 이상 훅에서 처리하지 않는다.
-            // → App.OnStartup의 버전 비교(SendInstallUpdateLogByVersionAsync)가 다음 정상 실행에서 전송한다.
+            // → LogSenderService의 버전 비교(SendInstallUpdateLogByVersionAsync)가 다음 정상 실행에서 전송한다.
             //   (훅 미실행/버스트 유실 문제를 원천 차단. uninstall만 훅에서 blocking 전송.)
         }
 
@@ -187,7 +187,7 @@ namespace WindowsOptimizer.Services
             }
 
             // update 로그 전송은 훅에서 처리하지 않는다. 자동 업데이트 후 재시작된 정상 실행에서
-            // App.OnStartup의 버전 비교(SendInstallUpdateLogByVersionAsync)가 LastLoggedVersion < 현재를
+            // LogSenderService의 버전 비교(SendInstallUpdateLogByVersionAsync)가 LastLoggedVersion < 현재를
             // 감지해 update 로그를 전송한다. → 훅 반환 직후 Environment.Exit(0) 유실을 차단.
         }
 
@@ -215,8 +215,11 @@ namespace WindowsOptimizer.Services
             // Bustabcc 서버 언인스톨 로그를 blocking 전송한다.
             // uninstall은 "다음 실행"이 없어 버전 비교(지연전송)가 불가하므로, 반드시 이 자리에서 완료를 기다린다.
             // app.manifest의 SquirrelAware 네이티브 마커로 이 훅이 실제 실행되므로 동작한다.
-            // (install/update는 App.OnStartup 버전 비교가 담당하므로 여기서 다루지 않는다.)
-            SendLogBlocking(() => BustabccLoggingService.Instance.LogUninstallAsync());
+            // (install/update는 LogSenderService의 버전 비교가 담당하므로 여기서 다루지 않는다.)
+            // eventId: 양채널(lg_read + wo-collect) 상관관계용으로 훅에서 1개 생성해 전달한다.
+            //   lg_read 와이어는 동결이라 실제로는 wo-collect payload("event_id")에만 실린다.
+            var uninstallEventId = Guid.NewGuid().ToString("N");
+            SendLogBlocking(() => BustabccLoggingService.Instance.LogUninstallAsync(uninstallEventId));
 
             tools.RemoveShortcutForThisExe(ShortcutLocation.StartMenu | ShortcutLocation.Startup);
             RegistryService.Instance.UnregisterStartup();
@@ -235,11 +238,13 @@ namespace WindowsOptimizer.Services
         /// - Task.Run으로 감싸 UI 스레드의 SynchronizationContext에서 발생하는
         ///   sync-over-async 데드락(OnStartup 시점엔 Dispatcher 루프가 아직 펌핑되지 않음)을 회피한다.
         /// - dual-send(lg_read + wo-collect) 두 채널을 모두 대기한다(LogUninstallAsync의 Task.WhenAll).
-        /// - 최대 13초만 대기해 서버 지연 시에도 Clowd.Squirrel 강제 킬(30초) 한도 내 여유를 둔다.
+        /// - 최대 17초 대기: lg_read HttpClient 타임아웃(15초) 예산을 온전히 실사용하고도
+        ///   Clowd.Squirrel 강제 킬(30초) 한도 내 여유를 둔다. (기존 13초는 15초 타임아웃보다 짧아
+        ///   서버가 14초 만에 응답해도 훅이 먼저 포기하는 낭비가 있었다.)
         /// </summary>
         private static void SendLogBlocking(Func<Task> sendLog)
         {
-            try { Task.Run(sendLog).Wait(TimeSpan.FromSeconds(13)); }
+            try { Task.Run(sendLog).Wait(TimeSpan.FromSeconds(17)); }
             catch { }
         }
 
