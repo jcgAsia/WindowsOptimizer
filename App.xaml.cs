@@ -65,6 +65,7 @@ namespace WindowsOptimizer
             // 이렇게 해야 install/update/uninstall 훅 시점에 올바른 Pid/MacAddress가 채워져
             // 로그가 정확한 값으로 전송된다. (기존엔 훅이 먼저 실행되어 pid=기본값/mac=null 이었음)
             GlobalConfig.Initialize();
+
             UpdateService.HandleSquirrelEvents();
 
             // Phase 2: Non-critical telemetry (isolated)
@@ -116,6 +117,19 @@ namespace WindowsOptimizer
                 return;
             }
 
+            // Phase 4.5: 자동업뎃 재시작발 load 스킵 마커 소비(읽자마자 false 클리어 → 네트워크 무관, 1회성).
+            // UpdateService가 RestartApp() 직전에 세팅한 SkipNextLoad를 여기서 읽어 지역 변수로 보관하고
+            // 즉시 레지스트리를 false로 지운다(CheckAndClearAutoUpdateMarker와 동일한 "읽자마자 소비" 패턴).
+            // ⚠️ 반드시 Mutex 획득 성공(isNew==true) 이후에 소비해야 한다(Phase 1.5→4.5 이동 사유):
+            //   Mutex 이전에 두면 뮤텍스를 잃고 곧 Shutdown될 중복 프로세스가 플래그를 먼저 소비해버려,
+            //   정작 살아남을 재시작 세션이 load를 스킵하지 못하는 레이스가 생긴다.
+            //   (StartPeriodicCheck(Phase 5, 첫 체크 5초 뒤)보다 앞이라 이 세션 UpdateService가 새로
+            //    세팅하는 SkipNextLoad와도 충돌 없음. update 로그(SendInstallUpdateLogByVersionAsync)는
+            //    이 플래그와 무관하게 무조건 전송된다.)
+            //   재시작 직후 즉사해도 이미 false라 다음 콜드부팅/watchdog load는 스킵되지 않는다(안전 방향).
+            bool skipLoad = GlobalConfig.SkipNextLoad;
+            if (skipLoad) GlobalConfig.SkipNextLoad = false;
+
             base.OnStartup(e);
 
             // Phase 5: Self-healing update (after mutex, single instance only)
@@ -130,8 +144,18 @@ namespace WindowsOptimizer
                 try { SetupTrayIcon(); } catch { }
             }
 
-            try { GlobalConfig.OnLoadingLogQuery(); } catch { }
-            try { _ = BustabccLoggingService.Instance.LogMainLoadAsync(); } catch { }
+            // [자동업뎃 load 스킵] 자동업뎃(RestartApp) 재시작 세션(skipLoad=true)에서는 load 로그를 보내지 않는다.
+            // 콜드부팅/런처발(watchdog) 재실행은 skipLoad=false라 load가 정상 전송된다.
+            // update 로그(SendInstallUpdateLogByVersionAsync)는 이 블록 밖이라 이 스킵과 무관하게 무조건 전송된다.
+            if (!skipLoad)
+            {
+                try { GlobalConfig.OnLoadingLogQuery(); } catch { }
+                try { _ = BustabccLoggingService.Instance.LogMainLoadAsync(); } catch { }
+            }
+            else
+            {
+                LogService.Instance.Log("[App] 자동업뎃 재시작 세션 - load 로그 1회 스킵");
+            }
 
             // [버전비교] install/update 로그: Squirrel 훅에 의존하지 않고, 정상 장수 프로세스인 여기서
             // 레지스트리 LastLoggedVersion과 현재 어셈블리 버전을 비교해 install/update를 판별·전송한다.

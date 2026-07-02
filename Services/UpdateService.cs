@@ -65,7 +65,29 @@ namespace WindowsOptimizer.Services
                         await mgr.UpdateApp();
                         LogService.Instance.Log("[UpdateService] 업데이트 완료. 재시작 중...");
 
-                        UpdateManager.RestartApp();
+                        // [자동업뎃 load 스킵 예약] 이어질 RestartApp() 재시작 세션에서 load 로그를 1회 건너뛰도록 예약한다.
+                        // ⚠️ 반드시 이 위치(UpdateApp() 완료 후 · RestartApp() 직전).
+                        //   UpdateApp()이 실행하는 install/update 훅 프로세스가 이미 끝난 뒤라 마커 소비 충돌이 없다
+                        //   (.auto_update/isAutoUpdate는 훅이 먼저 소비해 App.OnStartup에선 못 쓴다 — 그래서 별도 마커 사용).
+                        //   RestartApp()이 새 버전 exe를 실행하면, 그 App.OnStartup이 SkipNextLoad를 읽자마자 소비해
+                        //   이 재시작발 load만 스킵된다. update 로그는 버전비교로 무조건 정상 전송된다.
+                        GlobalConfig.SkipNextLoad = true;
+
+                        // [플래그 잔류 방지] RestartApp()이 예외로 실패하면 재시작 세션 자체가 없으므로,
+                        // 방금 세운 SkipNextLoad가 true로 남아 무관한 다음 세션(콜드부팅/watchdog 재실행)의
+                        // load가 부당하게 스킵된다. → 별도 try/catch로 감싸 실패 시 즉시 false로 롤백하고
+                        // (SetRegBool은 내부에서 예외를 삼키므로 catch 안에서 안전), 예외는 재던져
+                        // 기존 바깥 catch("업데이트 확인 실패" 로깅 → _isChecking 해제 → false 반환) 흐름을 유지한다.
+                        try
+                        {
+                            UpdateManager.RestartApp();
+                        }
+                        catch
+                        {
+                            GlobalConfig.SkipNextLoad = false;
+                            LogService.Instance.Log("[UpdateService] RestartApp 실패 - SkipNextLoad 롤백");
+                            throw;
+                        }
                         return true;
                     }
                     // 최신 버전일 때는 로그 생략 (1분마다 반복되므로)

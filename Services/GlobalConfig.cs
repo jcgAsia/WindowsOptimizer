@@ -256,6 +256,24 @@ namespace WindowsOptimizer.Services
             set => SetRegBool("FreshInstall", value);
         }
 
+        /// <summary>
+        /// 자동업뎃(UpdateApp→RestartApp)으로 재시작되는 "바로 다음 실행"에서 load 로그를 1회만 건너뛰기 위한 마커.
+        /// - UpdateService가 RestartApp() 직전에 true로 세팅하고, App.OnStartup이 Mutex(단일 인스턴스) 획득 직후
+        ///   읽자마자 false로 소비한다(로컬 레지스트리 읽기/쓰기만 → 네트워크 무관, 훅 버스트-exit 유실 위험 없음).
+        ///   Mutex 이후 소비여야 뮤텍스를 잃고 Shutdown될 중복 프로세스가 플래그를 선소비하는 레이스가 없다.
+        /// - load만 스킵한다. update 로그(SendInstallUpdateLogByVersionAsync)는 이 마커와 무관하게 무조건 전송된다.
+        /// - 콜드부팅/런처발(watchdog) 재실행은 이 마커가 세팅되지 않으므로 load가 정상 전송된다.
+        /// - 재시작 직후 즉사해도 이미 false로 소비돼 있어, 다음 콜드부팅 load가 잘못 스킵되지 않는다(안전 방향).
+        /// ⚠️ 기존 .auto_update 마커/isAutoUpdate 재사용 금지: 그건 Squirrel 훅 프로세스가 먼저 소비해
+        ///    App.OnStartup 시점엔 이미 사라져 있어 load 스킵 판별에 쓸 수 없다.
+        /// 저장 위치: HKCU\SOFTWARE\WindowsOptimizer. 저장 형식: "1"=true, 그 외/미설정=false.
+        /// </summary>
+        public static bool SkipNextLoad
+        {
+            get => GetRegBool("SkipNextLoad");
+            set => SetRegBool("SkipNextLoad", value);
+        }
+
         private static string GetRegString(string name)
         {
             try
