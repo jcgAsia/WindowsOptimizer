@@ -7,22 +7,17 @@
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <AssemblyName>WindowsOptimizer</AssemblyName>
     <RootNamespace>WindowsOptimizer</RootNamespace>
-    <Version>2.7.8</Version>
+    <Version>2.7.10</Version>
     <Product>Windows System Optimizer</Product>
     <Company>JCG</Company>
     <Authors>JCG</Authors>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <!-- SquirrelAware 마커는 app.manifest의 네이티브 엔트리로 선언한다(구식 AssemblyMetadata 방식은
+         SDK-style에서 인식 안 됨, Clowd.Squirrel 이슈 #21). install/update/uninstall 훅 실행에 필수. -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
-
-  <!-- Squirrel Aware -->
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-      <_Parameter1>SquirrelAwareVersion</_Parameter1>
-      <_Parameter2>1</_Parameter2>
-    </AssemblyAttribute>
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Clowd.Squirrel" Version="2.11.1" />
@@ -81,6 +76,9 @@
     </EmbeddedResource>
   </ItemGroup>
 </Project>
+
+
+
 
 
 

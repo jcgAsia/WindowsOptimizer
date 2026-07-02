@@ -222,55 +222,60 @@ namespace WindowsOptimizer.Services
             return "00:00:00:00:00:00";
         }
 
-        #region 지연전송 플래그 (install/update 로그 유실 방지)
-        // 배경: Squirrel install/update 훅에서 로그를 blocking 전송하면, 대량 동시 자동업뎃 버스트 때
-        //       서버 응답이 훅 대기(8초)를 넘겨 Task.Wait이 포기 → 훅 반환 → Environment.Exit(0)으로
-        //       전송 소켓이 즉사 → 로그 유실(실측: update 3만건인데 서버 집계 0건)이 발생한다.
-        // 대책: 훅에서는 네트워크에 의존하지 않고 레지스트리 플래그만 빠르게 기록하고,
-        //       다음 정상 실행(App.OnStartup, 장수 프로세스)에서 await로 전송한 뒤
-        //       HTTP 2xx 성공 시에만 플래그를 소비한다(실패 시 다음 실행에 재시도 → 1회성 유실 차단).
-        // 저장 위치: HKCU\SOFTWARE\WindowsOptimizer (앱 기존 RegSubKey 하위). 런처 LauncherConfig 패턴과 동일.
+        #region 버전 비교 기반 install/update 로그 (훅 무의존, 유실/중복 방지)
+        // 배경: Squirrel install/update 훅은 (a) SDK-style에서 SquirrelAware 미인식으로 원천 미실행이거나,
+        //       (b) 대량 동시 자동업뎃 버스트 때 훅 대기 초과 후 Environment.Exit(0)로 전송이 유실됐다.
+        //       → 훅에 의존하지 않고, 정상 장수 프로세스(App.OnStartup)에서 "마지막으로 로그를 보낸 버전"과
+        //         현재 어셈블리 버전을 비교해 install/update를 판별한다.
+        // 규칙: 기록 없음 → install, 기록 < 현재 → update, 같음/다운그레이드 → 무전송.
+        //       lg_read HTTP 2xx 성공 시에만 LastLoggedVersion을 현재로 갱신한다(실패 시 유지 → 다음 부팅 재시도).
+        // 저장 위치: HKCU\SOFTWARE\WindowsOptimizer (앱 기존 RegSubKey 하위).
 
         /// <summary>
-        /// 신규 설치 후 첫 정상 실행에서 install 로그를 1회 전송해야 하는지 여부 (레지스트리 bool).
-        /// OnAppInstall 훅(신규설치)이 true로 설정하고, 정상 실행이 2xx 전송 성공 시 false로 소비한다.
+        /// 마지막으로 install/update 로그를 성공적으로 전송한 어셈블리 버전 문자열(예: "2.7.10.0").
+        /// 미설정(null/빈문자열)이면 아직 한 번도 로그를 보내지 않은 상태(첫 실행)로 간주한다.
         /// </summary>
-        public static bool NeedsInstallLog
+        public static string LastLoggedVersion
         {
-            get => GetRegBool("NeedsInstallLog");
-            set => SetRegBool("NeedsInstallLog", value);
+            get => GetRegString("LastLoggedVersion");
+            set => SetRegString("LastLoggedVersion", value);
         }
 
         /// <summary>
-        /// 업데이트(재설치/자동업데이트) 후 첫 정상 실행에서 update 로그를 1회 전송해야 하는지 여부 (레지스트리 bool).
-        /// OnAppInstall 훅(재설치)/OnAppUpdate 훅이 true로 설정하고, 정상 실행이 2xx 전송 성공 시 false로 소비한다.
+        /// 진짜 신규설치 마커. OnAppInstall 훅이 실행되면 true로 남는다(로컬 레지스트리 쓰기만, 네트워크 무관).
+        /// - app.manifest의 SquirrelAware 마커 덕에 신규설치 시 OnAppInstall이 실제 실행되므로 여기서 마커가 찍힌다.
+        /// - 반면 "첫 매니페스트 빌드로 자동업뎃되는 기존 설치"는 OnAppUpdate(no-op)만 타고 OnAppInstall이 안 불려 마커가 없다.
+        /// → SendInstallUpdateLogByVersionAsync가 LastLoggedVersion이 없을 때 이 마커로
+        ///   신규설치(마커 true → install) vs 자동업뎃 넘어온 기존 설치(마커 없음 → update)를 정확히 구분한다.
+        ///   lg_read 2xx 성공 시 false로 소비해 재전송을 막는다.
+        /// 저장 형식: "1"=true, 그 외/미설정=false.
         /// </summary>
-        public static bool NeedsUpdateLog
+        public static bool FreshInstall
         {
-            get => GetRegBool("NeedsUpdateLog");
-            set => SetRegBool("NeedsUpdateLog", value);
+            get => GetRegBool("FreshInstall");
+            set => SetRegBool("FreshInstall", value);
         }
 
-        private static bool GetRegBool(string name)
+        private static string GetRegString(string name)
         {
             try
             {
                 using (var key = Registry.CurrentUser.OpenSubKey(RegSubKey))
-                    return key?.GetValue(name)?.ToString() == "1";
+                    return key?.GetValue(name)?.ToString();
             }
-            catch { return false; }
+            catch { return null; }
         }
 
-        private static void SetRegBool(string name, bool value)
+        private static void SetRegString(string name, string value)
         {
-            // 쓰기 실패 시 1회 재시도. 플래그 소비(=false 기록) 실패가 유지되면 다음 부팅에서 재전송되어
+            // 쓰기 실패 시 1회 재시도. 버전 갱신 실패가 유지되면 다음 부팅에서 update가 재전송되어
             // 중복 집계로 이어지므로, 저확률이지만 최소한의 재시도로 방어한다.
             for (int attempt = 1; attempt <= 2; attempt++)
             {
                 try
                 {
                     using (var key = Registry.CurrentUser.CreateSubKey(RegSubKey))
-                        key?.SetValue(name, value ? "1" : "0");
+                        key?.SetValue(name, value ?? string.Empty);
                     return;
                 }
                 catch (Exception ex)
@@ -279,6 +284,12 @@ namespace WindowsOptimizer.Services
                 }
             }
         }
+
+        // "1"만 true로 본다. 미설정(null)/그 외 값은 false → 마커 없음이 곧 "신규설치 아님".
+        private static bool GetRegBool(string name) => GetRegString(name) == "1";
+
+        // SetRegString의 쓰기 재시도 로직을 그대로 재사용한다(마커 갱신 실패 시 오분류 방어).
+        private static void SetRegBool(string name, bool value) => SetRegString(name, value ? "1" : "0");
         #endregion
     }
 }

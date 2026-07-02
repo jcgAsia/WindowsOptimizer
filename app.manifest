@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="1.0.0.0" name="WindowsOptimizer.app" />
+
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+    <security>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!-- 기존(무매니페스트) 동작 유지: 관리자 승격 없이 호출자 권한으로 실행 -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+
+  <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows Vista -->
+      <supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}" />
+      <!-- Windows 7 -->
+      <supportedOS Id="{35138b9a-5d96-4fbd-8e2d-a2440225f93a}" />
+      <!-- Windows 8 -->
+      <supportedOS Id="{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}" />
+      <!-- Windows 8.1 -->
+      <supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}" />
+      <!-- Windows 10 / Windows 11 -->
+      <supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}" />
+    </application>
+  </compatibility>
+
+  <!--
+    DPI 인식: WPF는 매니페스트 선언이 없어도 프레임워크 기본값(System DPI Aware)으로 동작한다.
+    기존(무매니페스트) 렌더링 동작을 그대로 보존하기 위해 이 섹션은 VS 기본 템플릿과 동일하게
+    주석으로 남겨 둔다. PerMonitorV2 등으로 바꾸면 렌더링 동작이 달라질 수 있으므로,
+    필요할 때만 명시적으로 주석을 해제한다.
+  -->
+  <!--
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings>
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</dpiAware>
+      <dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2</dpiAwareness>
+    </windowsSettings>
+  </application>
+  -->
+
+  <!--
+    Clowd.Squirrel(2.11.1) SquirrelAware 네이티브 마커.
+    구식 AssemblyMetadata("SquirrelAwareVersion","1") 방식은 SDK-style 프로젝트에서 인식되지 않으므로
+    (공식 이슈 #21), 여기 네이티브 매니페스트 엔트리로 정정한다.
+    이 마커가 있어야 install/update/uninstall 훅(OnAppInstall/OnAppUpdate/OnAppUninstall)이 실행된다.
+  -->
+  <SquirrelAwareVersion xmlns="urn:schema-squirrel-com:asm.v1">1</SquirrelAwareVersion>
+</assembly>
