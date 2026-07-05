@@ -1,4 +1,4 @@
-# WindowsOptimizer 롤백 스크립트
+﻿# WindowsOptimizer 롤백 스크립트
 # 사용법: .\rollback-release.ps1
 # 최신 버전을 삭제하고 직전 버전으로 롤백
 
@@ -38,12 +38,16 @@ $previousVersion = if ($previousPkg.Name -match "(\d+\.\d+\.\d+)") { $matches[1]
 Write-Host "    현재 최신: $latestVersion" -ForegroundColor White
 Write-Host "    롤백 대상: $previousVersion" -ForegroundColor White
 
-# 확인
-$confirm = Read-Host "    $latestVersion -> $previousVersion 으로 롤백하시겠습니까? (y/N)"
-if ($confirm -ne "y" -and $confirm -ne "Y") {
-    Write-Host "    롤백 취소됨" -ForegroundColor Yellow
-    exit 0
+# 확인 — 버전 문자열 재입력 게이트 (build-release push 게이트와 동일 방식)
+# 피드 재게시 = 전 기기 자동업데이트 확산이므로 y/N 대신 롤백 대상 버전을 정확히 재입력해야 진행
+Write-Host "    최종 게이트: 피드 재게시는 기존 설치 전 기기 자동업데이트에 영향을 줍니다." -ForegroundColor Yellow
+$reEntry = Read-Host "    롤백 대상 버전 문자열을 정확히 재입력하세요 (기대값: $previousVersion)"
+if ($null -eq $reEntry) { $reEntry = "" }
+if ($reEntry.Trim() -cne $previousVersion) {
+    Write-Host "    버전 불일치('$($reEntry.Trim())' != '$previousVersion') - 롤백 중단" -ForegroundColor Red
+    exit 1
 }
+Write-Host "    버전 재입력 일치 - 롤백 진행" -ForegroundColor Green
 
 # 2) 최신 버전 파일 삭제
 Write-Host "[2/5] 최신 버전 삭제..." -ForegroundColor Yellow
@@ -105,7 +109,8 @@ $changes = git status --porcelain
 if ([string]::IsNullOrWhiteSpace($changes)) {
     Write-Host "    변경사항 없음" -ForegroundColor Gray
 } else {
-    git add -A
+    # 화이트리스트 add — 피드 산출물만 스테이징 (임시/무관 파일 커밋 방지)
+    git add RELEASES *.nupkg *Setup*.exe
     git commit -m "Rollback: $latestVersion -> $previousVersion"
     git push
 
